@@ -1,10 +1,14 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useState } from "react"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
+  const navRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
     { href: "/products", label: "Products" },
@@ -12,7 +16,20 @@ export function Header() {
     { href: "/applications", label: "Applications" },
     { href: "/quality", label: "Quality" },
     { href: "/contact", label: "Contact" },
-  ]
+  ];
+
+  const activeLink = navRef?.current?.querySelector(
+    `a[href="${pathname}"]`
+  ) as HTMLAnchorElement;
+
+  useEffect(() => {
+    if (!navRef.current) return;
+
+    if (activeLink) {
+      const { offsetLeft, offsetWidth } = activeLink;
+      setSliderStyle({ left: offsetLeft, width: offsetWidth });
+    }
+  }, [pathname]);
 
   return (
     <header className="bg-white/90 backdrop-blur border-b border-slate-100 sticky top-0 z-50">
@@ -20,12 +37,33 @@ export function Header() {
         <Link href="/" className="text-emerald-800 font-semibold text-xl">
           Aukra Chem Essentials
         </Link>
-        <nav className="hidden md:flex gap-6 text-sm font-medium text-slate-600">
+        <nav
+          ref={navRef}
+          className="hidden md:flex gap-6 text-sm font-medium text-slate-600 relative"
+        >
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="hover:text-emerald-800 transition-colors">
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`pb-0.5 transition-colors relative z-10 ${
+                pathname === link.href
+                  ? "text-emerald-800"
+                  : "hover:text-emerald-800"
+              }`}
+            >
               {link.label}
             </Link>
           ))}
+
+          {activeLink && (
+            <div
+              className="absolute bottom-0 h-0.5 bg-emerald-800 rounded-full transition-all duration-300 ease-out"
+              style={{
+                left: `${sliderStyle.left}px`,
+                width: `${sliderStyle.width}px`,
+              }}
+            />
+          )}
         </nav>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -40,7 +78,11 @@ export function Header() {
             stroke="currentColor"
             className="w-7 h-7"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
+            />
           </svg>
         </button>
       </div>
@@ -53,7 +95,11 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-emerald-800 transition-colors"
+                className={`transition-colors ${
+                  pathname === link.href
+                    ? "text-emerald-800 font-semibold border-l-4 border-emerald-800 pl-2"
+                    : "hover:text-emerald-800"
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
@@ -63,5 +109,5 @@ export function Header() {
         </div>
       )}
     </header>
-  )
+  );
 }
