@@ -1,5 +1,6 @@
 "use client";
 
+import { useStore } from "@/lib/store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +10,7 @@ export function Header() {
   const pathname = usePathname();
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLDivElement>(null);
+  const basket = useStore((state) => state.basket);
 
   const navLinks = [
     { href: "/products", label: "Products" },
@@ -65,26 +67,54 @@ export function Header() {
             />
           )}
         </nav>
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-emerald-800"
-          aria-label="Toggle navigation"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-7 h-7"
+        <div className="flex items-center gap-4">
+          <Link
+            href="/products"
+            className="relative inline-flex items-center gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
-            />
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
+            </svg>
+            {basket.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-emerald-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
+                {basket.length}
+              </span>
+            )}
+            <span className="hidden sm:inline text-sm font-medium">
+              Enquiry
+            </span>
+          </Link>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden text-emerald-800"
+            aria-label="Toggle navigation"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-7 h-7"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}

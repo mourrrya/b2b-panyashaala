@@ -57,7 +57,7 @@ export default function ContactPage() {
                   <p className="text-slate-600">
                     <a
                       href="mailto:sales@example.com"
-                      className="hover:text-emerald-700"
+                      className="hover:text-emerald-700 transition-colors"
                     >
                       sales@example.com
                     </a>
@@ -68,7 +68,7 @@ export default function ContactPage() {
                   <p className="text-slate-600">
                     <a
                       href="tel:+1234567890"
-                      className="hover:text-emerald-700"
+                      className="hover:text-emerald-700 transition-colors"
                     >
                       +1 (234) 567-890
                     </a>
@@ -85,7 +85,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-lg">
+            <div className="glass-effect rounded-3xl p-8">
               <h2 className="text-xl font-semibold text-slate-900 mb-6">
                 Send us a message
               </h2>
@@ -105,7 +105,7 @@ export default function ContactPage() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-emerald-600 focus:outline-none transition-colors"
+                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
                     placeholder="Your name"
                   />
                 </div>
@@ -119,7 +119,7 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-emerald-600 focus:outline-none transition-colors"
+                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -132,7 +132,7 @@ export default function ContactPage() {
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-emerald-600 focus:outline-none transition-colors"
+                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
                     placeholder="Your company"
                   />
                 </div>
@@ -146,7 +146,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-emerald-600 focus:outline-none transition-colors resize-none"
+                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors resize-none"
                     placeholder="Tell us about your sourcing needs..."
                   />
                 </div>

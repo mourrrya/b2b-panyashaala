@@ -59,7 +59,7 @@ export default function QualityPage() {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-2xl border border-slate-100 bg-slate-50"
+                className="p-6 rounded-2xl border border-slate-100 bg-white/95 gradient-card card-hover"
               >
                 <h3 className="text-xl font-semibold text-slate-900">
                   {item.title}
@@ -77,13 +77,13 @@ export default function QualityPage() {
               {faqs.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="accordion-item rounded-2xl border border-slate-100 bg-white overflow-hidden"
+                  className="accordion-item rounded-2xl border border-slate-100 bg-white/95 overflow-hidden"
                 >
                   <button
                     onClick={() =>
                       setOpenAccordion(openAccordion === idx ? null : idx)
                     }
-                    className="w-full text-left px-6 py-4 font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition-colors"
+                    className="w-full text-left px-6 py-4 font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-50/80 transition-colors"
                   >
                     {faq.question}
                     <svg
@@ -103,7 +103,7 @@ export default function QualityPage() {
                     </svg>
                   </button>
                   {openAccordion === idx && (
-                    <div className="px-6 py-4 bg-slate-50 text-sm text-slate-600 border-t border-slate-100">
+                    <div className="px-6 py-4 bg-gradient-to-br from-white/95 to-emerald-50/95 text-sm text-slate-600 border-t border-slate-100">
                       {faq.answer}
                     </div>
                   )}
