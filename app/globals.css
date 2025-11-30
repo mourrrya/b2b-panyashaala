@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Custom utility classes for the cosmetic supplier design */
+.bg-texture {
+  background-image: radial-gradient(
+      circle at top right,
+      rgba(17, 94, 89, 0.15),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(189, 163, 79, 0.15),
+      transparent 55%
+    );
+}
+
+.card-hover {
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
+}
+
+.fade-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.fade-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 300ms ease;
+}
+
+.accordion-item.open .accordion-content {
+  max-height: 200px;
+}
