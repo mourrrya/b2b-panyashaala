@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function AboutPage() {
   return (
     <>
@@ -22,12 +24,12 @@ export default function AboutPage() {
                 manufacturers, we support your formulation journey with
                 documentation, traceability, and responsive collaboration.
               </p>
-              <a
+              <Link
                 href="/contact"
                 className="text-emerald-700 font-semibold hover:text-emerald-800 transition-colors"
               >
                 Talk to our sourcing team →
-              </a>
+              </Link>
             </div>
             <div className="bg-white/95 rounded-3xl border border-slate-100 p-8 shadow-lg">
               <h3 className="text-xl font-semibold text-slate-900 mb-6">

@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useStore } from "@/lib/store";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function ApplicationsPage() {
@@ -301,7 +302,7 @@ export default function ApplicationsPage() {
                 </svg>
                 Call {contactNumber}
               </a>
-              <a
+              <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-800 transition-colors"
               >
@@ -319,7 +320,7 @@ export default function ApplicationsPage() {
                   />
                 </svg>
                 Email Us
-              </a>
+              </Link>
             </div>
           </div>
         </div>

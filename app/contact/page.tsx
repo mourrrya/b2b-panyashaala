@@ -70,7 +70,7 @@ export default function ContactPage() {
                       href="tel:+1234567890"
                       className="hover:text-emerald-700 transition-colors"
                     >
-                      +1 (234) 567-890
+                      +91 80764 50898
                     </a>
                   </p>
                 </div>
