@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Footer() {
   return (
     <footer className="bg-gradient-to-br from-emerald-50/80 via-white/80 to-teal-50/80 border-t border-emerald-200/50 mt-20 backdrop-blur-sm">
@@ -14,36 +16,36 @@ export function Footer() {
             <h3 className="font-semibold text-slate-900 mb-4">Products</h3>
             <ul className="space-y-2 text-sm text-slate-600">
               <li>
-                <a
+                <Link
                   href="/products"
                   className="hover:text-emerald-800 transition-colors duration-200"
                 >
                   Essential Oils
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/products"
                   className="hover:text-emerald-800 transition-colors duration-200"
                 >
                   Carrier Oils
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/products"
                   className="hover:text-emerald-800 transition-colors duration-200"
                 >
                   Extracts
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/products"
                   className="hover:text-emerald-800 transition-colors duration-200"
                 >
                   Hydrosols
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -51,28 +53,28 @@ export function Footer() {
             <h3 className="font-semibold text-slate-900 mb-4">Resources</h3>
             <ul className="space-y-2 text-sm text-slate-600">
               <li>
-                <a
+                <Link
                   href="/about"
                   className="hover:text-emerald-800 transition-colors duration-200"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/quality"
                   className="hover:text-emerald-800 transition-colors duration-200"
                 >
                   Quality
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/applications"
                   className="hover:text-emerald-800 transition-colors duration-200"
                 >
                   Applications
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -87,12 +89,12 @@ export function Footer() {
               </a>
             </p>
             <p className="text-sm text-slate-600">
-              <a
+              <Link
                 href="/contact"
                 className="hover:text-emerald-800 transition-colors duration-200"
               >
                 Get in touch
-              </a>
+              </Link>
             </p>
           </div>
         </div>
