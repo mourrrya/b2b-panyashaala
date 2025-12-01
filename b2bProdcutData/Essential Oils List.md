@@ -62,7 +62,6 @@ Turpentine
 Chamomile
 Oregano
 Vetiver
-Cinnamon
 Grapefruit
 Palmarosa
 Ylang Ylang
