@@ -109,7 +109,7 @@ export default function ProductsPage() {
                       <h3 className="text-lg font-semibold text-slate-900">
                         {product.name}
                       </h3>
-                      <span className="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-medium">
+                      <span className="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-medium whitespace-nowrap">
                         {
                           categories.find((c) => c.value === product.category)
                             ?.label

@@ -1,6 +1,7 @@
 "use client";
 
 import { useStore } from "@/lib/store";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -37,7 +38,7 @@ export function Header() {
     <header className="bg-white/90 backdrop-blur border-b border-slate-100 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="text-emerald-800 font-semibold text-xl">
-          Aukra Chem Essentials
+          <Image src="/logo-text.svg" alt="Logo" width={150} height={50} />
         </Link>
         <nav
           ref={navRef}
