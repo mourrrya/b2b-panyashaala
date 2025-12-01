@@ -330,7 +330,7 @@ export default function ApplicationsPage() {
             <div
               key={idx}
               onClick={() => setSelectedApp(selectedApp === idx ? null : idx)}
-              className={`p-8 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${
+              className={`p-8 rounded-2xl border-2 cursor-pointer transition-all duration-300 self-baseline ${
                 selectedApp === idx
                   ? "bg-white/95 border-emerald-500 shadow-xl"
                   : "bg-white/90 border-slate-100 hover:border-emerald-300 card-hover"
@@ -338,7 +338,7 @@ export default function ApplicationsPage() {
             >
               {/* Icon and Title */}
               <div className="flex items-start gap-4 mb-3">
-                <span className="text-4xl">{app.icon}</span>
+                {app.icon && <span className="text-4xl">{app.icon}</span>}
                 <div className="flex-1">
                   <span className="inline-block bg-emerald-100 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full mb-2">
                     {app.category}
