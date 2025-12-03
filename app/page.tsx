@@ -69,7 +69,7 @@ export default function Home() {
           <div className="absolute -top-10 -right-16 w-64 h-64 bg-emerald-100 rounded-full blur-3xl"></div>
           <div className="relative space-y-6">
             <Image
-              src="https://images.unsplash.com/photo-1505575967455-40e256f73376?auto=format&fit=crop&w=600&q=80"
+              src="/heroImg.svg"
               alt="Botanical ingredients and natural essences"
               className="rounded-2xl w-full object-cover h-64"
               width={600}
