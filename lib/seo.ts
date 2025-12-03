@@ -12,9 +12,9 @@ export const DEFAULT_OG_IMAGE = "/og-image-default.jpg";
 
 // Social media and verification
 export const SOCIAL_HANDLES = {
-  twitter: "@cosmeticsupply",
-  linkedin: "b2b-cosmetics",
-  instagram: "@cosmeticsupply",
+  twitter: "cosmeticsupply",
+  linkedin: "aukra-chemical-essentials",
+  instagram: "aukra.co.in",
 };
 
 export const VERIFICATION_TOKENS = {
@@ -126,13 +126,13 @@ export function createOrganizationSchema(): Organization {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Customer Service",
-      email: "contact@yourdomain.com",
-      telephone: "+1-800-000-0000",
+      email: "anil@aukra.co.in",
+      telephone: "+91 80764 50898",
     },
     sameAs: [
-      `https://twitter.com/${SOCIAL_HANDLES.twitter.replace("@", "")}`,
+      `https://twitter.com/${SOCIAL_HANDLES.twitter}`,
       `https://linkedin.com/company/${SOCIAL_HANDLES.linkedin}`,
-      `https://instagram.com/${SOCIAL_HANDLES.instagram.replace("@", "")}`,
+      `https://instagram.com/${SOCIAL_HANDLES.instagram}`,
     ],
   };
 }
