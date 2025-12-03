@@ -1,5 +1,15 @@
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import {
+  createOrganizationSchema,
+  createWebsiteSchema,
+  DEFAULT_OG_IMAGE,
+  JsonLd,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+  VERIFICATION_TOKENS,
+} from "@/lib/seo";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
@@ -8,14 +18,69 @@ import type React from "react";
 import ClientOnly from "./ClientOnly";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
+const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 
-// <CHANGE> Updated metadata for cosmetic supplier business
+// Comprehensive metadata export following Next.js 16 Metadata API
 export const metadata: Metadata = {
-  title: "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
-  description:
-    "Natural cosmetic ingredients supplier offering essential oils, carrier oils, botanical extracts, and hydrosols for formulators and manufacturers.",
-  generator: "v0.app",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default:
+      "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
+    template: "%s | " + SITE_NAME,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "cosmetic ingredients",
+    "essential oils",
+    "carrier oils",
+    "botanical extracts",
+    "hydrosols",
+    "B2B supplier",
+    "natural ingredients",
+    "cosmetic formulations",
+    "contract manufacturer",
+    "ingredient sourcing",
+  ],
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: "Nature-powered actives for modern cosmetic formulations",
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@cosmeticsupply",
+    creator: "@cosmeticsupply",
+    title: "Nature-powered actives for modern cosmetic formulations",
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
   icons: {
     icon: [
       {
@@ -33,6 +98,13 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-icon.png",
   },
+  category: "business",
+  verification: {
+    google: VERIFICATION_TOKENS.googleSiteVerification,
+    other: {
+      "msvalidate.01": VERIFICATION_TOKENS.bingMsvalidate,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -42,6 +114,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <JsonLd schema={createOrganizationSchema()} />
+        <JsonLd schema={createWebsiteSchema()} />
+      </head>
       <body className={`${plusJakarta.className} antialiased`}>
         <ClientOnly>
           <Header />

@@ -1,8 +1,33 @@
+import { createBreadcrumbSchema, createMetadata, JsonLd } from "@/lib/seo";
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = createMetadata({
+  title: "About Us | Professional Cosmetic Ingredients Supplier",
+  description:
+    "Learn about our B2B cosmetic ingredients supply network, quality standards, and commitment to supporting formulators and manufacturers with certified botanical products.",
+  canonical: "/about",
+  keywords: [
+    "about us",
+    "B2B supplier",
+    "cosmetic ingredients",
+    "quality standards",
+    "ISO certified",
+    "GMP aligned",
+    "sourcing network",
+    "botanical products",
+  ],
+});
+
+const breadcrumbItems = [
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+];
 
 export default function AboutPage() {
   return (
     <>
+      <JsonLd schema={createBreadcrumbSchema(breadcrumbItems)} />
       <main className="bg-texture min-h-screen">
         <section className="max-w-6xl mx-auto px-6 py-16">
           <div className="grid md:grid-cols-2 gap-12">
@@ -60,7 +85,7 @@ export default function AboutPage() {
                 ].map((item, idx) => (
                   <li key={idx}>
                     <div className="flex gap-4">
-                      <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-semibold flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-semibold shrink-0">
                         {idx + 1}
                       </div>
                       <div>

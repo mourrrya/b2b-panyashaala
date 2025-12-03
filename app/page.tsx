@@ -1,8 +1,28 @@
+import { createMetadata, createWebsiteSchema, JsonLd } from "@/lib/seo";
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = createMetadata({
+  title: "Home",
+  description:
+    "B2B natural cosmetic ingredients supplier offering essential oils, carrier oils, botanical extracts, and hydrosols. Serving formulators, manufacturers, and sourcing teams globally with quality-tested, certified ingredients.",
+  canonical: "/",
+  keywords: [
+    "cosmetic ingredients",
+    "essential oils",
+    "carrier oils",
+    "botanical extracts",
+    "B2B supplier",
+    "natural ingredients",
+    "ingredient sourcing",
+  ],
+});
 
 export default function Home() {
   return (
     <main className="bg-texture">
+      <JsonLd schema={createWebsiteSchema()} />
       {/* Hero Section */}
       <section className="max-w-6xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
         <div>
@@ -48,10 +68,13 @@ export default function Home() {
         <div className="bg-white rounded-3xl shadow-2xl p-8 relative overflow-hidden">
           <div className="absolute -top-10 -right-16 w-64 h-64 bg-emerald-100 rounded-full blur-3xl"></div>
           <div className="relative space-y-6">
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1505575967455-40e256f73376?auto=format&fit=crop&w=600&q=80"
-              alt="Botanical ingredients"
+              alt="Botanical ingredients and natural essences"
               className="rounded-2xl w-full object-cover h-64"
+              width={600}
+              height={400}
+              priority
             />
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="p-4 rounded-xl border border-slate-100">

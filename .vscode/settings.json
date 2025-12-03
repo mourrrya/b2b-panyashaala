@@ -2,6 +2,6 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
-  "cSpell.words": ["Pincode", "Supabase"],
+  "cSpell.words": ["Aukra", "Pincode", "Supabase"],
   "svg.preview.background": "transparent"
 }

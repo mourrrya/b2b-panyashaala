@@ -141,3 +141,107 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Accessibility: Focus Visible Styles */
+:focus-visible {
+  outline: 3px solid rgb(16, 185, 129);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgb(5, 150, 105);
+  outline-offset: 2px;
+}
+
+/* Accessibility: Skip Link (hidden by default, visible on focus) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: rgb(5, 150, 105);
+  color: white;
+  padding: 0.75rem 1rem;
+  z-index: 100;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .floating-action {
+    animation: none;
+  }
+
+  .fade-in,
+  .slide-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .fade-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    color: #000;
+    background: white;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  a[href="#"]::after,
+  a[href*="javascript:"]::after {
+    content: "";
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+}
+
+/* Core Web Vitals: Font Display Optimization */
+/* Note: font-display: swap is configured in app/layout.tsx with next/font */

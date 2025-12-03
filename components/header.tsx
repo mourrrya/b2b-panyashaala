@@ -38,10 +38,16 @@ export function Header() {
     <header className="bg-white/90 backdrop-blur border-b border-slate-100 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="text-emerald-800 font-semibold text-xl">
-          <Image src="/logo-text.svg" alt="Logo" width={150} height={50} />
+          <Image
+            src="/logo-text.svg"
+            alt="Aukra Chem Essentials LLP"
+            width={150}
+            height={50}
+          />
         </Link>
         <nav
           ref={navRef}
+          aria-label="Main navigation"
           className="hidden md:flex gap-6 text-sm font-medium text-slate-600 relative"
         >
           {navLinks.map((link) => (
@@ -53,6 +59,7 @@ export function Header() {
                   ? "text-emerald-800"
                   : "hover:text-emerald-800"
               }`}
+              aria-current={pathname === link.href ? "page" : undefined}
             >
               {link.label}
             </Link>
@@ -65,6 +72,7 @@ export function Header() {
                 left: `${sliderStyle.left}px`,
                 width: `${sliderStyle.width}px`,
               }}
+              aria-hidden="true"
             />
           )}
         </nav>
@@ -72,12 +80,14 @@ export function Header() {
           <Link
             href="/products"
             className="relative inline-flex items-center gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group"
+            title={`View enquiry basket with ${basket.length} items`}
           >
             <svg
               className="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -87,7 +97,10 @@ export function Header() {
               />
             </svg>
             {basket.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-emerald-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
+              <span
+                className="absolute -top-2 -right-2 bg-emerald-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse"
+                aria-label={`${basket.length} items in enquiry basket`}
+              >
                 {basket.length}
               </span>
             )}
@@ -98,7 +111,8 @@ export function Header() {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden text-emerald-800"
-            aria-label="Toggle navigation"
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -107,6 +121,7 @@ export function Header() {
               strokeWidth="1.5"
               stroke="currentColor"
               className="w-7 h-7"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -120,7 +135,10 @@ export function Header() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-100 bg-white">
+        <nav
+          className="md:hidden border-t border-slate-100 bg-white"
+          aria-label="Mobile navigation"
+        >
           <div className="px-6 py-4 flex flex-col gap-3 text-sm text-slate-600">
             {navLinks.map((link) => (
               <Link
@@ -132,12 +150,13 @@ export function Header() {
                     : "hover:text-emerald-800"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
+                aria-current={pathname === link.href ? "page" : undefined}
               >
                 {link.label}
               </Link>
             ))}
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );
