@@ -4,7 +4,7 @@ import React, { type ReactElement } from "react";
 /**
  * Site Configuration Constants
  */
-export const SITE_URL = "https://yourdomain.com"; // Change to production domain
+export const SITE_URL = "https://aukra.co.in"; // Change to production domain
 export const SITE_NAME = "Aukra Chem Essentials LLP";
 export const SITE_DESCRIPTION =
   "Professional B2B supplier of natural cosmetic ingredients including essential oils, carrier oils, botanical extracts, and hydrosols for formulators and manufacturers.";
