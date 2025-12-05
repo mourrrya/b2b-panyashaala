@@ -1,7 +1,7 @@
 "use client";
 
+import { Turnstile } from "@/components/turnstile";
 import { useContactForm } from "@/hooks/use-contact-form";
-import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function ContactPage() {
   const {
@@ -14,9 +14,13 @@ export default function ContactPage() {
     handleTurnstileVerify,
     handleTurnstileError,
     handleTurnstileExpire,
-    isProduction,
     handleFieldChange,
   } = useContactForm();
+
+  console.log(
+    "Turnstile Site Key:",
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+  );
 
   return (
     <>
@@ -148,21 +152,19 @@ export default function ContactPage() {
                   )}
                 </div>
 
-                {isProduction && (
-                  <div>
-                    <Turnstile
-                      siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
-                      onSuccess={handleTurnstileVerify}
-                      onError={handleTurnstileError}
-                      onExpire={handleTurnstileExpire}
-                    />
-                    {errors.turnstileToken && (
-                      <p className="mt-2 text-sm text-red-600">
-                        {errors.turnstileToken.message}
-                      </p>
-                    )}
-                  </div>
-                )}
+                <div>
+                  <Turnstile
+                    onVerify={handleTurnstileVerify}
+                    onError={handleTurnstileError}
+                    onExpire={handleTurnstileExpire}
+                    size="compact"
+                  />
+                  {errors.turnstileToken && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {errors.turnstileToken.message}
+                    </p>
+                  )}
+                </div>
 
                 {isSubmitted && (
                   <div className=" p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-semibold">

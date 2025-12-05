@@ -2,7 +2,6 @@
 
 import {
   ContactFormDataSchema,
-  isProduction,
   sendEmail,
   verifyTurnstile,
   type ContactFormData,
@@ -15,7 +14,6 @@ import { useForm } from "react-hook-form";
  * Custom hook for managing contact form with Turnstile verification
  */
 export function useContactForm() {
-  const [turnstileToken, setTurnstileToken] = useState<string>("");
   const [submitError, setSubmitError] = useState<string>("");
 
   const {
@@ -23,8 +21,10 @@ export function useContactForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-    setValue,
     clearErrors,
+    setValue,
+    setError,
+    getValues,
   } = useForm<ContactFormData>({
     resolver: zodResolver(ContactFormDataSchema),
     mode: "onBlur",
@@ -40,16 +40,17 @@ export function useContactForm() {
       try {
         setSubmitError("");
 
-        // Add Turnstile token to form data (only in production)
-        if (isProduction()) {
-          data.turnstileToken = turnstileToken;
+        const token = getValues("turnstileToken") || "";
+        data.turnstileToken = token;
 
-          // Verify Turnstile token first
-          const isTokenValid = await verifyTurnstile(turnstileToken);
-          if (!isTokenValid) {
-            setSubmitError("Security verification failed. Please try again.");
-            return;
-          }
+        // Verify Turnstile token first
+        const isTokenValid = await verifyTurnstile(token);
+        if (!isTokenValid) {
+          setError("turnstileToken", {
+            type: "manual",
+            message: "Security verification failed. Please try again.",
+          });
+          return;
         }
 
         // Send email with verified data
@@ -64,7 +65,6 @@ export function useContactForm() {
         // Success
         setIsSubmitted(true);
         reset();
-        setTurnstileToken("");
 
         // Hide success message after 5 seconds
         setTimeout(() => {
@@ -75,32 +75,41 @@ export function useContactForm() {
         setSubmitError("An unexpected error occurred. Please try again.");
       }
     },
-    [turnstileToken, reset]
+    [reset, getValues, setError]
   );
 
   /**
    * Handle Turnstile successful verification
    */
-  const handleTurnstileVerify = useCallback((token: string) => {
-    setTurnstileToken(token);
-    setSubmitError("");
-  }, []);
+  const handleTurnstileVerify = useCallback(
+    (token: string) => {
+      setValue("turnstileToken", token);
+      clearErrors("turnstileToken");
+    },
+    [setValue, clearErrors]
+  );
 
   /**
    * Handle Turnstile verification error
    */
   const handleTurnstileError = useCallback(() => {
-    setTurnstileToken("");
-    setSubmitError("Security verification failed. Please try again.");
-  }, []);
+    setValue("turnstileToken", "");
+    setError("turnstileToken", {
+      type: "manual",
+      message: "Security verification failed. Please try again.",
+    });
+  }, [setValue, setError]);
 
   /**
    * Handle Turnstile token expiration
    */
   const handleTurnstileExpire = useCallback(() => {
-    setTurnstileToken("");
-    setSubmitError("Security verification expired. Please verify again.");
-  }, []);
+    setValue("turnstileToken", "");
+    setError("turnstileToken", {
+      type: "manual",
+      message: "Security verification expired. Please verify again.",
+    });
+  }, [setValue, setError]);
 
   /**
    * Handle field input - clears error for that field while typing
@@ -117,26 +126,24 @@ export function useContactForm() {
    */
   const resetForm = useCallback(() => {
     reset();
-    setTurnstileToken("");
+    setValue("turnstileToken", "");
     setSubmitError("");
     setIsSubmitted(false);
-  }, [reset]);
+  }, [reset, setValue]);
 
   return {
     // Form methods from react-hook-form
     register,
     handleSubmit: handleSubmit(onSubmit),
-    setValue,
     errors,
     reset: resetForm,
     clearErrors,
+    setError,
 
     // Form state
     isSubmitting,
     isSubmitted,
     submitError,
-    turnstileToken,
-    isProduction: isProduction(),
 
     // Handlers
     handleTurnstileVerify,

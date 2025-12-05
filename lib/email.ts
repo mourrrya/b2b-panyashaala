@@ -9,13 +9,6 @@ if (
 }
 
 /**
- * Determine if we're in production mode based on environment
- */
-export const isProduction = () => {
-  return process.env.NODE_ENV === "production";
-};
-
-/**
  * Form data type for contact form submissions
  */
 export const ContactFormDataSchema = z.object({
@@ -23,9 +16,9 @@ export const ContactFormDataSchema = z.object({
   email: z.string().email("Invalid email address"),
   company: z.string().optional(),
   message: z.string().min(10, "Message must be at least 10 characters"),
-  turnstileToken: isProduction()
-    ? z.string().min(1, "Please complete the security verification")
-    : z.string().optional(),
+  turnstileToken: z
+    .string()
+    .min(1, "Please complete the security verification"),
 });
 
 export type ContactFormData = z.infer<typeof ContactFormDataSchema>;
@@ -37,11 +30,6 @@ export type ContactFormData = z.infer<typeof ContactFormDataSchema>;
  * @returns true if verification succeeds or if in local dev, false otherwise
  */
 export async function verifyTurnstile(token: string): Promise<boolean> {
-  // Skip Turnstile completely in local development
-  if (!isProduction()) {
-    return true;
-  }
-
   try {
     const response = await fetch("/api/verify-turnstile", {
       method: "POST",
