@@ -17,11 +17,6 @@ export default function ContactPage() {
     handleFieldChange,
   } = useContactForm();
 
-  console.log(
-    "Turnstile Site Key:",
-    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-  );
-
   return (
     <>
       <main className="bg-texture min-h-screen">
