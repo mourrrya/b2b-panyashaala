@@ -1,37 +1,22 @@
 "use client";
 
-import type React from "react";
-
-import { useState } from "react";
+import { useContactForm } from "@/hooks/use-contact-form";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    message: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the form data to a server
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: "", email: "", company: "", message: "" });
-    }, 3000);
-  };
+  const {
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting,
+    isSubmitted,
+    submitError,
+    handleTurnstileVerify,
+    handleTurnstileError,
+    handleTurnstileExpire,
+    isProduction,
+    handleFieldChange,
+  } = useContactForm();
 
   return (
     <>
@@ -85,15 +70,10 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="glass-effect rounded-3xl p-8">
-              <h2 className="text-xl font-semibold text-slate-900 mb-6">
+            <div className="glass-effect rounded-3xl p-8 space-y-6">
+              <h2 className="text-xl font-semibold text-slate-900">
                 Send us a message
               </h2>
-              {submitted && (
-                <div className="mb-6 p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-semibold">
-                  ✓ Thank you! We'll be in touch soon.
-                </div>
-              )}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-slate-900 mb-2">
@@ -101,60 +81,106 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
                     placeholder="Your name"
+                    className={`w-full px-4 py-2 rounded-lg border bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors ${
+                      errors.name ? "border-red-500" : "border-slate-200"
+                    }`}
+                    {...register("name")}
+                    onInput={() => handleFieldChange("name")}
                   />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
+
                 <div>
                   <label className="block text-sm font-semibold text-slate-900 mb-2">
                     Email
                   </label>
                   <input
                     type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
                     placeholder="your@email.com"
+                    className={`w-full px-4 py-2 rounded-lg border bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors ${
+                      errors.email ? "border-red-500" : "border-slate-200"
+                    }`}
+                    {...register("email")}
+                    onInput={() => handleFieldChange("email")}
                   />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
+
                 <div>
                   <label className="block text-sm font-semibold text-slate-900 mb-2">
                     Company
                   </label>
                   <input
                     type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
                     placeholder="Your company"
+                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
+                    {...register("company")}
+                    onInput={() => handleFieldChange("company")}
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-semibold text-slate-900 mb-2">
                     Message
                   </label>
                   <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={4}
-                    className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors resize-none"
                     placeholder="Tell us about your sourcing needs..."
+                    rows={4}
+                    className={`w-full px-4 py-2 rounded-lg border bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors resize-none ${
+                      errors.message ? "border-red-500" : "border-slate-200"
+                    }`}
+                    {...register("message")}
+                    onInput={() => handleFieldChange("message")}
                   />
+                  {errors.message && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
+
+                {isProduction && (
+                  <div>
+                    <Turnstile
+                      siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+                      onSuccess={handleTurnstileVerify}
+                      onError={handleTurnstileError}
+                      onExpire={handleTurnstileExpire}
+                    />
+                    {errors.turnstileToken && (
+                      <p className="mt-2 text-sm text-red-600">
+                        {errors.turnstileToken.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {isSubmitted && (
+                  <div className=" p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-semibold">
+                    ✓ Thank you! We'll be in touch soon.
+                  </div>
+                )}
+                {submitError && (
+                  <div className=" p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-semibold">
+                    ✕ {submitError}
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 rounded-lg bg-emerald-700 text-white font-semibold hover:bg-emerald-800 transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full px-6 py-3 rounded-lg bg-emerald-700 text-white font-semibold hover:bg-emerald-800 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors"
                 >
-                  Send Message
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
               </form>
             </div>
