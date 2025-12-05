@@ -14,6 +14,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import Script from "next/script";
 import type React from "react";
 import ClientOnly from "./ClientOnly";
 import "./globals.css";
@@ -115,6 +116,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          strategy="beforeInteractive"
+          defer
+        />
         <JsonLd schema={createOrganizationSchema()} />
         <JsonLd schema={createWebsiteSchema()} />
       </head>
