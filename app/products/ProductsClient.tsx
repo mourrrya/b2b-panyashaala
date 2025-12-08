@@ -139,15 +139,45 @@ export function ProductsClient({ initialProducts }: ProductsClientProps) {
                         {product.applications}
                       </p>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addToBasket(product.id);
-                      }}
-                      className="mt-4 w-full px-3 py-2 text-sm font-medium bg-emerald-100 text-emerald-800 rounded-lg hover:bg-emerald-200 transition-colors"
-                    >
-                      Add to Enquiry
-                    </button>
+                    {(() => {
+                      const isInBasket = basket.includes(product.id);
+                      return (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (isInBasket) {
+                              removeFromBasket(product.id);
+                            } else {
+                              addToBasket(product.id);
+                            }
+                          }}
+                          className={`mt-4 w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                            isInBasket
+                              ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                              : "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                          }`}
+                        >
+                          {isInBasket ? (
+                            <>
+                              <svg
+                                className="inline w-4 h-4 mr-1"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              Added to Enquiry
+                            </>
+                          ) : (
+                            "Add to Enquiry"
+                          )}
+                        </button>
+                      );
+                    })()}
                   </Link>
                 ))}
               </div>
