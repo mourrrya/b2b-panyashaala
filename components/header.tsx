@@ -1,17 +1,29 @@
 "use client";
 
 import { useStore } from "@/lib/store";
+import { Drawer } from "antd";
+import { ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { BasketDrawer } from "./BasketDrawer";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [basketDrawerOpen, setBasketDrawerOpen] = useState(false);
   const pathname = usePathname();
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLDivElement>(null);
   const basket = useStore((state) => state.basket);
+  const products = useStore((state) => state.products);
+  const removeFromBasket = useStore((state) => state.removeFromBasket);
+
+  // Memoize basketProducts to avoid infinite loops
+  const basketProducts = useMemo(
+    () => products.filter((product) => basket.includes(product.id)),
+    [products, basket]
+  );
 
   const navLinks = [
     { href: "/products", label: "Products" },
@@ -77,25 +89,15 @@ export function Header() {
           )}
         </nav>
         <div className="flex items-center gap-4">
-          <Link
-            href="/products"
-            className="relative inline-flex items-center gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group"
+          <button
+            onClick={() => setBasketDrawerOpen(true)}
+            className="relative cursor-pointer inline-flex items-center gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
             title={`View enquiry basket with ${basket.length} items`}
+            aria-label="Open enquiry basket drawer"
+            aria-expanded={basketDrawerOpen}
+            aria-controls="basket-drawer"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
-            </svg>
+            <ShoppingBag className="w-6 h-6" />
             {basket.length > 0 && (
               <span
                 className="absolute -top-2 -right-2 bg-emerald-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse"
@@ -107,7 +109,7 @@ export function Header() {
             <span className="hidden sm:inline text-sm font-medium">
               Enquiry
             </span>
-          </Link>
+          </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden text-emerald-800"
@@ -131,6 +133,23 @@ export function Header() {
             </svg>
           </button>
         </div>
+
+        {/* Basket Drawer */}
+        <Drawer
+          id="basket-drawer"
+          title={`Enquiry Basket (${basket.length})`}
+          placement="right"
+          onClose={() => setBasketDrawerOpen(false)}
+          open={basketDrawerOpen}
+          className="basket-drawer"
+        >
+          <BasketDrawer
+            basketProducts={basketProducts}
+            basketLength={basket.length}
+            removeFromBasket={removeFromBasket}
+            setBasketDrawerOpen={setBasketDrawerOpen}
+          />
+        </Drawer>
       </div>
 
       {/* Mobile menu */}

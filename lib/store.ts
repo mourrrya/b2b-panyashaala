@@ -15,6 +15,7 @@ export interface StoreState {
   searchTerm: string;
   selectedCategory: string | null;
   selectedApplication: number | null;
+  isBasketDrawerOpen: boolean;
 
   // Actions
   setProducts: (products: Product[]) => void;
@@ -24,6 +25,7 @@ export interface StoreState {
   setSearchTerm: (term: string) => void;
   setSelectedCategory: (category: string | null) => void;
   setSelectedApplication: (appId: number | null) => void;
+  setBasketDrawerOpen: (isOpen: boolean) => void;
 
   // Selectors
   getFilteredProducts: () => Product[];
@@ -36,6 +38,7 @@ export const useStore = create<StoreState>((set, get) => ({
   searchTerm: "",
   selectedCategory: null,
   selectedApplication: null,
+  isBasketDrawerOpen: false,
 
   setProducts: (products) => set({ products }),
 
@@ -58,6 +61,8 @@ export const useStore = create<StoreState>((set, get) => ({
   setSelectedCategory: (category) => set({ selectedCategory: category }),
 
   setSelectedApplication: (appId) => set({ selectedApplication: appId }),
+
+  setBasketDrawerOpen: (isOpen) => set({ isBasketDrawerOpen: isOpen }),
 
   getFilteredProducts: () => {
     const state = get();
