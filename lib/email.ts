@@ -1,5 +1,6 @@
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
+import type { Product } from "./store";
 
 if (
   typeof window !== "undefined" &&
@@ -15,7 +16,7 @@ export const ContactFormDataSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   company: z.string().optional(),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  message: z.string().optional(),
   turnstileToken: z
     .string()
     .min(1, "Please complete the security verification"),
@@ -52,7 +53,10 @@ export async function verifyTurnstile(token: string): Promise<boolean> {
   }
 }
 
-export const sendEmail = async (data: ContactFormData): Promise<boolean> => {
+export const sendEmail = async (
+  data: ContactFormData,
+  products: Product[] = []
+): Promise<boolean> => {
   try {
     if (
       !process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ||
@@ -62,6 +66,16 @@ export const sendEmail = async (data: ContactFormData): Promise<boolean> => {
       throw new Error("EmailJS configuration is missing");
     }
 
+    const enquiredProductsText =
+      products.length > 0
+        ? products
+            .map(
+              (product) =>
+                `- ${product.name} (${product.category}) - INCI: ${product.inci}`
+            )
+            .join("\n")
+        : "No products enquired";
+
     const templateParams = {
       to_name: "Sai Enterprise",
       from_name: data.name,
@@ -70,6 +84,8 @@ export const sendEmail = async (data: ContactFormData): Promise<boolean> => {
       page_url: window.location.href,
       company: data.company || "Not provided",
       message: data.message || "No message provided",
+      enquired_products: enquiredProductsText,
+      product_count: products.length.toString(),
 
       turnstile_token: data.turnstileToken,
       reply_to: data.email,

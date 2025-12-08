@@ -6,6 +6,7 @@ import {
   verifyTurnstile,
   type ContactFormData,
 } from "@/lib/email";
+import type { Product } from "@/lib/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -13,7 +14,7 @@ import { useForm } from "react-hook-form";
 /**
  * Custom hook for managing contact form with Turnstile verification
  */
-export function useContactForm() {
+export function useContactForm(products: Product[] = []) {
   const [submitError, setSubmitError] = useState<string>("");
 
   const {
@@ -54,7 +55,7 @@ export function useContactForm() {
         }
 
         // Send email with verified data
-        const emailSent = await sendEmail(data);
+        const emailSent = await sendEmail(data, products);
         if (!emailSent) {
           setSubmitError(
             "Failed to send your message. Please try again or contact us directly."
