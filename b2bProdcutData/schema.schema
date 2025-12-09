@@ -1,0 +1,47 @@
+model Product {
+  id                String              @id @default(uuid())
+  name              String              @unique
+  category          ProductCategory
+  description       String?
+  botanicalName     String?
+  extractionMethod  ExtractionMethod?
+  chemicalFormula   String?
+  casNumber         String?
+  hazardClass       HazardClass?
+  supplier          String
+  certifications    CertificationType[]
+  storageConditions String?
+  isDeleted         Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  variants          Variant[]
+
+  @@map("products")
+}
+
+model Variant {
+  id             String         @id @default(uuid())
+  productId      String
+  variantName    String         @unique
+  description    String?
+  size           String?
+  concentration  String?
+  packaging      PackagingType?
+  retailPrice    Decimal        @db.Decimal(10, 2)
+  wholesalePrice Decimal        @db.Decimal(10, 2)
+  costPrice      Decimal        @db.Decimal(10, 2)
+  initialStock   Int            @default(0)
+  minStockLevel  Int?
+  isDeleted      Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  benefits       String[]
+  ingredients    String[]
+  usage          String
+  images         Image[]
+  orderItems     OrderItem[]
+  reviews        Review[]
+  product        Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("variants")
+}
