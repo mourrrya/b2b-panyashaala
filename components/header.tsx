@@ -15,9 +15,7 @@ export function Header() {
   const pathname = usePathname();
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLDivElement>(null);
-  const basket = useStore((state) => state.basket);
-  const products = useStore((state) => state.products);
-  const removeFromBasket = useStore((state) => state.removeFromBasket);
+  const { basket, products, removeFromBasket } = useStore();
 
   // Memoize basketProducts to avoid infinite loops
   const basketProducts = useMemo(

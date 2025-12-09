@@ -118,7 +118,10 @@ export default function RootLayout({
         <JsonLd schema={createOrganizationSchema()} />
         <JsonLd schema={createWebsiteSchema()} />
       </head>
-      <body className={`${plusJakarta.className} antialiased`}>
+      <body
+        suppressHydrationWarning
+        className={`${plusJakarta.className} antialiased`}
+      >
         <ClientOnly>
           <Header />
           <AntdRegistry>{children}</AntdRegistry>

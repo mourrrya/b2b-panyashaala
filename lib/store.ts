@@ -1,3 +1,4 @@
+import Fuse from "fuse.js";
 import { create } from "zustand";
 
 export interface Product {
@@ -66,22 +67,32 @@ export const useStore = create<StoreState>((set, get) => ({
 
   getFilteredProducts: () => {
     const state = get();
-    return state.products.filter((product) => {
-      const matchesSearch =
-        product.name.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
-        product.description
-          .toLowerCase()
-          .includes(state.searchTerm.toLowerCase()) ||
-        product.inci.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
-        product.applications
-          .toLowerCase()
-          .includes(state.searchTerm.toLowerCase());
 
-      const matchesCategory =
-        !state.selectedCategory || product.category === state.selectedCategory;
+    if (!state.searchTerm) {
+      // If no search term, just filter by category
+      return state.products.filter(
+        (product) =>
+          !state.selectedCategory || product.category === state.selectedCategory
+      );
+    }
 
-      return matchesSearch && matchesCategory;
+    // Configure Fuse for fuzzy search
+    const fuse = new Fuse(state.products, {
+      keys: ["name", "description", "inci", "applications"],
+      threshold: 0.4, // Allow for some fuzziness (0 = exact match, 1 = match anything)
+      includeScore: true,
     });
+
+    const searchResults = fuse.search(state.searchTerm);
+
+    // Filter results by category if selected
+    return searchResults
+      .filter(
+        (result) =>
+          !state.selectedCategory ||
+          result.item.category === state.selectedCategory
+      )
+      .map((result) => result.item);
   },
 
   getBasketProducts: () => {

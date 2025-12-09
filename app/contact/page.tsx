@@ -33,22 +33,22 @@ export default function ContactPage() {
       <main className="bg-texture min-h-screen">
         <section className="max-w-6xl mx-auto px-6 py-16">
           {/* Two-column layout */}
-          <div className="flex gap-8">
+          <div className="mb-12">
+            <p className="text-sm uppercase tracking-[0.2em] text-emerald-600 mb-3">
+              Get in Touch
+            </p>
+            <h1 className="text-3xl font-semibold text-slate-900 mb-6">
+              Contact Our Sourcing Team
+            </h1>
+            <p className="text-slate-600">
+              Have questions about our products or need custom sourcing
+              solutions? Reach out to our team and we'll connect you with the
+              right specialist.
+            </p>
+          </div>
+          <div className="flex gap-8 flex-col-reverse sm:flex-row">
             {/* Left Column - Contact Form */}
             <div className="flex-1">
-              <div className="mb-12">
-                <p className="text-sm uppercase tracking-[0.2em] text-emerald-600 mb-3">
-                  Get in Touch
-                </p>
-                <h1 className="text-3xl font-semibold text-slate-900 mb-6">
-                  Contact Our Sourcing Team
-                </h1>
-                <p className="text-slate-600">
-                  Have questions about our products or need custom sourcing
-                  solutions? Reach out to our team and we'll connect you with
-                  the right specialist.
-                </p>
-              </div>
               <div className="glass-effect rounded-3xl p-8 space-y-6 flex-1">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-full bg-linear-to-br from-emerald-600 to-teal-700 flex items-center justify-center">
@@ -102,11 +102,11 @@ export default function ContactPage() {
 
                   <div>
                     <label className="block text-sm font-semibold text-slate-900 mb-2">
-                      Company
+                      Company (Optional)
                     </label>
                     <input
                       type="text"
-                      placeholder="Your company"
+                      placeholder="Your company (Optional)"
                       className="w-full px-4 py-2 rounded-lg border border-slate-200 bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
                       {...register("company")}
                       onInput={() => handleFieldChange("company")}
@@ -163,7 +163,7 @@ export default function ContactPage() {
             </div>
 
             {/* Right Column - Enquiry Summary */}
-            <div className="lg:sticky lg:top-28 h-fit">
+            <div className="sm:sticky sm:top-28 h-fit">
               <div className="glass-effect rounded-3xl p-6 space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
