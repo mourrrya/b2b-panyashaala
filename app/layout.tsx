@@ -18,6 +18,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import type React from "react";
 import ClientOnly from "./ClientOnly";
 import "./globals.css";
+import { ProgressBar } from "./progressBar";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 
@@ -126,7 +127,9 @@ export default function RootLayout({
         <ClientOnly>
           <ProductDataProvider />
           <Header />
-          <AntdRegistry>{children}</AntdRegistry>
+          <AntdRegistry>
+            <ProgressBar>{children}</ProgressBar>
+          </AntdRegistry>
           <Footer />
         </ClientOnly>
         <Analytics />

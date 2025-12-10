@@ -14,6 +14,9 @@ importers:
       '@ant-design/nextjs-registry':
         specifier: ^1.3.0
         version: 1.3.0(@ant-design/cssinjs@2.0.1(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(antd@6.1.0(date-fns@4.1.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(next@16.0.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      '@bprogress/next':
+        specifier: ^3.2.12
+        version: 3.2.12(next@16.0.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@emailjs/browser':
         specifier: ^4.4.1
         version: 4.4.1
@@ -147,6 +150,22 @@ packages:
   '@babel/runtime@7.28.4':
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
+
+  '@bprogress/core@1.3.4':
+    resolution: {integrity: sha512-q/AqpurI/1uJzOrQROuZWixn/+ARekh+uvJGwLCP6HQ/EqAX4SkvNf618tSBxL4NysC0MwqAppb/mRw6Tzi61w==}
+
+  '@bprogress/next@3.2.12':
+    resolution: {integrity: sha512-/ZvNwbAd0ty9QiQwCfT2AfwWVdAaEyCPx5RUz3CfiiJS/OLBohhDz/IC/srhwK9GnXeXavvtiUrpKzN5GJDwlw==}
+    peerDependencies:
+      next: '>=13.0.0'
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+
+  '@bprogress/react@1.2.7':
+    resolution: {integrity: sha512-MqJfHW+R5CQeWqyqrLxUjdBRHk24Xl63OkBLo5DMWqUqocUikRTfCIc/jtQQbPk7BRfdr5OP3Lx7YlfQ9QOZMQ==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
 
   '@emailjs/browser@4.4.1':
     resolution: {integrity: sha512-DGSlP9sPvyFba3to2A50kDtZ+pXVp/0rhmqs2LmbMS3I5J8FSOgLwzY2Xb4qfKlOVHh29EAutLYwe5yuEZmEFg==}
@@ -1358,6 +1377,22 @@ snapshots:
       throttle-debounce: 5.0.2
 
   '@babel/runtime@7.28.4': {}
+
+  '@bprogress/core@1.3.4': {}
+
+  '@bprogress/next@3.2.12(next@16.0.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+    dependencies:
+      '@bprogress/core': 1.3.4
+      '@bprogress/react': 1.2.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      next: 16.0.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
+
+  '@bprogress/react@1.2.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+    dependencies:
+      '@bprogress/core': 1.3.4
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
 
   '@emailjs/browser@4.4.1': {}
 
