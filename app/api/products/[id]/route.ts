@@ -1,6 +1,5 @@
 import { ErrorInvalidRequest, handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
-import { RouteContext } from "@/lib/backend/protect";
 import type {
   ErrorResponse,
   ProductWithVariantsImagesReviews,
@@ -8,6 +7,10 @@ import type {
 } from "@/lib/types/api.payload.types";
 import { NextRequest, NextResponse } from "next/server";
 import { getProductById } from "../../services/productServices";
+
+interface RouteContext<TParams = Record<string, string>> {
+  params: Promise<TParams>;
+}
 
 export async function GET(
   _: NextRequest,

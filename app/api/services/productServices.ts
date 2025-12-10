@@ -1,6 +1,7 @@
 import { ErrorNotFound, ErrorUnknown } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { prisma } from "@/lib/backend/prisma";
+import { serializeProductData } from "@/lib/productUtils";
 import { ProductFiltersQuery } from "@/lib/schema";
 import { Prisma, ProductCategory } from "@prisma/client";
 
@@ -19,26 +20,28 @@ export async function getProducts(filters: ProductFiltersQuery) {
         { description: { contains: filters.search, mode: "insensitive" } },
       ];
     }
-    return await prisma.product.findMany({
-      where: {
-        isDeleted: false,
-        variants: {
-          some: {
-            isDeleted: false,
+    return serializeProductData(
+      await prisma.product.findMany({
+        where: {
+          isDeleted: false,
+          variants: {
+            some: {
+              isDeleted: false,
+            },
+          },
+          ...where,
+        },
+        include: {
+          variants: {
+            include: {
+              images: true,
+              reviews: true,
+            },
           },
         },
-        ...where,
-      },
-      include: {
-        variants: {
-          include: {
-            images: true,
-            reviews: true,
-          },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+        orderBy: { createdAt: "desc" },
+      })
+    );
   } catch (error) {
     logger.error({ error }, "Error getting products");
     throw new ErrorUnknown("Error getting products");
@@ -65,7 +68,7 @@ export async function getProductById(id: string): Promise<any> {
       throw new ErrorNotFound("Product");
     }
     logger.info({ productId: id }, "Product found successfully");
-    return product;
+    return serializeProductData(product);
   } catch (error) {
     logger.error({ error, productId: id }, "Error getting product by ID");
     throw new ErrorUnknown("Error getting product by ID");
