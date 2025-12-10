@@ -1,91 +1,19 @@
+import type {
+  DbProduct,
+  Image,
+  Product,
+  Review,
+  Variant,
+} from "@/types/product";
 import Fuse from "fuse.js";
 import { create } from "zustand";
 import { productListFetcher } from "./client/product";
+import { transformDbProductToProduct } from "./productUtils";
 
-export interface Product {
-  id: number | string; // Support both number (current) and string (database UUID)
-  name: string;
-  category: string;
-  description: string;
-  inci: string;
-  applications: string;
-  // Database-backed fields (optional for backward compatibility)
-  variants?: Variant[];
-  botanicalName?: string;
-  supplier?: string;
-  certifications?: string[];
-  storageConditions?: string;
-}
+// Re-export for backward compatibility
+export type { DbProduct, Image, Product, Review, Variant };
 
-export interface Variant {
-  id: string;
-  variantName: string;
-  description?: string;
-  size?: string;
-  concentration?: string;
-  packaging?: string;
-  retailPrice: number;
-  wholesalePrice: number;
-  costPrice: number;
-  initialStock: number;
-  minStockLevel?: number;
-  benefits: string[];
-  ingredients: string[];
-  usage: string;
-  images?: Image[];
-  reviews?: Review[];
-}
-
-export interface Image {
-  id: string;
-  url: string;
-  alt?: string;
-  order: number;
-}
-
-export interface Review {
-  id: string;
-  rating: number;
-  comment?: string;
-  createdAt: string;
-}
-
-export interface DbProduct extends Omit<Product, "id"> {
-  id: string; // Database products use UUID strings
-  variants: Variant[];
-}
-
-// Helper functions for data transformation
-const mapCategoryToUI = (category: string): string => {
-  const categoryMap: Record<string, string> = {
-    ESSENTIAL_OIL: "essential-oil",
-    FIXED_OIL: "fixed-oil",
-    EXTRACT: "extract",
-    HYDROSOL: "hydrosol",
-    HERBAL_OILS: "herbal-oils",
-    CHEMICALS: "chemicals",
-  };
-  return categoryMap[category] || category.toLowerCase().replace("_", "-");
-};
-
-const generateINCI = (product: any): string => {
-  if (product.botanicalName) {
-    return product.botanicalName;
-  }
-  // Fallback to name if no botanical name
-  return product.name;
-};
-
-const generateApplications = (product: any): string => {
-  if (product.variants && product.variants.length > 0) {
-    const applications = product.variants
-      .map((variant: any) => variant.usage || variant.description || "")
-      .filter((app: string) => app.length > 0)
-      .join(", ");
-    return applications || "Various cosmetic applications";
-  }
-  return "Various cosmetic applications";
-};
+// product transformation helpers moved to lib/productUtils.ts
 
 export interface StoreState {
   products: Product[];
@@ -183,14 +111,9 @@ export const useStore = create<StoreState>((set, get) => ({
     try {
       const result = await productListFetcher("/products");
       if (result.success && result.data) {
-        const transformedProducts = result.data.map((product: any) => ({
-          id: product.id,
-          name: product.name,
-          category: mapCategoryToUI(product.category),
-          description: product.description || "",
-          inci: generateINCI(product),
-          applications: generateApplications(product),
-        }));
+        const transformedProducts = result.data.map(
+          transformDbProductToProduct
+        );
         setProducts(transformedProducts);
         setLoadingProducts(false);
       } else {

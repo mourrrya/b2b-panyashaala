@@ -2,13 +2,13 @@ import {
   getProductById,
   getProducts,
 } from "@/app/api/services/productServices";
+import { transformDbProductToProduct } from "@/lib/productUtils";
 import {
   createBreadcrumbSchema,
   createMetadata,
   createProductSchema,
   JsonLd,
 } from "@/lib/seo";
-import type { Product } from "@/lib/store";
 import {
   ProductDescription,
   ProductHeader,
@@ -21,51 +21,7 @@ import type { Metadata } from "next";
 
 export const revalidate = 3600; // ISR: Revalidate every hour
 
-// Helper functions for data transformation
-const mapCategoryToUI = (category: string): string => {
-  const categoryMap: Record<string, string> = {
-    ESSENTIAL_OIL: "essential-oil",
-    FIXED_OIL: "fixed-oil",
-    EXTRACT: "extract",
-    HYDROSOL: "hydrosol",
-    HERBAL_OILS: "herbal-oils",
-    CHEMICALS: "chemicals",
-  };
-  return categoryMap[category] || category.toLowerCase().replace("_", "-");
-};
-
-const generateINCI = (product: any): string => {
-  if (product.botanicalName) {
-    return product.botanicalName;
-  }
-  // Fallback to name if no botanical name
-  return product.name;
-};
-
-const generateApplications = (product: any): string => {
-  if (product.variants && product.variants.length > 0) {
-    const applications = product.variants
-      .map((variant: any) => variant.usage || variant.description || "")
-      .filter((app: string) => app.length > 0)
-      .join(", ");
-    return applications || "Various cosmetic applications";
-  }
-  return "Various cosmetic applications";
-};
-
-const transformDbProductToProduct = (dbProduct: any): Product => ({
-  id: dbProduct.id,
-  name: dbProduct.name,
-  category: mapCategoryToUI(dbProduct.category),
-  description: dbProduct.description || "",
-  inci: generateINCI(dbProduct),
-  applications: generateApplications(dbProduct),
-  variants: dbProduct.variants,
-  botanicalName: dbProduct.botanicalName,
-  supplier: dbProduct.supplier,
-  certifications: dbProduct.certifications,
-  storageConditions: dbProduct.storageConditions,
-});
+// Product transformation helpers are centralized in `lib/productUtils.ts`
 
 // Generate metadata for each product page
 export async function generateMetadata({
@@ -79,13 +35,14 @@ export async function generateMetadata({
     const product = transformDbProductToProduct(productDb);
 
     const categoryLabel =
-      {
-        "essential-oil": "Essential Oil",
-        "fixed-oil": "Carrier Oil",
-        extract: "Extract",
-        hydrosol: "Hydrosol",
-      }[product.category] || "Product";
-
+      (
+        {
+          "essential-oil": "Essential Oil",
+          "fixed-oil": "Carrier Oil",
+          extract: "Extract",
+          hydrosol: "Hydrosol",
+        } as Record<string, string>
+      )[product.category] || "Product";
     return createMetadata({
       title: `${product.name} | ${categoryLabel}`,
       description: `${product.description} INCI name: ${product.inci}. Common applications: ${product.applications}.`,
@@ -96,7 +53,7 @@ export async function generateMetadata({
         product.name,
         categoryLabel,
         product.inci,
-        ...product.applications.split(",").map((s) => s.trim()),
+        ...product.applications.split(",").map((s: string) => s.trim()),
         "cosmetic ingredients",
         "B2B supplier",
       ],
@@ -124,17 +81,19 @@ export default async function ProductDetailPage({
   const allProducts = allProductsDb.map(transformDbProductToProduct);
 
   const categoryLabel =
-    {
-      "essential-oil": "Essential Oil",
-      "fixed-oil": "Carrier Oil",
-      extract: "Extract",
-      hydrosol: "Hydrosol",
-    }[product.category] || "Product";
+    (
+      {
+        "essential-oil": "Essential Oil",
+        "fixed-oil": "Carrier Oil",
+        extract: "Extract",
+        hydrosol: "Hydrosol",
+      } as Record<string, string>
+    )[product.category] || "Product";
 
   const breadcrumbItems = [
     { name: "Home", path: "/" },
     { name: "Products", path: "/products" },
-    { name: product.name, path: `/products/${product.name}` },
+    { name: product.name, path: `/products/${product.id}` },
   ];
 
   return (

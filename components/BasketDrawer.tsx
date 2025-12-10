@@ -72,7 +72,8 @@ export function BasketDrawer({
                       {product.category
                         .split("-")
                         .map(
-                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                          (word: string) =>
+                            word.charAt(0).toUpperCase() + word.slice(1)
                         )
                         .join(" ")}
                     </p>
