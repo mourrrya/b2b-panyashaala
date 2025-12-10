@@ -1,11 +1,8 @@
-import {
-  ErrorInvalidRequest,
-  ErrorResponse,
-  handleError,
-} from "@/lib/backend/errorHandler";
+import { ErrorInvalidRequest, handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { RouteContext } from "@/lib/backend/protect";
 import type {
+  ErrorResponse,
   ProductWithVariantsImagesReviews,
   SuccessRes,
 } from "@/lib/types/api.payload.types";

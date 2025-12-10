@@ -1,4 +1,3 @@
-import { generateProductSlug } from "@/lib/seo";
 import type { Product } from "@/lib/store";
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -27,7 +26,7 @@ export function ProductCard({
 
   return (
     <Link
-      href={`/products/${generateProductSlug(product.name, product.id)}`}
+      href={`/products/${product.id}`}
       className="p-6 rounded-2xl border border-slate-100 bg-white card-hover cursor-pointer transition-all hover:border-emerald-200 hover:shadow-lg flex flex-col"
     >
       <div className="sticky top-0 z-10 -mx-6 -mt-6 px-6 pt-6 pb-3 bg-white rounded-t-2xl flex items-start justify-between gap-1 mb-3">

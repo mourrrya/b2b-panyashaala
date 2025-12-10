@@ -1,5 +1,5 @@
-import { getProductsData } from "@/lib/productData";
-import { SITE_URL, generateProductSlug } from "@/lib/seo";
+import { getProducts } from "@/app/api/services/productServices";
+import { SITE_URL } from "@/lib/seo";
 import type { MetadataRoute } from "next";
 
 export const revalidate = 86400; // Revalidate once per day (24 hours)
@@ -46,12 +46,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Dynamic product routes
-  const products = getProductsData();
+  const products = await getProducts({});
   const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${SITE_URL}/products/${generateProductSlug(
-      product.name,
-      product.id
-    )}`,
+    url: `${SITE_URL}/products/${product.id}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.5,

@@ -1,4 +1,3 @@
-import { generateProductSlug } from "@/lib/seo";
 import type { Product } from "@/lib/store";
 import Link from "next/link";
 
@@ -30,10 +29,7 @@ export function RelatedProducts({
           {relatedProducts.map((relatedProduct) => (
             <Link
               key={relatedProduct.id}
-              href={`/products/${generateProductSlug(
-                relatedProduct.name,
-                relatedProduct.id
-              )}`}
+              href={`/products/${relatedProduct.id}`}
               className="group p-6 rounded-xl border border-slate-100 hover:border-emerald-200 transition-all hover:shadow-lg hover:shadow-emerald-100/50 bg-white hover:bg-emerald-50/30"
             >
               <p className="text-xs font-semibold text-emerald-600 mb-2">

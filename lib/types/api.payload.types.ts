@@ -1,6 +1,11 @@
 import type { Image, Product, Review, Variant } from "@prisma/client";
 
-// API response interfaces
+export interface ErrorResponse {
+  success: false;
+  message: string;
+  details?: any; // For validation errors
+}
+
 export interface SuccessRes<T> {
   data?: T;
   success: boolean;

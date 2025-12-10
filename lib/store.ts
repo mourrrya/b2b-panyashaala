@@ -1,5 +1,6 @@
 import Fuse from "fuse.js";
 import { create } from "zustand";
+import { productListFetcher } from "./client/product";
 
 export interface Product {
   id: number | string; // Support both number (current) and string (database UUID)
@@ -54,6 +55,38 @@ export interface DbProduct extends Omit<Product, "id"> {
   variants: Variant[];
 }
 
+// Helper functions for data transformation
+const mapCategoryToUI = (category: string): string => {
+  const categoryMap: Record<string, string> = {
+    ESSENTIAL_OIL: "essential-oil",
+    FIXED_OIL: "fixed-oil",
+    EXTRACT: "extract",
+    HYDROSOL: "hydrosol",
+    HERBAL_OILS: "herbal-oils",
+    CHEMICALS: "chemicals",
+  };
+  return categoryMap[category] || category.toLowerCase().replace("_", "-");
+};
+
+const generateINCI = (product: any): string => {
+  if (product.botanicalName) {
+    return product.botanicalName;
+  }
+  // Fallback to name if no botanical name
+  return product.name;
+};
+
+const generateApplications = (product: any): string => {
+  if (product.variants && product.variants.length > 0) {
+    const applications = product.variants
+      .map((variant: any) => variant.usage || variant.description || "")
+      .filter((app: string) => app.length > 0)
+      .join(", ");
+    return applications || "Various cosmetic applications";
+  }
+  return "Various cosmetic applications";
+};
+
 export interface StoreState {
   products: Product[];
   basket: (number | string)[]; // Support both number and string IDs
@@ -82,6 +115,9 @@ export interface StoreState {
   // Loading and error actions
   setLoadingProducts: (loading: boolean) => void;
   setProductsError: (error: string | null) => void;
+
+  // Initialize products
+  initialize: () => Promise<void>;
 
   // Optimistic update actions
   addToBasketOptimistic: (productId: number | string) => Promise<void>;
@@ -139,6 +175,34 @@ export const useStore = create<StoreState>((set, get) => ({
   setLoadingProducts: (loading) => set({ isLoadingProducts: loading }),
 
   setProductsError: (error) => set({ productsError: error }),
+
+  initialize: async () => {
+    const { setLoadingProducts, setProductsError, setProducts } = get();
+    setLoadingProducts(true);
+    setProductsError(null);
+    try {
+      const result = await productListFetcher("/products");
+      if (result.success && result.data) {
+        const transformedProducts = result.data.map((product: any) => ({
+          id: product.id,
+          name: product.name,
+          category: mapCategoryToUI(product.category),
+          description: product.description || "",
+          inci: generateINCI(product),
+          applications: generateApplications(product),
+        }));
+        setProducts(transformedProducts);
+        setLoadingProducts(false);
+      } else {
+        setProductsError((result as any).message || "Failed to load products");
+        setLoadingProducts(false);
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+      setProductsError("Failed to load products");
+      setLoadingProducts(false);
+    }
+  },
 
   addToBasketOptimistic: async (productId) => {
     // Optimistically add to basket

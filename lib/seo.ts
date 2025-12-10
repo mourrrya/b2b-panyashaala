@@ -293,31 +293,10 @@ export function createArticleSchema(article: Article): ArticleSchema {
  */
 
 /**
- * Generate URL-friendly slug from product name and ID
+ * Generate URL-friendly slug from and ID
  */
-export function generateProductSlug(name: string, id: number | string): string {
-  const cleanName = name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-  return `${cleanName}-${id}`;
-}
-
-/**
- * Parse product ID from slug
- */
-export function parseProductSlug(slug: string): number | string {
-  const parts = slug.split("-");
-  const lastPart = parts[parts.length - 1];
-
-  // Try to parse as number first (for legacy numeric IDs)
-  const numericId = parseInt(lastPart, 10);
-  if (!isNaN(numericId)) {
-    return numericId;
-  }
-
-  // If not a number, treat as string ID (UUID)
-  return lastPart;
+export function generateProductSlug(id: number | string): string {
+  return `${id}`;
 }
 
 /**

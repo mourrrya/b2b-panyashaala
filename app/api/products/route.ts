@@ -1,7 +1,8 @@
-import { ErrorResponse, handleError } from "@/lib/backend/errorHandler";
+import { handleError } from "@/lib/backend/errorHandler";
 import { validateQueryParams } from "@/lib/backend/validation";
 import { ProductFiltersQuerySchema } from "@/lib/schema";
 import type {
+  ErrorResponse,
   ProductWithVariantsImagesReviews,
   SuccessRes,
 } from "@/lib/types/api.payload.types";

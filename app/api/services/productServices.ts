@@ -22,7 +22,6 @@ export async function getProducts(filters: ProductFiltersQuery) {
     return await prisma.product.findMany({
       where: {
         isDeleted: false,
-        category: ProductCategory.HERBAL_OILS,
         variants: {
           some: {
             isDeleted: false,
