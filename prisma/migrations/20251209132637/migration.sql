@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "HazardClass" ADD VALUE 'NON_HAZARDOUS';

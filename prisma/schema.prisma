@@ -1,0 +1,222 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Product {
+  id                String              @id @default(uuid())
+  name              String              @unique
+  category          ProductCategory
+  description       String?
+  botanicalName     String?
+  extractionMethod  ExtractionMethod?
+  chemicalFormula   String?
+  casNumber         String?
+  hazardClass       HazardClass?
+  supplier          String
+  certifications    CertificationType[]
+  storageConditions String?
+  isDeleted         Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  variants          Variant[]
+
+  @@map("products")
+}
+
+model Variant {
+  id             String         @id @default(uuid())
+  productId      String
+  variantName    String         @unique
+  description    String?
+  size           String?
+  concentration  String?
+  packaging      PackagingType?
+  retailPrice    Decimal        @db.Decimal(10, 2)
+  wholesalePrice Decimal        @db.Decimal(10, 2)
+  costPrice      Decimal        @db.Decimal(10, 2)
+  initialStock   Int            @default(0)
+  minStockLevel  Int?
+  isDeleted      Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  benefits       String[]
+  ingredients    String[]
+  usage          String
+  images         Image[]
+  orderItems     OrderItem[]
+  reviews        Review[]
+  product        Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("variants")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  variantId String
+  userId    String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  variant   Variant  @relation(fields: [variantId], references: [id])
+
+  @@map("reviews")
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  alt       String?
+  order     Int      @default(0)
+  variantId String
+  createdAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
+  updatedAt DateTime @default(now()) @updatedAt
+  variant   Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@map("images")
+}
+
+model Profile {
+  id        String      @id @default(uuid())
+  email     String?
+  fullName  String?     @map("full_name")
+  phone     String?
+  avatarUrl String?     @map("avatar_url")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @default(now()) @updatedAt @map("updated_at")
+  addresses addresses[]
+  orders    Order[]
+
+  @@map("profiles")
+}
+
+model Order {
+  id                                              String        @id @default(uuid())
+  userId                                          String        @map("user_id")
+  status                                          OrderStatus   @default(pending)
+  totalAmount                                     Decimal       @map("total_amount") @db.Decimal(10, 2)
+  paymentMethod                                   String        @map("payment_method")
+  paymentStatus                                   PaymentStatus @default(pending) @map("payment_status")
+  createdAt                                       DateTime      @default(now()) @map("created_at")
+  updatedAt                                       DateTime      @default(now()) @updatedAt @map("updated_at")
+  billing_address_id                              String?
+  shipping_address_id                             String?
+  orderItems                                      OrderItem[]
+  addresses_orders_billing_address_idToaddresses  addresses?    @relation("orders_billing_address_idToaddresses", fields: [billing_address_id], references: [id])
+  addresses_orders_shipping_address_idToaddresses addresses?    @relation("orders_shipping_address_idToaddresses", fields: [shipping_address_id], references: [id])
+  user                                            Profile       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String   @map("order_id")
+  variantId String   @map("variant_id")
+  quantity  Int      @default(1)
+  price     Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now()) @map("created_at")
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant   Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model addresses {
+  id                                           String      @id
+  user_id                                      String
+  type                                         AddressType
+  street                                       String
+  area                                         String?
+  city                                         String
+  state                                        String
+  zip_code                                     String
+  country                                      String
+  is_default                                   Boolean     @default(false)
+  created_at                                   DateTime    @default(now())
+  updated_at                                   DateTime
+  profiles                                     Profile     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  orders_orders_billing_address_idToaddresses  Order[]     @relation("orders_billing_address_idToaddresses")
+  orders_orders_shipping_address_idToaddresses Order[]     @relation("orders_shipping_address_idToaddresses")
+}
+
+enum ProductCategory {
+  ESSENTIAL_OIL
+  FIXED_OIL
+  EXTRACT
+  HYDROSOL
+  HERBAL_OILS
+  CHEMICALS
+}
+
+enum CertificationType {
+  ORGANIC
+  GMP
+  ISO_9001
+  REACH
+  FDA
+  USDA
+  KOSHER
+  HALAL
+}
+
+enum ExtractionMethod {
+  STEAM_DISTILLATION
+  COLD_PRESS
+  SOLVENT_EXTRACTION
+  CO2_EXTRACTION
+  HYDRO_DISTILLATION
+}
+
+enum HazardClass {
+  NON_HAZARDOUS
+  CLASS_1_EXPLOSIVE
+  CLASS_2_GAS
+  CLASS_3_FLAMMABLE_LIQUID
+  CLASS_4_FLAMMABLE_SOLID
+  CLASS_5_OXIDIZER
+  CLASS_6_POISON
+  CLASS_7_RADIOACTIVE
+  CLASS_8_CORROSIVE
+  CLASS_9_MISCELLANEOUS
+}
+
+enum PackagingType {
+  GLASS_BOTTLE
+  PLASTIC_BOTTLE
+  AMBER_GLASS
+  DROPPER_BOTTLE
+  SPRAY_BOTTLE
+  ALUMINUM_BOTTLE
+  JAR
+  TUBE
+  POUCH
+  BULK_CONTAINER
+}
+
+enum OrderStatus {
+  pending
+  confirmed
+  processing
+  shipped
+  delivered
+  cancelled
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+  refunded
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
+}
