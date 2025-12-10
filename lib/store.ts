@@ -245,12 +245,10 @@ export const useStore = create<StoreState>((set, get) => ({
   },
 }));
 
-// Basket persistence helpers
 const BASKET_STORAGE_KEY = "aukra_basket";
-
 function loadBasketFromStorage(): (number | string)[] {
   if (typeof window === "undefined") return [];
-
+  const BASKET_STORAGE_KEY = "aukra_basket";
   try {
     const stored = localStorage.getItem(BASKET_STORAGE_KEY);
     return stored ? JSON.parse(stored) : [];
