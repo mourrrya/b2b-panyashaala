@@ -2,31 +2,90 @@ import Fuse from "fuse.js";
 import { create } from "zustand";
 
 export interface Product {
-  id: number;
+  id: number | string; // Support both number (current) and string (database UUID)
   name: string;
   category: string;
   description: string;
   inci: string;
   applications: string;
+  // Database-backed fields (optional for backward compatibility)
+  variants?: Variant[];
+  botanicalName?: string;
+  supplier?: string;
+  certifications?: string[];
+  storageConditions?: string;
+}
+
+export interface Variant {
+  id: string;
+  variantName: string;
+  description?: string;
+  size?: string;
+  concentration?: string;
+  packaging?: string;
+  retailPrice: number;
+  wholesalePrice: number;
+  costPrice: number;
+  initialStock: number;
+  minStockLevel?: number;
+  benefits: string[];
+  ingredients: string[];
+  usage: string;
+  images?: Image[];
+  reviews?: Review[];
+}
+
+export interface Image {
+  id: string;
+  url: string;
+  alt?: string;
+  order: number;
+}
+
+export interface Review {
+  id: string;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+}
+
+export interface DbProduct extends Omit<Product, "id"> {
+  id: string; // Database products use UUID strings
+  variants: Variant[];
 }
 
 export interface StoreState {
   products: Product[];
-  basket: number[];
+  basket: (number | string)[]; // Support both number and string IDs
   searchTerm: string;
   selectedCategory: string | null;
   selectedApplication: number | null;
   isBasketDrawerOpen: boolean;
 
+  // Loading and error states
+  isLoadingProducts: boolean;
+  productsError: string | null;
+
+  // Basket optimistic update states
+  basketPendingOperations: Set<string | number>;
+
   // Actions
   setProducts: (products: Product[]) => void;
-  addToBasket: (productId: number) => void;
-  removeFromBasket: (productId: number) => void;
+  addToBasket: (productId: number | string) => void;
+  removeFromBasket: (productId: number | string) => void;
   clearBasket: () => void;
   setSearchTerm: (term: string) => void;
   setSelectedCategory: (category: string | null) => void;
   setSelectedApplication: (appId: number | null) => void;
   setBasketDrawerOpen: (isOpen: boolean) => void;
+
+  // Loading and error actions
+  setLoadingProducts: (loading: boolean) => void;
+  setProductsError: (error: string | null) => void;
+
+  // Optimistic update actions
+  addToBasketOptimistic: (productId: number | string) => Promise<void>;
+  removeFromBasketOptimistic: (productId: number | string) => Promise<void>;
 
   // Selectors
   getFilteredProducts: () => Product[];
@@ -35,27 +94,39 @@ export interface StoreState {
 
 export const useStore = create<StoreState>((set, get) => ({
   products: [],
-  basket: [],
+  basket: loadBasketFromStorage(), // Load basket from localStorage
   searchTerm: "",
   selectedCategory: null,
   selectedApplication: null,
   isBasketDrawerOpen: false,
+  isLoadingProducts: false,
+  productsError: null,
+  basketPendingOperations: new Set(),
 
   setProducts: (products) => set({ products }),
 
-  addToBasket: (productId) =>
-    set((state) => ({
-      basket: state.basket.includes(productId)
+  addToBasket: (productId) => {
+    set((state) => {
+      const newBasket = state.basket.includes(productId)
         ? state.basket
-        : [...state.basket, productId],
-    })),
+        : [...state.basket, productId];
+      saveBasketToStorage(newBasket);
+      return { basket: newBasket };
+    });
+  },
 
-  removeFromBasket: (productId) =>
-    set((state) => ({
-      basket: state.basket.filter((id) => id !== productId),
-    })),
+  removeFromBasket: (productId) => {
+    set((state) => {
+      const newBasket = state.basket.filter((id) => id !== productId);
+      saveBasketToStorage(newBasket);
+      return { basket: newBasket };
+    });
+  },
 
-  clearBasket: () => set({ basket: [] }),
+  clearBasket: () => {
+    saveBasketToStorage([]);
+    set({ basket: [] });
+  },
 
   setSearchTerm: (term) => set({ searchTerm: term }),
 
@@ -64,6 +135,90 @@ export const useStore = create<StoreState>((set, get) => ({
   setSelectedApplication: (appId) => set({ selectedApplication: appId }),
 
   setBasketDrawerOpen: (isOpen) => set({ isBasketDrawerOpen: isOpen }),
+
+  setLoadingProducts: (loading) => set({ isLoadingProducts: loading }),
+
+  setProductsError: (error) => set({ productsError: error }),
+
+  addToBasketOptimistic: async (productId) => {
+    // Optimistically add to basket
+    set((state) => {
+      state.basketPendingOperations.add(productId);
+      const newBasket = state.basket.includes(productId)
+        ? state.basket
+        : [...state.basket, productId];
+      saveBasketToStorage(newBasket);
+      return {
+        basket: newBasket,
+        basketPendingOperations: new Set(state.basketPendingOperations),
+      };
+    });
+
+    try {
+      // Simulate API call (replace with actual API call when needed)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // On success, remove from pending
+      set((state) => {
+        const newPending = new Set(state.basketPendingOperations);
+        newPending.delete(productId);
+        return { basketPendingOperations: newPending };
+      });
+    } catch (error) {
+      // On failure, rollback the optimistic update
+      set((state) => {
+        const newPending = new Set(state.basketPendingOperations);
+        newPending.delete(productId);
+        const newBasket = state.basket.filter((id) => id !== productId);
+        saveBasketToStorage(newBasket);
+        return {
+          basket: newBasket,
+          basketPendingOperations: newPending,
+        };
+      });
+      throw error;
+    }
+  },
+
+  removeFromBasketOptimistic: async (productId) => {
+    // Store the original basket for potential rollback
+    const originalBasket = get().basket;
+
+    // Optimistically remove from basket
+    set((state) => {
+      state.basketPendingOperations.add(productId);
+      const newBasket = state.basket.filter((id) => id !== productId);
+      saveBasketToStorage(newBasket);
+      return {
+        basket: newBasket,
+        basketPendingOperations: new Set(state.basketPendingOperations),
+      };
+    });
+
+    try {
+      // Simulate API call (replace with actual API call when needed)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // On success, remove from pending
+      set((state) => {
+        const newPending = new Set(state.basketPendingOperations);
+        newPending.delete(productId);
+        return { basketPendingOperations: newPending };
+      });
+    } catch (error) {
+      // On failure, rollback the optimistic update
+      set((state) => {
+        const newPending = new Set(state.basketPendingOperations);
+        newPending.delete(productId);
+        saveBasketToStorage(originalBasket);
+        return {
+          basket: originalBasket,
+          basketPendingOperations: newPending,
+        };
+      });
+      throw error;
+    }
+  },
 
   getFilteredProducts: () => {
     const state = get();
@@ -102,3 +257,28 @@ export const useStore = create<StoreState>((set, get) => ({
     );
   },
 }));
+
+// Basket persistence helpers
+const BASKET_STORAGE_KEY = "aukra_basket";
+
+function loadBasketFromStorage(): (number | string)[] {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const stored = localStorage.getItem(BASKET_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error("Error loading basket from storage:", error);
+    return [];
+  }
+}
+
+function saveBasketToStorage(basket: (number | string)[]): void {
+  if (typeof window === "undefined") return;
+
+  try {
+    localStorage.setItem(BASKET_STORAGE_KEY, JSON.stringify(basket));
+  } catch (error) {
+    console.error("Error saving basket to storage:", error);
+  }
+}

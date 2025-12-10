@@ -1,4 +1,3 @@
-import { getProductsData } from "@/lib/productData";
 import { createBreadcrumbSchema, createMetadata, JsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import { ProductsClient } from "./ProductsClient";
@@ -26,12 +25,10 @@ const breadcrumbItems = [
 ];
 
 export default function ProductsPage() {
-  const products = getProductsData();
-
   return (
     <>
       <JsonLd schema={createBreadcrumbSchema(breadcrumbItems)} />
-      <ProductsClient initialProducts={products} />
+      <ProductsClient />
     </>
   );
 }

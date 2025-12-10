@@ -9,14 +9,15 @@ interface ProductSidebarProps {
 }
 
 export function ProductSidebar({ product }: ProductSidebarProps) {
-  const { basket, addToBasket, removeFromBasket } = useStore();
+  const { basket, addToBasketOptimistic, removeFromBasketOptimistic } =
+    useStore();
   const isInBasket = basket.includes(product.id);
 
   const handleEnquiryToggle = () => {
     if (isInBasket) {
-      removeFromBasket(product.id);
+      removeFromBasketOptimistic(product.id);
     } else {
-      addToBasket(product.id);
+      addToBasketOptimistic(product.id);
     }
   };
 

@@ -4,7 +4,7 @@ import Link from "next/link";
 interface BasketSidebarProps {
   basketProducts: Product[];
   basketLength: number;
-  removeFromBasket: (id: number) => void;
+  removeFromBasket: (id: number | string) => void;
 }
 
 export function BasketSidebar({

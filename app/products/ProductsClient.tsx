@@ -2,33 +2,20 @@
 
 import { ProductCard } from "@/components/ProductCard";
 import { ProductFilters } from "@/components/ProductFilters";
-import type { Product } from "@/lib/store";
 import { useStore } from "@/lib/store";
-import { useEffect } from "react";
 
-interface ProductsClientProps {
-  initialProducts: Product[];
-}
-
-export function ProductsClient({ initialProducts }: ProductsClientProps) {
+export function ProductsClient() {
   const {
     products,
     basket,
     searchTerm,
     selectedCategory,
-    setProducts,
     setSearchTerm,
     setSelectedCategory,
-    addToBasket,
-    removeFromBasket,
+    addToBasketOptimistic,
+    removeFromBasketOptimistic,
     getFilteredProducts,
   } = useStore();
-
-  useEffect(() => {
-    if (products.length === 0 && initialProducts.length > 0) {
-      setProducts(initialProducts);
-    }
-  }, [products.length, initialProducts, setProducts]);
 
   const filteredProducts = getFilteredProducts();
 
@@ -50,8 +37,8 @@ export function ProductsClient({ initialProducts }: ProductsClientProps) {
                 key={product.id}
                 product={product}
                 basket={basket}
-                addToBasket={addToBasket}
-                removeFromBasket={removeFromBasket}
+                addToBasket={addToBasketOptimistic}
+                removeFromBasket={removeFromBasketOptimistic}
               />
             ))}
           </div>

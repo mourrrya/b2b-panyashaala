@@ -5,9 +5,9 @@ import Link from "next/link";
 
 interface ProductCardProps {
   product: Product;
-  basket: number[];
-  addToBasket: (id: number) => void;
-  removeFromBasket: (id: number) => void;
+  basket: (number | string)[];
+  addToBasket: (id: number | string) => void;
+  removeFromBasket: (id: number | string) => void;
 }
 
 export function ProductCard({

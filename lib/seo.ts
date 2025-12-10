@@ -170,7 +170,7 @@ export function createWebsiteSchema(): Website {
 }
 
 interface Product {
-  id: number;
+  id: number | string;
   name: string;
   description: string;
   inci: string;
@@ -295,7 +295,7 @@ export function createArticleSchema(article: Article): ArticleSchema {
 /**
  * Generate URL-friendly slug from product name and ID
  */
-export function generateProductSlug(name: string, id: number): string {
+export function generateProductSlug(name: string, id: number | string): string {
   const cleanName = name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -306,10 +306,18 @@ export function generateProductSlug(name: string, id: number): string {
 /**
  * Parse product ID from slug
  */
-export function parseProductSlug(slug: string): number {
+export function parseProductSlug(slug: string): number | string {
   const parts = slug.split("-");
-  const id = parseInt(parts[parts.length - 1], 10);
-  return isNaN(id) ? 0 : id;
+  const lastPart = parts[parts.length - 1];
+
+  // Try to parse as number first (for legacy numeric IDs)
+  const numericId = parseInt(lastPart, 10);
+  if (!isNaN(numericId)) {
+    return numericId;
+  }
+
+  // If not a number, treat as string ID (UUID)
+  return lastPart;
 }
 
 /**

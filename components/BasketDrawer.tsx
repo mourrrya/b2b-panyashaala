@@ -9,7 +9,7 @@ import { Dispatch, SetStateAction } from "react";
 interface BasketDrawerProps {
   basketProducts: Product[];
   basketLength: number;
-  removeFromBasket: (productId: number) => void;
+  removeFromBasket: (productId: number | string) => void;
   setBasketDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }
 

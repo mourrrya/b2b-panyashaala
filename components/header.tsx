@@ -15,7 +15,7 @@ export function Header() {
   const pathname = usePathname();
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLDivElement>(null);
-  const { basket, products, removeFromBasket } = useStore();
+  const { basket, products, removeFromBasketOptimistic } = useStore();
 
   // Memoize basketProducts to avoid infinite loops
   const basketProducts = useMemo(
@@ -144,7 +144,7 @@ export function Header() {
           <BasketDrawer
             basketProducts={basketProducts}
             basketLength={basket.length}
-            removeFromBasket={removeFromBasket}
+            removeFromBasket={removeFromBasketOptimistic}
             setBasketDrawerOpen={setBasketDrawerOpen}
           />
         </Drawer>

@@ -7,7 +7,8 @@ import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 
 export default function ContactPage() {
-  const { basket, products, removeFromBasket, clearBasket } = useStore();
+  const { basket, products, removeFromBasketOptimistic, clearBasket } =
+    useStore();
 
   const basketProducts = useMemo(() => {
     return products.filter((product) => basket.includes(product.id));
@@ -206,7 +207,7 @@ export default function ContactPage() {
                           </p>
                         </div>
                         <button
-                          onClick={() => removeFromBasket(product.id)}
+                          onClick={() => removeFromBasketOptimistic(product.id)}
                           className="shrink-0 p-1 rounded-md hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors"
                           title="Remove from enquiry"
                         >
