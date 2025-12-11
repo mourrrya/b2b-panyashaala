@@ -83,34 +83,34 @@ model Image {
 }
 
 model Profile {
-  id        String      @id @default(uuid())
+  id        String    @id
   email     String?
-  fullName  String?     @map("full_name")
+  fullName  String?   @map("full_name")
   phone     String?
-  avatarUrl String?     @map("avatar_url")
-  createdAt DateTime    @default(now()) @map("created_at")
-  updatedAt DateTime    @default(now()) @updatedAt @map("updated_at")
-  addresses addresses[]
+  avatarUrl String?   @map("avatar_url")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
   orders    Order[]
+  addresses Address[]
 
   @@map("profiles")
 }
 
 model Order {
-  id                                              String        @id @default(uuid())
-  userId                                          String        @map("user_id")
-  status                                          OrderStatus   @default(pending)
-  totalAmount                                     Decimal       @map("total_amount") @db.Decimal(10, 2)
-  paymentMethod                                   String        @map("payment_method")
-  paymentStatus                                   PaymentStatus @default(pending) @map("payment_status")
-  createdAt                                       DateTime      @default(now()) @map("created_at")
-  updatedAt                                       DateTime      @default(now()) @updatedAt @map("updated_at")
-  billing_address_id                              String?
-  shipping_address_id                             String?
-  orderItems                                      OrderItem[]
-  addresses_orders_billing_address_idToaddresses  addresses?    @relation("orders_billing_address_idToaddresses", fields: [billing_address_id], references: [id])
-  addresses_orders_shipping_address_idToaddresses addresses?    @relation("orders_shipping_address_idToaddresses", fields: [shipping_address_id], references: [id])
-  user                                            Profile       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String        @id @default(uuid())
+  userId            String        @map("user_id")
+  status            OrderStatus   @default(pending)
+  totalAmount       Decimal       @map("total_amount") @db.Decimal(10, 2)
+  shippingAddressId String?       @map("shipping_address_id")
+  billingAddressId  String?       @map("billing_address_id")
+  paymentMethod     String        @map("payment_method")
+  paymentStatus     PaymentStatus @default(pending) @map("payment_status")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @default(now()) @updatedAt @map("updated_at")
+  orderItems        OrderItem[]
+  user              Profile       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shippingAddress   Address?      @relation("OrderShippingAddress", fields: [shippingAddressId], references: [id])
+  billingAddress    Address?      @relation("OrderBillingAddress", fields: [billingAddressId], references: [id])
 
   @@map("orders")
 }
@@ -128,22 +128,29 @@ model OrderItem {
   @@map("order_items")
 }
 
-model addresses {
-  id                                           String      @id
-  user_id                                      String
-  type                                         AddressType
-  street                                       String
-  area                                         String?
-  city                                         String
-  state                                        String
-  zip_code                                     String
-  country                                      String
-  is_default                                   Boolean     @default(false)
-  created_at                                   DateTime    @default(now())
-  updated_at                                   DateTime
-  profiles                                     Profile     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  orders_orders_billing_address_idToaddresses  Order[]     @relation("orders_billing_address_idToaddresses")
-  orders_orders_shipping_address_idToaddresses Order[]     @relation("orders_shipping_address_idToaddresses")
+model Address {
+  id             String      @id @default(uuid())
+  userId         String      @map("user_id")
+  type           AddressType
+  street         String
+  area           String?
+  city           String
+  state          String
+  zipCode        String      @map("zip_code")
+  country        String
+  isDefault      Boolean     @default(false) @map("is_default")
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+  user           Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shippingOrders Order[]     @relation("OrderShippingAddress")
+  billingOrders  Order[]     @relation("OrderBillingAddress")
+
+  @@map("addresses")
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
 }
 
 enum ProductCategory {
@@ -214,9 +221,4 @@ enum PaymentStatus {
   paid
   failed
   refunded
-}
-
-enum AddressType {
-  SHIPPING
-  BILLING
 }
