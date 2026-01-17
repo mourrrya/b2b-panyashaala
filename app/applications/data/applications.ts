@@ -1,6 +1,21 @@
+export enum ApplicationCategory {
+  HAIR = "Hair",
+  FACE = "Face",
+  BODY = "Body",
+  TRADITIONAL = "Traditional",
+  CLEAN = "Clean",
+  MEN = "Men",
+  SENSITIVE = "Sensitive",
+  PROBLEM = "Problem",
+  BRIGHTENING = "Brightening",
+  WELLNESS = "Wellness",
+  LUXURY = "Luxury",
+  ORAL = "Oral",
+}
+
 export interface Application {
   title: string;
-  category: string;
+  category: ApplicationCategory;
   description: string;
   ingredients: string[];
   icon: string;
@@ -9,7 +24,7 @@ export interface Application {
 export const applications: Application[] = [
   {
     title: "Hair Care & Scalp Health",
-    category: "Hair",
+    category: ApplicationCategory.HAIR,
     description:
       "Professional formulations for hair growth, conditioning, and scalp treatments.",
     ingredients: [
@@ -28,7 +43,7 @@ export const applications: Application[] = [
   },
   {
     title: "Skin Care & Anti-Aging",
-    category: "Face",
+    category: ApplicationCategory.FACE,
     description:
       "Premium serums, creams, and treatments for visible skin transformation.",
     ingredients: [
@@ -47,7 +62,7 @@ export const applications: Application[] = [
   },
   {
     title: "Body Care & Wellness",
-    category: "Body",
+    category: ApplicationCategory.BODY,
     description:
       "Luxurious lotions, body butters, soaps, and holistic care products.",
     ingredients: [
@@ -64,7 +79,7 @@ export const applications: Application[] = [
   },
   {
     title: "Ayurvedic & Herbal",
-    category: "Traditional",
+    category: ApplicationCategory.TRADITIONAL,
     description:
       "Classical Ayurvedic formulations rooted in centuries of tradition.",
     ingredients: [
@@ -85,7 +100,7 @@ export const applications: Application[] = [
   },
   {
     title: "Clean & Conscious Beauty",
-    category: "Clean",
+    category: ApplicationCategory.CLEAN,
     description: "Minimalist formulations with pure, essential actives only.",
     ingredients: [
       "Cucumber Hydrosol",
@@ -101,7 +116,7 @@ export const applications: Application[] = [
   },
   {
     title: "Men's Grooming & Scalp",
-    category: "Men",
+    category: ApplicationCategory.MEN,
     description:
       "Specialized products for beard care, shaving, and masculine grooming.",
     ingredients: [
@@ -119,7 +134,7 @@ export const applications: Application[] = [
   },
   {
     title: "Sensitive & Calming Care",
-    category: "Sensitive",
+    category: ApplicationCategory.SENSITIVE,
     description:
       "Gentle formulations for reactive, inflamed, and compromised skin.",
     ingredients: [
@@ -136,7 +151,7 @@ export const applications: Application[] = [
   },
   {
     title: "Acne & Clarity Solutions",
-    category: "Problem",
+    category: ApplicationCategory.PROBLEM,
     description: "Targeted treatments for breakout-prone and combination skin.",
     ingredients: [
       "Tea Tree Oil",
@@ -153,7 +168,7 @@ export const applications: Application[] = [
   },
   {
     title: "Brightening & Radiance",
-    category: "Brightening",
+    category: ApplicationCategory.BRIGHTENING,
     description:
       "Formulations for luminosity, even tone, and glowing complexion.",
     ingredients: [
@@ -171,7 +186,7 @@ export const applications: Application[] = [
   },
   {
     title: "Aromatherapy & Wellness",
-    category: "Wellness",
+    category: ApplicationCategory.WELLNESS,
     description:
       "Mood-enhancing and therapeutic formulations for emotional wellbeing.",
     ingredients: [
@@ -190,7 +205,7 @@ export const applications: Application[] = [
   },
   {
     title: "Luxury & Premium Lines",
-    category: "Luxury",
+    category: ApplicationCategory.LUXURY,
     description: "High-end formulations using rare and precious botanicals.",
     ingredients: [
       "Rose Oil",
@@ -207,7 +222,7 @@ export const applications: Application[] = [
   },
   {
     title: "Oral Care & Dental Health",
-    category: "Oral",
+    category: ApplicationCategory.ORAL,
     description: "Natural formulations for oral hygiene and gum health.",
     ingredients: [
       "Tea Tree Oil",
