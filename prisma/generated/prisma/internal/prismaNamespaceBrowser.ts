@@ -85,6 +85,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  purityType: 'purityType',
   category: 'category',
   description: 'description',
   botanicalName: 'botanicalName',

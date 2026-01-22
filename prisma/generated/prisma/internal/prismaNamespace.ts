@@ -1420,6 +1420,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  purityType: 'purityType',
   category: 'category',
   description: 'description',
   botanicalName: 'botanicalName',
@@ -1711,6 +1712,20 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'String[]'
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductPurityType'
+ */
+export type EnumProductPurityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductPurityType'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductPurityType[]'
+ */
+export type ListEnumProductPurityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductPurityType[]'>
     
 
 

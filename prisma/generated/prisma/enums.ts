@@ -19,6 +19,15 @@ export const BatchStatus = {
 export type BatchStatus = (typeof BatchStatus)[keyof typeof BatchStatus]
 
 
+export const ProductPurityType = {
+  PURE: 'PURE',
+  REFINED: 'REFINED',
+  RCO: 'RCO'
+} as const
+
+export type ProductPurityType = (typeof ProductPurityType)[keyof typeof ProductPurityType]
+
+
 export const GstSlab = {
   ZERO_PERCENT: 'ZERO_PERCENT',
   FIVE_PERCENT: 'FIVE_PERCENT',

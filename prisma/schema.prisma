@@ -9,7 +9,8 @@ datasource db {
 
 model Product {
   id                String              @id @default(uuid())
-  name              String              @unique
+  name              String
+  purityType        ProductPurityType
   category          ProductCategory
   description       String?
   botanicalName     String?
@@ -27,6 +28,7 @@ model Product {
   updatedAt         DateTime            @updatedAt
   variants          Variant[]
 
+  @@unique([name, purityType])
   @@map("products")
 }
 
@@ -293,6 +295,12 @@ model PurchaseOrderItem {
   @@index([purchaseOrderId])
   @@index([variantId])
   @@map("purchase_order_items")
+}
+
+enum ProductPurityType {
+  PURE
+  REFINED
+  RCO
 }
 
 enum GstSlab {

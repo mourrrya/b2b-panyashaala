@@ -27,6 +27,7 @@ export type AggregateProduct = {
 export type ProductMinAggregateOutputType = {
   id: string | null
   name: string | null
+  purityType: $Enums.ProductPurityType | null
   category: $Enums.ProductCategory | null
   description: string | null
   botanicalName: string | null
@@ -46,6 +47,7 @@ export type ProductMinAggregateOutputType = {
 export type ProductMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  purityType: $Enums.ProductPurityType | null
   category: $Enums.ProductCategory | null
   description: string | null
   botanicalName: string | null
@@ -65,6 +67,7 @@ export type ProductMaxAggregateOutputType = {
 export type ProductCountAggregateOutputType = {
   id: number
   name: number
+  purityType: number
   category: number
   description: number
   botanicalName: number
@@ -87,6 +90,7 @@ export type ProductCountAggregateOutputType = {
 export type ProductMinAggregateInputType = {
   id?: true
   name?: true
+  purityType?: true
   category?: true
   description?: true
   botanicalName?: true
@@ -106,6 +110,7 @@ export type ProductMinAggregateInputType = {
 export type ProductMaxAggregateInputType = {
   id?: true
   name?: true
+  purityType?: true
   category?: true
   description?: true
   botanicalName?: true
@@ -125,6 +130,7 @@ export type ProductMaxAggregateInputType = {
 export type ProductCountAggregateInputType = {
   id?: true
   name?: true
+  purityType?: true
   category?: true
   description?: true
   botanicalName?: true
@@ -218,6 +224,7 @@ export type ProductGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type ProductGroupByOutputType = {
   id: string
   name: string
+  purityType: $Enums.ProductPurityType | null
   category: $Enums.ProductCategory
   description: string | null
   botanicalName: string | null
@@ -259,6 +266,7 @@ export type ProductWhereInput = {
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   id?: Prisma.StringFilter<"Product"> | string
   name?: Prisma.StringFilter<"Product"> | string
+  purityType?: Prisma.EnumProductPurityTypeNullableFilter<"Product"> | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
   description?: Prisma.StringNullableFilter<"Product"> | string | null
   botanicalName?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -280,6 +288,7 @@ export type ProductWhereInput = {
 export type ProductOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  purityType?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   botanicalName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -304,6 +313,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   OR?: Prisma.ProductWhereInput[]
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
+  purityType?: Prisma.EnumProductPurityTypeNullableFilter<"Product"> | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryFilter<"Product"> | $Enums.ProductCategory
   description?: Prisma.StringNullableFilter<"Product"> | string | null
   botanicalName?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -325,6 +335,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
 export type ProductOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  purityType?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   botanicalName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -351,6 +362,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProductScalarWhereWithAggregatesInput | Prisma.ProductScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Product"> | string
   name?: Prisma.StringWithAggregatesFilter<"Product"> | string
+  purityType?: Prisma.EnumProductPurityTypeNullableWithAggregatesFilter<"Product"> | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryWithAggregatesFilter<"Product"> | $Enums.ProductCategory
   description?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   botanicalName?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -371,6 +383,7 @@ export type ProductScalarWhereWithAggregatesInput = {
 export type ProductCreateInput = {
   id?: string
   name: string
+  purityType?: $Enums.ProductPurityType | null
   category: $Enums.ProductCategory
   description?: string | null
   botanicalName?: string | null
@@ -392,6 +405,7 @@ export type ProductCreateInput = {
 export type ProductUncheckedCreateInput = {
   id?: string
   name: string
+  purityType?: $Enums.ProductPurityType | null
   category: $Enums.ProductCategory
   description?: string | null
   botanicalName?: string | null
@@ -413,6 +427,7 @@ export type ProductUncheckedCreateInput = {
 export type ProductUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  purityType?: Prisma.NullableEnumProductPurityTypeFieldUpdateOperationsInput | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   botanicalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -434,6 +449,7 @@ export type ProductUpdateInput = {
 export type ProductUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  purityType?: Prisma.NullableEnumProductPurityTypeFieldUpdateOperationsInput | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   botanicalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -455,6 +471,7 @@ export type ProductUncheckedUpdateInput = {
 export type ProductCreateManyInput = {
   id?: string
   name: string
+  purityType?: $Enums.ProductPurityType | null
   category: $Enums.ProductCategory
   description?: string | null
   botanicalName?: string | null
@@ -475,6 +492,7 @@ export type ProductCreateManyInput = {
 export type ProductUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  purityType?: Prisma.NullableEnumProductPurityTypeFieldUpdateOperationsInput | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   botanicalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -495,6 +513,7 @@ export type ProductUpdateManyMutationInput = {
 export type ProductUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  purityType?: Prisma.NullableEnumProductPurityTypeFieldUpdateOperationsInput | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   botanicalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -523,6 +542,7 @@ export type EnumCertificationTypeNullableListFilter<$PrismaModel = never> = {
 export type ProductCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  purityType?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
   botanicalName?: Prisma.SortOrder
@@ -543,6 +563,7 @@ export type ProductCountOrderByAggregateInput = {
 export type ProductMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  purityType?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
   botanicalName?: Prisma.SortOrder
@@ -562,6 +583,7 @@ export type ProductMaxOrderByAggregateInput = {
 export type ProductMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  purityType?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
   botanicalName?: Prisma.SortOrder
@@ -589,6 +611,10 @@ export type ProductCreatecertificationsInput = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type NullableEnumProductPurityTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ProductPurityType | null
 }
 
 export type EnumProductCategoryFieldUpdateOperationsInput = {
@@ -641,6 +667,7 @@ export type ProductUpdateOneRequiredWithoutVariantsNestedInput = {
 export type ProductCreateWithoutVariantsInput = {
   id?: string
   name: string
+  purityType?: $Enums.ProductPurityType | null
   category: $Enums.ProductCategory
   description?: string | null
   botanicalName?: string | null
@@ -661,6 +688,7 @@ export type ProductCreateWithoutVariantsInput = {
 export type ProductUncheckedCreateWithoutVariantsInput = {
   id?: string
   name: string
+  purityType?: $Enums.ProductPurityType | null
   category: $Enums.ProductCategory
   description?: string | null
   botanicalName?: string | null
@@ -697,6 +725,7 @@ export type ProductUpdateToOneWithWhereWithoutVariantsInput = {
 export type ProductUpdateWithoutVariantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  purityType?: Prisma.NullableEnumProductPurityTypeFieldUpdateOperationsInput | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   botanicalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -717,6 +746,7 @@ export type ProductUpdateWithoutVariantsInput = {
 export type ProductUncheckedUpdateWithoutVariantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  purityType?: Prisma.NullableEnumProductPurityTypeFieldUpdateOperationsInput | $Enums.ProductPurityType | null
   category?: Prisma.EnumProductCategoryFieldUpdateOperationsInput | $Enums.ProductCategory
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   botanicalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -768,6 +798,7 @@ export type ProductCountOutputTypeCountVariantsArgs<ExtArgs extends runtime.Type
 export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  purityType?: boolean
   category?: boolean
   description?: boolean
   botanicalName?: boolean
@@ -790,6 +821,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  purityType?: boolean
   category?: boolean
   description?: boolean
   botanicalName?: boolean
@@ -810,6 +842,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  purityType?: boolean
   category?: boolean
   description?: boolean
   botanicalName?: boolean
@@ -830,6 +863,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type ProductSelectScalar = {
   id?: boolean
   name?: boolean
+  purityType?: boolean
   category?: boolean
   description?: boolean
   botanicalName?: boolean
@@ -847,7 +881,7 @@ export type ProductSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "category" | "description" | "botanicalName" | "extractionMethod" | "chemicalFormula" | "casNumber" | "hazardClass" | "supplier" | "certifications" | "storageConditions" | "gstSlab" | "HSNCode" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "purityType" | "category" | "description" | "botanicalName" | "extractionMethod" | "chemicalFormula" | "casNumber" | "hazardClass" | "supplier" | "certifications" | "storageConditions" | "gstSlab" | "HSNCode" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   variants?: boolean | Prisma.Product$variantsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -863,6 +897,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    purityType: $Enums.ProductPurityType | null
     category: $Enums.ProductCategory
     description: string | null
     botanicalName: string | null
@@ -1304,6 +1339,7 @@ export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.
 export interface ProductFieldRefs {
   readonly id: Prisma.FieldRef<"Product", 'String'>
   readonly name: Prisma.FieldRef<"Product", 'String'>
+  readonly purityType: Prisma.FieldRef<"Product", 'ProductPurityType'>
   readonly category: Prisma.FieldRef<"Product", 'ProductCategory'>
   readonly description: Prisma.FieldRef<"Product", 'String'>
   readonly botanicalName: Prisma.FieldRef<"Product", 'String'>
