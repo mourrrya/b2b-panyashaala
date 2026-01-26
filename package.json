@@ -29,6 +29,7 @@
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@prisma/engines": "^7.3.0",
+    "@supabase/supabase-js": "^2.93.1",
     "@vercel/analytics": "^1.6.1",
     "antd": "^6.2.2",
     "autoprefixer": "^10.4.23",

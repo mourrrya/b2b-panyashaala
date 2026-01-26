@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/components/AuthProvider";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { ProductDataProvider } from "@/components/ProductDataProvider";
@@ -125,11 +126,13 @@ export default function RootLayout({
         className={`${plusJakarta.className} antialiased`}
       >
         <ClientOnly>
-          <ProductDataProvider />
-          <Header />
-          <AntdRegistry>
-            <ProgressBar>{children}</ProgressBar>
-          </AntdRegistry>
+          <AuthProvider>
+            <ProductDataProvider />
+            <Header />
+            <AntdRegistry>
+              <ProgressBar>{children}</ProgressBar>
+            </AntdRegistry>
+          </AuthProvider>
           <Footer />
         </ClientOnly>
         <Analytics />

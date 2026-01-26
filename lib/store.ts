@@ -7,7 +7,7 @@ import type {
 } from "@/types/product";
 import Fuse from "fuse.js";
 import { create } from "zustand";
-import { productListFetcher } from "./client/product";
+import { productListFetcher } from "./client/apiCalling/product";
 import { transformDbProductToProduct } from "./productUtils";
 
 // Re-export for backward compatibility

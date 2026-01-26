@@ -1,8 +1,9 @@
 "use client";
 
 import { useStore } from "@/lib/store";
+import { useAuthStore } from "@/store/auth-store";
 import { Drawer } from "antd";
-import { ShoppingBag } from "lucide-react";
+import { LogIn, ShoppingBag, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,11 +17,12 @@ export function Header() {
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLDivElement>(null);
   const { basket, products, removeFromBasketOptimistic } = useStore();
+  const { user } = useAuthStore();
 
   // Memoize basketProducts to avoid infinite loops
   const basketProducts = useMemo(
     () => products.filter((product) => basket.includes(product.id)),
-    [products, basket]
+    [products, basket],
   );
 
   const navLinks = [
@@ -32,7 +34,7 @@ export function Header() {
   ];
 
   const activeLink = navRef?.current?.querySelector(
-    `a[href="${pathname}"]`
+    `a[href="${pathname}"]`,
   ) as HTMLAnchorElement;
 
   useEffect(() => {
@@ -87,6 +89,33 @@ export function Header() {
           )}
         </nav>
         <div className="flex items-center gap-4">
+          {/* Login/Profile Button */}
+          {user ? (
+            <Link
+              href="/profile"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 hover:from-emerald-200 hover:to-teal-200 transition-all duration-300 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              title="View profile"
+              aria-label="View profile"
+            >
+              <User className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm font-medium">
+                {user.fullName || user.companyName || "Profile"}
+              </span>
+            </Link>
+          ) : (
+            <Link
+              href={`/login?redirect=${pathname !== "/login" ? encodeURIComponent(pathname) : "/"}`}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              title="Login to your account"
+              aria-label="Login"
+            >
+              <LogIn className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm font-medium">
+                Login
+              </span>
+            </Link>
+          )}
+
           <button
             onClick={() => setBasketDrawerOpen(true)}
             className="relative cursor-pointer inline-flex items-center gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"

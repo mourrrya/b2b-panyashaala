@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
-import { ErrorResponse } from "../types/api.payload.types";
+
+export interface ErrorResponse {
+  success: false;
+  message: string;
+  details?: any; // For validation errors
+}
 
 export class ErrorApp extends Error {
   constructor(
     public message: string,
     public statusCode: number = 400,
-    public details?: any
+    public details?: any,
   ) {
     super(message);
   }
@@ -66,12 +71,12 @@ export function handleError(error: unknown): NextResponse<ErrorResponse> {
   if (error instanceof Error) {
     return NextResponse.json(
       { message: error.message, success: false },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
   return NextResponse.json(
     { message: "Internal server error", success: false },
-    { status: 500 }
+    { status: 500 },
   );
 }

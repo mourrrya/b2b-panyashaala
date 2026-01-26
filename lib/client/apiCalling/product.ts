@@ -6,7 +6,7 @@ import {
 import { axiosInstance } from "./axios-config";
 
 export const productListFetcher = async (
-  url: string
+  url: string,
 ): Promise<SuccessRes<ProductWithVariantsImagesReviews[]> | ErrorResponse> => {
   try {
     const res = await axiosInstance.get(url);
@@ -16,7 +16,7 @@ export const productListFetcher = async (
   }
 };
 export const productFetcher = async (
-  url: string
+  url: string,
 ): Promise<SuccessRes<ProductWithVariantsImagesReviews> | ErrorResponse> => {
   try {
     const res = await axiosInstance.get(url);
