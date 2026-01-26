@@ -39,7 +39,7 @@ model Variant {
   description           String?
   netContent            Decimal                @db.Decimal(10, 2)
   measurementUnit       MeasurementUnit
-  concentration         String?
+  concentration         Decimal?               @db.Decimal(5, 2)
   packaging             PackagingType?
   retailPrice           Decimal                @db.Decimal(10, 2)
   wholesalePrice        Decimal                @db.Decimal(10, 2)
@@ -426,4 +426,41 @@ enum POStatus {
   CANCELLED
 
   @@map("PurchaseOrderStatus")
+}
+
+// ============================================================================
+// INTERNAL USERS & AUTHENTICATION
+// ============================================================================
+
+model InternalUser {
+  id          String           @id @default(uuid())
+  email       String           @unique
+  googleId    String?          @unique @map("google_id")
+  role        InternalUserRole @default(USER)
+  permissions String[]
+  status      UserStatus       @default(ACTIVE)
+  fullName    String?          @map("full_name")
+  department  String?
+  notes       String?
+  lastLoginAt DateTime?        @map("last_login_at")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@index([email])
+  @@index([googleId])
+  @@map("internal_users")
+}
+
+enum InternalUserRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  USER
+  VIEWER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
 }

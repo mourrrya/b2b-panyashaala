@@ -14,7 +14,7 @@ if (
  */
 export const ContactFormDataSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   company: z.string().optional(),
   message: z.string().optional(),
   turnstileToken: z
@@ -55,7 +55,7 @@ export async function verifyTurnstile(token: string): Promise<boolean> {
 
 export const sendEmail = async (
   data: ContactFormData,
-  products: Product[] = []
+  products: Product[] = [],
 ): Promise<boolean> => {
   try {
     if (
@@ -71,7 +71,7 @@ export const sendEmail = async (
         ? products
             .map(
               (product) =>
-                `- ${product.name} (${product.category}) - INCI: ${product.inci}`
+                `- ${product.name} (${product.category}) - INCI: ${product.inci}`,
             )
             .join("\n")
         : "No products enquired";
@@ -94,7 +94,7 @@ export const sendEmail = async (
     const response = await emailjs.send(
       process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
       process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-      templateParams
+      templateParams,
     );
 
     return response.status === 200;
