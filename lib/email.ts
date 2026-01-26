@@ -14,7 +14,7 @@ if (
  */
 export const ContactFormDataSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.email("Invalid email address"),
+  email: z.string().email("Invalid email address"),
   company: z.string().optional(),
   message: z.string().optional(),
   turnstileToken: z
@@ -63,7 +63,8 @@ export const sendEmail = async (
       !process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ||
       !process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
     ) {
-      throw new Error("EmailJS configuration is missing");
+      console.log("EmailJS environment variables are not set.");
+      return false;
     }
 
     const enquiredProductsText =

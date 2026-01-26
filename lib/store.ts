@@ -112,7 +112,7 @@ export const useStore = create<StoreState>((set, get) => ({
       const result = await productListFetcher("/products");
       if (result.success && result.data) {
         const transformedProducts = result.data.map(
-          transformDbProductToProduct
+          transformDbProductToProduct,
         );
         setProducts(transformedProducts);
         setLoadingProducts(false);
@@ -163,7 +163,6 @@ export const useStore = create<StoreState>((set, get) => ({
           basketPendingOperations: newPending,
         };
       });
-      throw error;
     }
   },
 
@@ -203,7 +202,6 @@ export const useStore = create<StoreState>((set, get) => ({
           basketPendingOperations: newPending,
         };
       });
-      throw error;
     }
   },
 
@@ -214,7 +212,8 @@ export const useStore = create<StoreState>((set, get) => ({
       // If no search term, just filter by category
       return state.products.filter(
         (product) =>
-          !state.selectedCategory || product.category === state.selectedCategory
+          !state.selectedCategory ||
+          product.category === state.selectedCategory,
       );
     }
 
@@ -232,7 +231,7 @@ export const useStore = create<StoreState>((set, get) => ({
       .filter(
         (result) =>
           !state.selectedCategory ||
-          result.item.category === state.selectedCategory
+          result.item.category === state.selectedCategory,
       )
       .map((result) => result.item);
   },
@@ -240,7 +239,7 @@ export const useStore = create<StoreState>((set, get) => ({
   getBasketProducts: () => {
     const state = get();
     return state.products.filter((product) =>
-      state.basket.includes(product.id)
+      state.basket.includes(product.id),
     );
   },
 }));

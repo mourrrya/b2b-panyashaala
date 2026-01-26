@@ -17,6 +17,49 @@ import { useForm } from "react-hook-form";
 export function useContactForm(products: Product[] = []) {
   const [submitError, setSubmitError] = useState<string>("");
 
+  /**
+   * Custom Zod resolver to avoid version conflicts with @hookform/resolvers
+   */
+  // const zodresolver: Resolver<ContactFormData> = useCallback(async (values) => {
+  //   try {
+  //     const result = ContactFormDataSchema.safeParse(values);
+
+  //     if (result.success) {
+  //       return {
+  //         values: result.data,
+  //         errors: {},
+  //       };
+  //     }
+
+  //     const errors = result.error.issues.reduce(
+  //       (allErrors, issue) => {
+  //         const path = issue.path[0];
+  //         if (typeof path === "string") {
+  //           return {
+  //             ...allErrors,
+  //             [path]: {
+  //               type: issue.code,
+  //               message: issue.message,
+  //             },
+  //           };
+  //         }
+  //         return allErrors;
+  //       },
+  //       {} as Record<string, { type: string; message: string }>,
+  //     );
+
+  //     return {
+  //       values: {},
+  //       errors,
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       values: {},
+  //       errors: {},
+  //     };
+  //   }
+  // }, []);
+
   const {
     register,
     handleSubmit,
@@ -29,6 +72,7 @@ export function useContactForm(products: Product[] = []) {
   } = useForm<ContactFormData>({
     resolver: zodResolver(ContactFormDataSchema),
     mode: "onBlur",
+    reValidateMode: "onChange",
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -58,7 +102,7 @@ export function useContactForm(products: Product[] = []) {
         const emailSent = await sendEmail(data, products);
         if (!emailSent) {
           setSubmitError(
-            "Failed to send your message. Please try again or contact us directly."
+            "Failed to send your message. Please try again or contact us directly.",
           );
           return;
         }
@@ -76,7 +120,7 @@ export function useContactForm(products: Product[] = []) {
         setSubmitError("An unexpected error occurred. Please try again.");
       }
     },
-    [reset, getValues, setError]
+    [reset, getValues, setError, products],
   );
 
   /**
@@ -87,7 +131,7 @@ export function useContactForm(products: Product[] = []) {
       setValue("turnstileToken", token);
       clearErrors("turnstileToken");
     },
-    [setValue, clearErrors]
+    [setValue, clearErrors],
   );
 
   /**
@@ -119,7 +163,7 @@ export function useContactForm(products: Product[] = []) {
     (fieldName: keyof ContactFormData) => {
       clearErrors(fieldName);
     },
-    [clearErrors]
+    [clearErrors],
   );
 
   /**
