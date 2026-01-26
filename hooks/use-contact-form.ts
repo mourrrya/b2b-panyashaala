@@ -17,49 +17,6 @@ import { useForm } from "react-hook-form";
 export function useContactForm(products: Product[] = []) {
   const [submitError, setSubmitError] = useState<string>("");
 
-  /**
-   * Custom Zod resolver to avoid version conflicts with @hookform/resolvers
-   */
-  // const zodresolver: Resolver<ContactFormData> = useCallback(async (values) => {
-  //   try {
-  //     const result = ContactFormDataSchema.safeParse(values);
-
-  //     if (result.success) {
-  //       return {
-  //         values: result.data,
-  //         errors: {},
-  //       };
-  //     }
-
-  //     const errors = result.error.issues.reduce(
-  //       (allErrors, issue) => {
-  //         const path = issue.path[0];
-  //         if (typeof path === "string") {
-  //           return {
-  //             ...allErrors,
-  //             [path]: {
-  //               type: issue.code,
-  //               message: issue.message,
-  //             },
-  //           };
-  //         }
-  //         return allErrors;
-  //       },
-  //       {} as Record<string, { type: string; message: string }>,
-  //     );
-
-  //     return {
-  //       values: {},
-  //       errors,
-  //     };
-  //   } catch (error) {
-  //     return {
-  //       values: {},
-  //       errors: {},
-  //     };
-  //   }
-  // }, []);
-
   const {
     register,
     handleSubmit,
