@@ -171,12 +171,12 @@ model Customer {
   orders    Order[]
   addresses Address[]
   reviews   Review[]
-  accounts  Account[]
+  accounts  CustomerAccount[]
 
   @@map("customers")
 }
 
-model Account {
+model CustomerAccount {
   id                String  @id @default(uuid())
   userId            String  @map("user_id")
   type              String
@@ -197,7 +197,7 @@ model Account {
 
   @@unique([provider, providerAccountId])
   @@index([userId])
-  @@map("accounts")
+  @@map("customer_accounts")
 }
 
 model VerificationToken {
