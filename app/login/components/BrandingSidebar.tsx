@@ -3,7 +3,7 @@ import { FeatureHighlights } from "./FeatureHighlights";
 
 export function BrandingSidebar() {
   return (
-    <div className="hidden lg:block">
+    <div className="hidden lg:block self-start">
       <div className="flex-1 flex flex-col max-w-xl space-y-8">
         <div className="space-y-4 lg:space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 border border-emerald-200/50">
