@@ -145,22 +145,65 @@ export const authConfig: NextAuthConfig = {
     async signIn({ user, account, profile }) {
       // For OAuth providers, handle account linking
       if (account?.provider === "google" && user.email) {
-        const existingUser = await prisma.customer.findUnique({
-          where: { email: user.email.toLowerCase() },
-          include: { accounts: true },
-        });
+        try {
+          const existingUser = await prisma.customer.findUnique({
+            where: { email: user.email.toLowerCase() },
+            include: { accounts: true },
+          });
 
-        if (existingUser) {
-          // Check if Google account is already linked
-          const hasGoogleAccount = existingUser.accounts.some(
-            (acc) => acc.provider === "google",
-          );
+          if (existingUser) {
+            // Check if Google account is already linked
+            const hasGoogleAccount = existingUser.accounts.some(
+              (acc) => acc.provider === "google",
+            );
 
-          if (!hasGoogleAccount) {
-            // Link Google account to existing user
-            await prisma.account.create({
+            if (!hasGoogleAccount) {
+              // Link Google account to existing user
+              await prisma.customerAccount.create({
+                data: {
+                  userId: existingUser.id,
+                  type: account.type,
+                  provider: account.provider,
+                  providerAccountId: account.providerAccountId,
+                  access_token: account.access_token,
+                  refresh_token: account.refresh_token,
+                  expires_at: account.expires_at,
+                  token_type: account.token_type,
+                  scope: account.scope,
+                  id_token: account.id_token,
+                  session_state: account.session_state as string | null,
+                },
+              });
+
+              // Update user profile with Google data if missing
+              await prisma.customer.update({
+                where: { id: existingUser.id },
+                data: {
+                  fullName: existingUser.fullName || profile?.name,
+                  avatarUrl:
+                    existingUser.avatarUrl || (profile as any)?.picture,
+                  emailVerified: existingUser.emailVerified || new Date(),
+                },
+              });
+            }
+
+            // Use existing user's ID
+            user.id = existingUser.id;
+          } else {
+            // Create new user for Google OAuth
+            const newUser = await prisma.customer.create({
               data: {
-                userId: existingUser.id,
+                email: user.email.toLowerCase(),
+                fullName: profile?.name || user.name,
+                avatarUrl: (profile as any)?.picture || user.image,
+                emailVerified: new Date(),
+              },
+            });
+
+            // Create the account link
+            await prisma.customerAccount.create({
+              data: {
+                userId: newUser.id,
                 type: account.type,
                 provider: account.provider,
                 providerAccountId: account.providerAccountId,
@@ -174,48 +217,12 @@ export const authConfig: NextAuthConfig = {
               },
             });
 
-            // Update user profile with Google data if missing
-            await prisma.customer.update({
-              where: { id: existingUser.id },
-              data: {
-                fullName: existingUser.fullName || profile?.name,
-                avatarUrl: existingUser.avatarUrl || (profile as any)?.picture,
-                emailVerified: existingUser.emailVerified || new Date(),
-              },
-            });
+            user.id = newUser.id;
           }
-
-          // Use existing user's ID
-          user.id = existingUser.id;
-        } else {
-          // Create new user for Google OAuth
-          const newUser = await prisma.customer.create({
-            data: {
-              email: user.email.toLowerCase(),
-              fullName: profile?.name || user.name,
-              avatarUrl: (profile as any)?.picture || user.image,
-              emailVerified: new Date(),
-            },
-          });
-
-          // Create the account link
-          await prisma.account.create({
-            data: {
-              userId: newUser.id,
-              type: account.type,
-              provider: account.provider,
-              providerAccountId: account.providerAccountId,
-              access_token: account.access_token,
-              refresh_token: account.refresh_token,
-              expires_at: account.expires_at,
-              token_type: account.token_type,
-              scope: account.scope,
-              id_token: account.id_token,
-              session_state: account.session_state as string | null,
-            },
-          });
-
-          user.id = newUser.id;
+        } catch (error) {
+          console.error("[Auth] Google signIn callback error:", error);
+          // Return false to deny access on database errors
+          return false;
         }
       }
 

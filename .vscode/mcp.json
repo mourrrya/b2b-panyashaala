@@ -7,6 +7,10 @@
     "my-mcp-server-f54b6502": {
       "url": "https://mcp.prisma.io/mcp",
       "type": "http"
+    },
+    "gcloud": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/gcloud-mcp"]
     }
   },
   "inputs": []
