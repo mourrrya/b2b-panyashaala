@@ -1,16 +1,23 @@
 "use client";
+
 import { useAuthStore } from "@/store/auth-store";
+import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+function AuthInitializer({ children }: { children: React.ReactNode }) {
   const { initialize } = useAuthStore();
 
   useEffect(() => {
-    const init = async () => {
-      await initialize();
-    };
-    init();
-  }, []);
+    initialize();
+  }, [initialize]);
 
   return <>{children}</>;
+}
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <SessionProvider>
+      <AuthInitializer>{children}</AuthInitializer>
+    </SessionProvider>
+  );
 }

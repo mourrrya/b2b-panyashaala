@@ -2,11 +2,12 @@
 
 import { useStore } from "@/lib/store";
 import { useAuthStore } from "@/store/auth-store";
-import { Drawer } from "antd";
-import { LogIn, ShoppingBag, User } from "lucide-react";
+import type { MenuProps } from "antd";
+import { Drawer, Dropdown } from "antd";
+import { LogIn, LogOut, ShoppingBag, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BasketDrawer } from "./BasketDrawer";
 
@@ -14,10 +15,11 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [basketDrawerOpen, setBasketDrawerOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLDivElement>(null);
   const { basket, products, removeFromBasketOptimistic } = useStore();
-  const { user } = useAuthStore();
+  const { user, signOut, isLoading } = useAuthStore();
 
   // Memoize basketProducts to avoid infinite loops
   const basketProducts = useMemo(
@@ -91,17 +93,43 @@ export function Header() {
         <div className="flex items-center gap-4">
           {/* Login/Profile Button */}
           {user ? (
-            <Link
-              href="/profile"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 hover:from-emerald-200 hover:to-teal-200 transition-all duration-300 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-              title="View profile"
-              aria-label="View profile"
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: "profile",
+                    label: "My Profile",
+                    icon: <User className="w-4 h-4" />,
+                    onClick: () => router.push("/profile"),
+                  },
+                  { type: "divider" },
+                  {
+                    key: "logout",
+                    label: "Sign Out",
+                    icon: <LogOut className="w-4 h-4" />,
+                    danger: true,
+                    disabled: isLoading,
+                    onClick: async () => {
+                      await signOut();
+                      router.push("/");
+                    },
+                  },
+                ] as MenuProps["items"],
+              }}
+              placement="bottomRight"
+              trigger={["click"]}
             >
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm font-medium">
-                {user.fullName || user.companyName || "Profile"}
-              </span>
-            </Link>
+              <button
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 hover:from-emerald-200 hover:to-teal-200 transition-all duration-300 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                title="Account menu"
+                aria-label="Account menu"
+              >
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline text-sm font-medium">
+                  {user.fullName || user.companyName || "Account"}
+                </span>
+              </button>
+            </Dropdown>
           ) : (
             <Link
               href={`/login?redirect=${pathname !== "/login" ? encodeURIComponent(pathname) : "/"}`}

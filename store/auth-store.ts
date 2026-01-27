@@ -1,35 +1,45 @@
 "use client";
 
-import {
-  initializeAuth,
-  logout,
-  sendOtp,
-  verifyOtp,
-} from "@/lib/client/apiCalling/auth";
-import { fetchProfile } from "@/lib/client/apiCalling/profile";
 import { Customer } from "@/prisma/generated/prisma/browser";
-import { User } from "@supabase/supabase-js";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+// Types for auth actions
+interface SignInCredentialsParams {
+  email: string;
+  password: string;
+  isSignUp?: boolean;
+  name?: string;
+}
+
+interface AuthResult {
+  success: boolean;
+  error?: string;
+}
+
 interface AuthState {
   user: Customer | null;
-  otpSending: boolean;
-  otpSent: boolean;
-  phoneNumber: string;
+  isLoading: boolean;
+  isInitialized: boolean;
 }
 
 interface AuthActions {
-  onSendOtp: (phone: string) => Promise<{ success: boolean; error?: string }>;
-  onVerifyOtp: (
-    phone: string,
-    token: string,
-  ) => Promise<{ user?: User; success: boolean; error?: string }>;
-  logout: () => Promise<void>;
+  // Core auth actions
+  signInWithCredentials: (
+    params: SignInCredentialsParams,
+  ) => Promise<AuthResult>;
+  signInWithGoogle: (callbackUrl?: string) => Promise<void>;
+  signOut: () => Promise<void>;
+
+  // Profile management
+  fetchProfile: () => Promise<void>;
+  updateProfile: (data: Partial<Customer>) => Promise<AuthResult>;
+
+  // State management
   initialize: () => Promise<void>;
-  resetOtp: () => void;
-  getProfile: () => Promise<void>;
+  setUser: (user: Customer | null) => void;
+  setLoading: (loading: boolean) => void;
 }
 
 type AuthStore = AuthState & AuthActions;
@@ -38,95 +48,124 @@ export const useAuthStore = create<AuthStore>()(
   devtools(
     immer((set, get) => ({
       user: null,
-      otpSending: false,
-      otpSent: false,
-      phoneNumber: "",
+      isLoading: false,
+      isInitialized: false,
 
-      onSendOtp: async (phone: string) => {
-        console.log("📤 [STORE] onSendOtp called with phone:", phone);
-        set({ otpSending: true });
-        const { success, error } = await sendOtp(phone);
-        console.log("📤 [STORE] sendOtp result:", { success, error });
-        if (!success) {
-          set({ otpSending: false });
-          return { success: false, error };
-        }
-        set({ otpSent: true, phoneNumber: phone, otpSending: false });
-        console.log("✅ [STORE] OTP sent successfully, state updated");
-        return { success: true };
-      },
-
-      onVerifyOtp: async (phone: string, token: string) => {
-        console.log(
-          "🔍 [STORE] onVerifyOtp called with phone:",
-          phone,
-          "token length:",
-          token.length,
-        );
-        const { success, error } = await verifyOtp(phone, token);
-        console.log("🔍 [STORE] verifyOtp result:", {
-          success,
-          error,
-          hasUser: !!success,
-        });
-        if (!success) {
-          set({ otpSending: false });
-          return { success: false, error };
-        }
-        await get().getProfile();
-        console.log("✅ [STORE] OTP verified and profile loaded");
-        return { success: true };
-      },
-
-      getProfile: async () => {
-        console.log("👤 [STORE] getProfile called");
+      signInWithCredentials: async ({
+        email,
+        password,
+        isSignUp = false,
+        name,
+      }) => {
+        set({ isLoading: true });
         try {
-          const response = await fetchProfile("/profile");
-          console.log("👤 [STORE] fetchProfile response:", {
-            success: response.success,
-            hasData: !!response.data,
+          const { signIn } = await import("next-auth/react");
+
+          const result = await signIn("credentials", {
+            email,
+            password,
+            name: name || "",
+            isSignUp: isSignUp ? "true" : "false",
+            redirect: false,
           });
-          if (response.data) {
-            set({ user: response.data });
-            console.log(
-              "✅ [STORE] Profile loaded successfully:",
-              response.data.id,
-            );
-          } else {
-            console.warn("⚠️ [STORE] No profile data returned");
+
+          if (result?.error) {
+            set({ isLoading: false });
+            return { success: false, error: result.error };
+          }
+
+          // Fetch profile after successful sign in
+          await get().fetchProfile();
+          set({ isLoading: false });
+          return { success: true };
+        } catch (error: any) {
+          set({ isLoading: false });
+          return {
+            success: false,
+            error: error?.message || "An unexpected error occurred",
+          };
+        }
+      },
+
+      signInWithGoogle: async (callbackUrl = "/") => {
+        const { signIn } = await import("next-auth/react");
+        await signIn("google", { callbackUrl });
+      },
+
+      signOut: async () => {
+        set({ isLoading: true });
+        try {
+          const { signOut: authSignOut } = await import("next-auth/react");
+          await authSignOut({ redirect: false });
+          set({ user: null, isLoading: false });
+        } catch (error) {
+          console.error("Sign out error:", error);
+          set({ isLoading: false });
+        }
+      },
+
+      fetchProfile: async () => {
+        try {
+          const response = await fetch("/api/profile");
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.data) {
+              set({ user: data.data });
+            }
           }
         } catch (error) {
-          console.error("💥 [STORE] Error loading profile:", error);
+          console.error("Error fetching profile:", error);
         }
       },
 
-      logout: async () => {
-        console.log("🚪 [STORE] logout called");
-        await logout();
-        set({ user: null, otpSent: false, phoneNumber: "" });
-        console.log("✅ [STORE] logout complete, state reset");
+      updateProfile: async (data) => {
+        try {
+          const response = await fetch("/api/profile", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            if (result.success && result.data) {
+              set({ user: result.data });
+              return { success: true };
+            }
+          }
+
+          return { success: false, error: "Failed to update profile" };
+        } catch (error: any) {
+          return { success: false, error: error?.message || "Update failed" };
+        }
       },
 
       initialize: async () => {
-        console.log("🔄 [STORE] initialize called");
-        const { user } = await initializeAuth();
-        console.log("🔄 [STORE] initialize result:", { hasUser: !!user });
-        if (!user) {
-          console.log("ℹ️ [STORE] No user session found");
-          return;
+        if (get().isInitialized) return;
+
+        set({ isLoading: true });
+        try {
+          const { getSession } = await import("next-auth/react");
+          const session = await getSession();
+
+          if (session?.user) {
+            await get().fetchProfile();
+          }
+        } catch (error) {
+          console.error("Auth initialization error:", error);
+        } finally {
+          set({ isLoading: false, isInitialized: true });
         }
-        await get().getProfile();
-        console.log("✅ [STORE] Auth initialization complete");
       },
 
-      resetOtp: () => {
-        console.log("🔄 [STORE] resetOtp called");
-        set({ otpSent: false, phoneNumber: "" });
-        console.log("✅ [STORE] OTP state reset");
-      },
+      setUser: (user) => set({ user }),
+      setLoading: (loading) => set({ isLoading: loading }),
     })),
-    {
-      name: "useAuthStore",
-    },
+    { name: "auth-store" },
   ),
 );
+
+// Selector hooks for common use cases
+export const useUser = () => useAuthStore((state) => state.user);
+export const useIsAuthenticated = () => useAuthStore((state) => !!state.user);
+export const useAuthLoading = () => useAuthStore((state) => state.isLoading);

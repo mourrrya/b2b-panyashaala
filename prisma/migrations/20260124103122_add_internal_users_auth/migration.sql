@@ -8,7 +8,7 @@ CREATE TYPE "UserStatus" AS ENUM('ACTIVE', 'INACTIVE', 'PENDING');
 CREATE TABLE "internal_users" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "clerk_user_id" TEXT,
+    "google_id" TEXT,
     "role" "InternalUserRole" NOT NULL DEFAULT 'USER',
     "permissions" TEXT[],
     "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
@@ -26,10 +26,10 @@ CREATE TABLE "internal_users" (
 CREATE UNIQUE INDEX "internal_users_email_key" ON "internal_users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "internal_users_clerk_user_id_key" ON "internal_users"("clerk_user_id");
+CREATE UNIQUE INDEX "internal_users_google_id_key" ON "internal_users"("google_id");
 
 -- CreateIndex
 CREATE INDEX "internal_users_email_idx" ON "internal_users"("email");
 
 -- CreateIndex
-CREATE INDEX "internal_users_clerk_user_id_idx" ON "internal_users"("clerk_user_id");
+CREATE INDEX "internal_users_google_id_idx" ON "internal_users"("google_id");

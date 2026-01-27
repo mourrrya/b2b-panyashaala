@@ -151,6 +151,10 @@ model Customer {
   email String?      @unique
   phone String?
 
+  // Auth fields
+  password      String? // Hashed password for credential login
+  emailVerified DateTime? @map("email_verified")
+
   // Shared: Full Name for Individual, Contact Person for Business
   fullName String? @map("full_name")
 
@@ -167,8 +171,42 @@ model Customer {
   orders    Order[]
   addresses Address[]
   reviews   Review[]
+  accounts  Account[]
 
   @@map("customers")
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user Customer @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 model Order {

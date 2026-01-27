@@ -1,18 +1,18 @@
+import { protect, ProtectedRequest } from "@/lib/auth/protect";
 import { ErrorResponse, handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
-import { protect } from "@/lib/backend/protect";
 import { validateRequestBody } from "@/lib/backend/validation";
 import { UpdateProfileReqSchema } from "@/lib/schemas";
 import type { SuccessRes } from "@/lib/types/api.payload.types";
 import { Customer } from "@/prisma/generated/prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getOrCreateProfile, updateProfile } from "../services/profileServices";
 
 async function getProfileHandler(
-  request: NextRequest,
+  request: ProtectedRequest,
 ): Promise<NextResponse<SuccessRes<Customer> | ErrorResponse>> {
   try {
-    const { user } = request.auth!;
+    const { user } = request.auth;
     const profile = await getOrCreateProfile(user.id, user);
     return NextResponse.json({ data: profile, success: true });
   } catch (error) {
@@ -22,7 +22,7 @@ async function getProfileHandler(
 }
 
 async function updateProfileHandler(
-  request: NextRequest,
+  request: ProtectedRequest,
 ): Promise<NextResponse<SuccessRes<Customer> | ErrorResponse>> {
   try {
     const validation = await validateRequestBody(
@@ -30,7 +30,7 @@ async function updateProfileHandler(
       UpdateProfileReqSchema,
     );
     const body = validation.data;
-    const { user } = request.auth!;
+    const { user } = request.auth;
     const profile = await updateProfile(user.id, body);
     return NextResponse.json({ data: profile, success: true });
   } catch (error) {

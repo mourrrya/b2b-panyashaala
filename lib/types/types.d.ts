@@ -1,10 +1,16 @@
-import { User } from "@supabase/supabase-js";
 import "next/server";
+
+export type AuthUser = {
+  id: string;
+  email: string;
+  name?: string | null;
+  image?: string | null;
+};
 
 declare module "next/server" {
   interface NextRequest {
-    auth: {
-      user: User;
+    auth?: {
+      user: AuthUser;
     };
   }
 }

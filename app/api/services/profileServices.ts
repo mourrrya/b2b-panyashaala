@@ -1,3 +1,4 @@
+import { AuthUser } from "@/lib/auth/protect";
 import { ErrorUnknown } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { prisma } from "@/lib/backend/prisma";
@@ -5,7 +6,7 @@ import { Customer } from "@/prisma/generated/prisma/client";
 
 export async function getOrCreateProfile(
   userId: string,
-  userData: any,
+  userData: AuthUser,
 ): Promise<Customer> {
   logger.info({ userId }, "Getting or creating profile");
   try {
@@ -17,8 +18,7 @@ export async function getOrCreateProfile(
       data: {
         id: userId,
         email: userData.email || null,
-        fullName: userData.user_metadata?.full_name || null,
-        phone: userData.phone || userData.user_metadata?.phone || null,
+        fullName: userData.name || null,
       },
     });
     logger.info({ userId }, "Profile created");

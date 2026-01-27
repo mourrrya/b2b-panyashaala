@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "next-devtools": {
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"]
+    },
+    "my-mcp-server-f54b6502": {
+      "url": "https://mcp.prisma.io/mcp",
+      "type": "http"
+    }
+  },
+  "inputs": []
+}
