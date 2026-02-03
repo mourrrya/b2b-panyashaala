@@ -25,8 +25,55 @@ interface AddressSectionProps {
   addresses: Address[];
   title: string;
   icon: LucideIcon;
-  colorScheme: "emerald" | "blue" | "grey";
+  colorScheme: "emerald" | "blue" | "slate";
   showDefaultBadge?: boolean;
+}
+
+/**
+ * Elegant masking overlay with slate gradient
+ * Creates a professional frosted-glass effect with subtle gradient transitions
+ */
+function SlateMaskOverlay({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative overflow-hidden rounded-xl">
+      {/* Primary gradient mask layer */}
+      <div className="absolute inset-0 bg-linear-to-br from-slate-100/80 via-slate-50/60 to-white/40 pointer-events-none z-0" />
+      {/* Subtle radial gradient overlay for depth */}
+      <div className="absolute inset-0 bg-radial-[ellipse_at_top_right] from-slate-200/30 via-transparent to-slate-100/20 pointer-events-none z-0" />
+      {/* Content layer */}
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+}
+
+/**
+ * Professional glass-morphism card effect with slate theme
+ * Use for elevated content cards requiring visual hierarchy
+ */
+function SlateGlassCard({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`
+        relative overflow-hidden rounded-xl
+        bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70
+        backdrop-blur-sm
+        border border-slate-200/60
+        shadow-[0_4px_24px_-4px_rgba(51,65,85,0.12)]
+        before:absolute before:inset-0 
+        before:bg-linear-to-tr before:from-slate-200/20 before:via-transparent before:to-white/30
+        before:pointer-events-none
+        ${className}
+      `}
+    >
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
 }
 
 function AddressTypeInfo({
@@ -35,13 +82,15 @@ function AddressTypeInfo({
   icon: Icon = InfoIcon,
 }: AddressTypeInfoProps) {
   return (
-    <div className="p-2 px-4 space-y-1 bg-slate-50 rounded-xl border border-slate-200">
+    <SlateGlassCard className="p-3 px-4 space-y-1">
       <div className="flex items-center gap-2">
-        <Icon className="w-5 h-5 text-slate-600" />
-        <h3 className="font-semibold text-slate-900">{title}</h3>
+        <div className="p-1.5 rounded-lg bg-linear-to-br from-slate-100 to-slate-200/80">
+          <Icon className="w-4 h-4 text-slate-600" />
+        </div>
+        <h3 className="font-semibold text-slate-800">{title}</h3>
       </div>
-      <p className="text-sm text-slate-800">{description}</p>
-    </div>
+      <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
+    </SlateGlassCard>
   );
 }
 
@@ -65,11 +114,12 @@ function AddressSection({
       background: "bg-linear-to-br from-blue-50 to-indigo-50",
       borderColor: "border-blue-200",
     },
-    grey: {
+    slate: {
       icon: "text-slate-600",
-      border: "border-slate-200",
-      background: "bg-linear-to-br from-slate-50 to-slate-100",
-      borderColor: "border-slate-200",
+      border: "border-slate-200/60",
+      background:
+        "bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70",
+      borderColor: "border-slate-200/60",
     },
   };
 
@@ -77,35 +127,60 @@ function AddressSection({
 
   return (
     <div className="flex-1 min-w-75">
+      {/* Section header with elegant gradient underline */}
       <div
-        className={`flex whitespace-nowrap items-center gap-2 mb-4 py-2 border-b ${colors.border}`}
+        className={`flex whitespace-nowrap items-center gap-2 mb-4 pb-2 border-b ${colors.border}`}
       >
-        <Icon className={`w-5 h-5 ${colors.icon}`} />
+        <div className="p-1.5 rounded-lg bg-linear-to-br from-slate-100 to-slate-200/80">
+          <Icon className={`w-4 h-4 ${colors.icon}`} />
+        </div>
         <h3 className="font-bold text-slate-800">
           {title}
           {addresses.length > 1 ? "es" : ""}
         </h3>
-        <span className="text-sm text-slate-500">({addresses.length})</span>
+        <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+          {addresses.length}
+        </span>
       </div>
 
       <div className="flex flex-wrap gap-4">
         {addresses.map((address) => (
           <div
             key={address.id}
-            className={`flex-1 p-4 ${colors.background} rounded-lg border ${colors.borderColor} min-w-52`}
+            className={`
+              relative flex-1 p-4 min-w-52 rounded-xl overflow-hidden
+              ${colors.background}
+              border ${colors.borderColor}
+              backdrop-blur-sm
+              shadow-[0_2px_12px_-3px_rgba(51,65,85,0.08)]
+              transition-all duration-300 ease-out
+              before:absolute before:inset-0 
+              before:bg-linear-to-tr before:from-slate-200/10 before:via-transparent before:to-white/20
+              before:pointer-events-none
+            `}
           >
-            {showDefaultBadge && address.isDefault && (
-              <span className="inline-block px-2 py-1 mb-2 bg-blue-600 text-white text-xs font-semibold rounded-full">
-                Default
-              </span>
-            )}
-            <div className="space-y-1 text-sm text-slate-700">
-              <p className="font-medium">{address.street}</p>
-              {address.area && <p className="text-slate-600">{address.area}</p>}
-              <p>
-                {address.city}, {address.state} {address.zipCode}
-              </p>
-              <p className="text-slate-600">{address.country}</p>
+            {/* Subtle top highlight for depth */}
+            <div className="absolute top-0 left-4 right-4 h-px bg-linear-to-r from-transparent via-white/60 to-transparent" />
+
+            <div className="relative z-10">
+              {showDefaultBadge && address.isDefault && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 mb-3 bg-linear-to-r from-slate-600 to-slate-700 text-white text-xs font-semibold rounded-full shadow-sm">
+                  <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                  Default
+                </span>
+              )}
+              <div className="space-y-1.5 text-sm text-slate-700">
+                <p className="font-semibold text-slate-800">{address.street}</p>
+                {address.area && (
+                  <p className="text-slate-500">{address.area}</p>
+                )}
+                <p className="text-slate-600">
+                  {address.city}, {address.state} {address.zipCode}
+                </p>
+                <p className="text-slate-500 text-xs uppercase tracking-wide">
+                  {address.country}
+                </p>
+              </div>
             </div>
           </div>
         ))}
@@ -127,18 +202,29 @@ export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
   );
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-      {/* Header */}
-      <div className="bg-linear-to-r from-slate-50 to-slate-100 px-6 py-4 border-b border-slate-100">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-linear-to-r from-slate-500 to-slate-600 rounded-lg flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-white" />
+    <div className="relative bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200/60">
+      {/* Subtle background pattern for depth */}
+      <div className="absolute inset-0 bg-radial-[ellipse_at_top_left] from-slate-50/50 via-transparent to-transparent pointer-events-none" />
+
+      {/* Header with elegant gradient mask */}
+      <div className="relative bg-linear-to-r from-slate-50 via-slate-100/80 to-slate-50 px-6 py-5 border-b border-slate-200/60">
+        {/* Top edge highlight */}
+        <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-white to-transparent" />
+
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            {/* Icon container with layered gradient */}
+            <div className="w-12 h-12 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-xl flex items-center justify-center shadow-lg shadow-slate-500/25">
+              <MapPin className="w-6 h-6 text-white" />
+            </div>
+            {/* Subtle glow effect */}
+            <div className="absolute inset-0 bg-linear-to-br from-white/20 to-transparent rounded-xl" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 tracking-tight">
               Saved Addresses
             </h2>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-500 mt-0.5">
               Your shipping and billing addresses
             </p>
           </div>
@@ -165,7 +251,7 @@ export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
                 addresses={shippingAddresses}
                 title="Shipping Address"
                 icon={Home}
-                colorScheme="grey"
+                colorScheme="slate"
               />
             )}
 
@@ -175,7 +261,7 @@ export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
                 addresses={billingAddresses}
                 title="Billing Address"
                 icon={Building}
-                colorScheme="grey"
+                colorScheme="slate"
                 showDefaultBadge={true}
               />
             )}

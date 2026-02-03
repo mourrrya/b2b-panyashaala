@@ -78,13 +78,19 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
   };
 
   return (
-    <div className="bg-linear-to-r from-emerald-600 to-teal-600 text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-texture opacity-30"></div>
-      <div className="max-w-6xl mx-auto  px-3 md:px-6 py-12  relative">
-        <div className="flex gap-4 flex-wrap items-center justify-start">
+    <div className="relative bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200/60 border-l-emerald-200/40">
+      {/* Subtle background pattern for depth */}
+      <div className="absolute inset-0 bg-radial-[ellipse_at_top_left] from-slate-50/50 via-transparent to-transparent pointer-events-none" />
+
+      {/* Header with elegant gradient mask */}
+      <div className="relative bg-linear-to-r from-slate-50 via-slate-100/80 to-slate-50 px-6 py-8 border-b border-slate-200/60">
+        {/* Top edge highlight */}
+        <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-white to-transparent" />
+
+        <div className="flex gap-6 flex-wrap items-center justify-start max-w-6xl mx-auto  px-3 md:px-6">
           {/* Avatar Section */}
           <div className="relative group">
-            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-2xl bg-white">
+            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-200 shadow-xl bg-white">
               <Image
                 src={user.avatarUrl || "/placeholder-user.jpg"}
                 alt={user.fullName || user.companyName || "Profile"}
@@ -93,7 +99,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
                 className="w-full h-full object-cover"
               />
             </div>
-            <label className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-white text-emerald-600 border-none shadow-lg hover:bg-emerald-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+            <label className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-white text-slate-600 border border-slate-200 shadow-lg hover:bg-slate-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
               <Camera className="w-4 h-4" />
               <input
                 type="file"
@@ -104,23 +110,24 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
               />
               {uploadingAvatar && (
                 <div className="absolute inset-0 bg-white rounded-full flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-emerald-600 border-t-transparent"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-slate-600 border-t-transparent"></div>
                 </div>
               )}
             </label>
           </div>
-          <div className="flex flex-1 items-center justify-between  gap-4 md:gap-8">
+
+          <div className="flex flex-1 items-center justify-between gap-4 md:gap-8">
             {/* User Info Section */}
             <div className="flex-1">
               <div className="w-fit sm:text-left">
-                <h1 className="text-3xl md:text-4xl font-bold mb-2 whitespace-nowrap">
+                <h1 className="text-3xl md:text-4xl font-bold mb-2 whitespace-nowrap text-slate-800">
                   {user.fullName || user.companyName || "Welcome"}
                 </h1>
 
                 {/* Member Since */}
                 {getMemberSinceText() && (
-                  <div className="inline-block bg-white/10 backdrop-blur rounded-lg px-4 py-2 whitespace-nowrap">
-                    <p className="text-sm font-medium text-emerald-50">
+                  <div className="inline-block bg-linear-to-r from-slate-100 to-slate-200/80 backdrop-blur-sm rounded-lg px-4 py-2 whitespace-nowrap border border-slate-200/60">
+                    <p className="text-sm font-medium text-slate-600">
                       {getMemberSinceText()}
                     </p>
                   </div>
@@ -128,9 +135,20 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
               </div>
             </div>
 
-            <div className="text-center px-6 py-4 bg-white/10 backdrop-blur rounded-lg">
-              <div className="text-2xl font-bold">0</div>
-              <div className="text-xs text-emerald-100">Orders</div>
+            {/* Orders Stats Card */}
+            <div
+              className="relative overflow-hidden rounded-xl bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70 backdrop-blur-sm border border-slate-200/60 shadow-[0_2px_12px_-3px_rgba(51,65,85,0.08)] px-6 py-4 before:absolute before:inset-0 before:bg-linear-to-tr before:from-emerald-50/20 before:via-transparent before:to-white/30 before:pointer-events-none transition-all duration-300 ease-out hover:shadow-[0_8px_24px_-6px_rgba(51,65,85,0.15)] hover:-translate-y-0.5 cursor-pointer"
+              onClick={() => {
+                // Future: Navigate to orders page or open orders modal
+                console.log("Orders card clicked - implement navigation here");
+              }}
+            >
+              <div className="relative z-10 text-center">
+                <div className="text-2xl font-bold text-slate-800">0</div>
+                <div className="text-xs text-slate-500 uppercase tracking-wide">
+                  Orders
+                </div>
+              </div>
             </div>
           </div>
         </div>
