@@ -13,7 +13,6 @@ import {
   SITE_URL,
   VERIFICATION_TOKENS,
 } from "@/lib/seo";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
@@ -130,9 +129,7 @@ export default function RootLayout({
           <AuthProvider>
             <ProductDataProvider />
             <Header />
-            <AntdRegistry>
-              <ProgressBar>{children}</ProgressBar>
-            </AntdRegistry>
+            <ProgressBar>{children}</ProgressBar>
           </AuthProvider>
           <Footer />
           <Sonner />

@@ -2,14 +2,26 @@
 
 import { useStore } from "@/lib/store";
 import { useAuthStore } from "@/store/auth-store";
-import type { MenuProps } from "antd";
-import { Drawer, Dropdown } from "antd";
-import { LogIn, LogOut, ShoppingBag, User } from "lucide-react";
+import { LogIn, LogOut, Menu, ShoppingBag, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BasketDrawer } from "./BasketDrawer";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -63,7 +75,7 @@ export function Header() {
         <nav
           ref={navRef}
           aria-label="Main navigation"
-          className="hidden md:flex gap-4 lg:gap-6 text-sm font-medium text-slate-600 relative"
+          className="hidden lg:flex gap-4 lg:gap-6 text-sm font-medium text-slate-600 relative"
         >
           {navLinks.map((link) => (
             <Link
@@ -94,43 +106,38 @@ export function Header() {
         <div className="flex items-center gap-2 sm:gap-4">
           {/* Login/Profile Button */}
           {user ? (
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: "profile",
-                    label: "My Profile",
-                    icon: <User className="w-4 h-4" />,
-                    onClick: () => router.push("/profile"),
-                  },
-                  { type: "divider" },
-                  {
-                    key: "logout",
-                    label: "Sign Out",
-                    icon: <LogOut className="w-4 h-4" />,
-                    danger: true,
-                    disabled: isLoading,
-                    onClick: async () => {
-                      await signOut();
-                      router.push("/");
-                    },
-                  },
-                ] as MenuProps["items"],
-              }}
-              placement="bottomRight"
-              trigger={["click"]}
-            >
-              <button
-                className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 hover:from-emerald-200 hover:to-teal-200 transition-all duration-300 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-                title="Account menu"
-                aria-label="Account menu"
-              >
-                <User className="w-4 h-4" />
-                <span className="hidden sm:inline text-xs sm:text-sm font-medium">
-                  {user.fullName || user.companyName || "Account"}
-                </span>
-              </button>
-            </Dropdown>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 hover:from-emerald-200 hover:to-teal-200 transition-all duration-300 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                  title="Account menu"
+                  aria-label="Account menu"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="hidden sm:inline text-xs sm:text-sm font-medium">
+                    {user.fullName || user.companyName || "Account"}
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => router.push("/profile")}>
+                  <User className="w-4 h-4 mr-2" />
+                  My Profile
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                  disabled={isLoading}
+                  onClick={async () => {
+                    await signOut();
+                    router.push("/");
+                  }}
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Link
               href={`/login?redirect=${pathname !== "/login" ? encodeURIComponent(pathname) : "/"}`}
@@ -145,94 +152,126 @@ export function Header() {
             </Link>
           )}
 
-          <button
-            onClick={() => setBasketDrawerOpen(true)}
-            className="relative cursor-pointer inline-flex items-center gap-1.5 sm:gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-            title={`View enquiry basket with ${basket.length} items`}
-            aria-label="Open enquiry basket drawer"
-            aria-expanded={basketDrawerOpen}
-            aria-controls="basket-drawer"
-          >
-            <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
-            {basket.length > 0 && (
-              <span
-                className="absolute -top-1.5 sm:-top-2 -right-1.5 sm:-right-2 bg-emerald-600 text-white text-[10px] sm:text-xs font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center animate-pulse"
-                aria-label={`${basket.length} items in enquiry basket`}
+          {/* Basket Drawer */}
+          <Sheet open={basketDrawerOpen} onOpenChange={setBasketDrawerOpen}>
+            <SheetTrigger asChild>
+              <button
+                className="relative cursor-pointer inline-flex items-center gap-1.5 sm:gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                title={`View enquiry basket with ${basket.length} items`}
+                aria-label="Open enquiry basket drawer"
               >
-                {basket.length}
-              </span>
-            )}
-            <span className="hidden sm:inline text-xs sm:text-sm font-medium">
-              Enquiry
-            </span>
-          </button>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-emerald-800 p-1"
-            aria-label="Toggle navigation menu"
-            aria-expanded={mobileMenuOpen}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6 sm:w-7 sm:h-7"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
+                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
+                {basket.length > 0 && (
+                  <span
+                    className="absolute -top-1.5 sm:-top-2 -right-1.5 sm:-right-2 bg-emerald-600 text-white text-[10px] sm:text-xs font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center animate-pulse"
+                    aria-label={`${basket.length} items in enquiry basket`}
+                  >
+                    {basket.length}
+                  </span>
+                )}
+                <span className="hidden sm:inline text-xs sm:text-sm font-medium">
+                  Enquiry
+                </span>
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-full sm:max-w-md p-0">
+              <SheetHeader className="px-6 py-4 border-b border-slate-100">
+                <SheetTitle className="text-lg font-semibold text-emerald-900">
+                  Enquiry Basket ({basket.length})
+                </SheetTitle>
+              </SheetHeader>
+              <BasketDrawer
+                basketProducts={basketProducts}
+                basketLength={basket.length}
+                removeFromBasket={removeFromBasketOptimistic}
+                setBasketDrawerOpen={setBasketDrawerOpen}
               />
-            </svg>
-          </button>
-        </div>
+            </SheetContent>
+          </Sheet>
 
-        {/* Basket Drawer */}
-        <Drawer
-          id="basket-drawer"
-          title={`Enquiry Basket (${basket.length})`}
-          placement="right"
-          onClose={() => setBasketDrawerOpen(false)}
-          open={basketDrawerOpen}
-          className="basket-drawer"
-        >
-          <BasketDrawer
-            basketProducts={basketProducts}
-            basketLength={basket.length}
-            removeFromBasket={removeFromBasketOptimistic}
-            setBasketDrawerOpen={setBasketDrawerOpen}
-          />
-        </Drawer>
-      </div>
-
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <nav
-          className="md:hidden border-t border-slate-100 bg-white"
-          aria-label="Mobile navigation"
-        >
-          <div className="px-6 py-4 flex flex-col gap-3 text-sm text-slate-600">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`transition-colors ${
-                  pathname === link.href
-                    ? "text-emerald-800 font-semibold border-l-4 border-emerald-800 pl-2"
-                    : "hover:text-emerald-800"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-                aria-current={pathname === link.href ? "page" : undefined}
+          {/* Mobile Sidebar Menu */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <button
+                className="lg:hidden text-emerald-800 p-1 hover:bg-emerald-50 rounded-md transition-colors"
+                aria-label="Toggle navigation menu"
               >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
-      )}
+                <Menu className="w-6 h-6 sm:w-7 sm:h-7" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-72 sm:w-80 p-0">
+              <SheetHeader className="px-6 py-4 border-b border-slate-100">
+                <div className="flex items-center justify-between">
+                  <Image
+                    src="/logo-text.svg"
+                    alt="Aukra Chem Essentials LLP"
+                    width={100}
+                    height={33}
+                    className="h-8 w-auto"
+                  />
+                </div>
+              </SheetHeader>
+              <nav
+                className="flex flex-col py-4"
+                aria-label="Mobile navigation"
+              >
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`px-6 py-3 text-sm font-medium transition-colors ${
+                      pathname === link.href
+                        ? "text-emerald-800 bg-emerald-50 border-l-4 border-emerald-800"
+                        : "text-slate-600 hover:text-emerald-800 hover:bg-slate-50"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-current={pathname === link.href ? "page" : undefined}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+
+                {/* Mobile User Actions */}
+                <div className="mt-4 px-6 pt-4 border-t border-slate-100">
+                  {user ? (
+                    <div className="space-y-2">
+                      <Link
+                        href="/profile"
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-emerald-800 hover:bg-slate-50 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <User className="w-4 h-4" />
+                        My Profile
+                      </Link>
+                      <button
+                        className="flex items-center gap-2 w-full px-4 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                        disabled={isLoading}
+                        onClick={async () => {
+                          await signOut();
+                          setMobileMenuOpen(false);
+                          router.push("/");
+                        }}
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <Link
+                      href={`/login?redirect=${pathname !== "/login" ? encodeURIComponent(pathname) : "/"}`}
+                      className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-linear-to-r from-emerald-600 to-teal-600 text-white text-sm font-medium hover:from-emerald-700 hover:to-teal-700 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <LogIn className="w-4 h-4" />
+                      Login
+                    </Link>
+                  )}
+                </div>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
     </header>
   );
 }

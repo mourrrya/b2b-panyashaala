@@ -2,7 +2,10 @@
   "servers": {
     "next-devtools": {
       "command": "npx",
-      "args": ["-y", "next-devtools-mcp@latest"]
+      "args": [
+        "-y",
+        "next-devtools-mcp@latest"
+      ]
     },
     "my-mcp-server-f54b6502": {
       "url": "https://mcp.prisma.io/mcp",
@@ -10,7 +13,17 @@
     },
     "gcloud": {
       "command": "npx",
-      "args": ["-y", "@google-cloud/gcloud-mcp"]
+      "args": [
+        "-y",
+        "@google-cloud/gcloud-mcp"
+      ]
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
     }
   },
   "inputs": []

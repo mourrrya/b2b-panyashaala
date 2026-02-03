@@ -1,10 +1,11 @@
 "use client";
 
 import type { Product } from "@/lib/store";
-import { DeleteOutlined, InboxOutlined } from "@ant-design/icons";
-import { Button, Card } from "antd";
+import { Package, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
 
 interface BasketDrawerProps {
   basketProducts: Product[];
@@ -21,8 +22,8 @@ export function BasketDrawer({
 }: BasketDrawerProps) {
   if (basketLength === 0) {
     return (
-      <div className="basket-empty h-full flex flex-col items-center justify-center py-8 gap-2">
-        <InboxOutlined className="text-4xl text-emerald-300 mb-4" />
+      <div className="basket-empty h-full flex flex-col items-center justify-center py-8 gap-2 px-6">
+        <Package className="w-12 h-12 text-emerald-300 mb-4" />
         <p className="text-center text-slate-600 font-medium mb-2">
           Your enquiry basket is empty
         </p>
@@ -31,8 +32,7 @@ export function BasketDrawer({
         </p>
         <Link href="/products">
           <Button
-            type="primary"
-            className="bg-emerald-800 hover:bg-emerald-700"
+            className="bg-emerald-800 hover:bg-emerald-700 text-white"
             onClick={() => setBasketDrawerOpen(false)}
           >
             Browse Products
@@ -49,7 +49,7 @@ export function BasketDrawer({
           {basketProducts.map((product, index) => (
             <div key={product.id}>
               <Card
-                className="basket-card"
+                className="basket-card p-4"
                 style={{
                   animation: `fadeIn 600ms ease-out ${index * 100}ms both`,
                 }}
@@ -61,7 +61,7 @@ export function BasketDrawer({
                     title={`Remove ${product.name}`}
                     aria-label={`Remove ${product.name} from basket`}
                   >
-                    <DeleteOutlined className="text-lg" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
 
                   <div className="pr-8">
@@ -73,7 +73,7 @@ export function BasketDrawer({
                         .split("-")
                         .map(
                           (word: string) =>
-                            word.charAt(0).toUpperCase() + word.slice(1)
+                            word.charAt(0).toUpperCase() + word.slice(1),
                         )
                         .join(" ")}
                     </p>
@@ -88,13 +88,11 @@ export function BasketDrawer({
         </div>
       </div>
 
-      <div className="border-t border-slate-100 p-4 space-y-3 ">
+      <div className="border-t border-slate-100 p-4 space-y-3">
         <Link href="/contact" className="w-full block">
           <Button
-            type="primary"
-            size="large"
-            block
-            className="bg-emerald-800 hover:bg-emerald-700 text-white font-semibold"
+            size="lg"
+            className="w-full bg-emerald-800 hover:bg-emerald-700 text-white font-semibold"
             disabled={basketLength === 0}
             onClick={() => setBasketDrawerOpen(false)}
           >
