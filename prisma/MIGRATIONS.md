@@ -24,7 +24,7 @@ pnpm db:migrate
 # Deploy migrations (production)
 pnpm db:migrate:deploy
 
-# Reset database and run all migrations
+# Never run Reset database and run all migrations
 npx prisma migrate reset
 
 # Check migration status
@@ -33,7 +33,7 @@ npx prisma migrate status
 
 ## Important Notes
 
-- Use `db:push` for rapid prototyping in development
+- Do not use `db:push`
 - Use `db:migrate` for production-ready database changes
 - Always review generated migrations before applying them
 - Migrations are the recommended approach for production deployments

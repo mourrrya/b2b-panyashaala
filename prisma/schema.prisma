@@ -8,25 +8,26 @@ datasource db {
 }
 
 model Product {
-  id                String              @id @default(uuid())
-  name              String
-  purityType        ProductPurityType
-  category          ProductCategory
-  description       String?
-  botanicalName     String?
-  extractionMethod  ExtractionMethod?
-  chemicalFormula   String?
-  casNumber         String?
-  hazardClass       HazardClass?
-  supplier          String
-  certifications    CertificationType[]
-  storageConditions String?
-  gstSlab           GstSlab
-  HSNCode           String
-  isDeleted         Boolean             @default(false)
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  variants          Variant[]
+  id                 String              @id @default(uuid())
+  name               String
+  purityType         ProductPurityType
+  category           ProductCategory
+  description        String?
+  botanicalName      String?
+  extractionMethod   ExtractionMethod?
+  chemicalFormula    String?
+  casNumber          String?
+  hazardClass        HazardClass?
+  supplier           String
+  certifications     CertificationType[]
+  storageConditions  String?
+  gstSlab            GstSlab
+  HSNCode            String
+  standardLabResults Json?
+  isDeleted          Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  variants           Variant[]
 
   @@unique([name, purityType])
   @@map("products")
@@ -46,6 +47,7 @@ model Variant {
   costPrice             Decimal                @db.Decimal(10, 2)
   quantityAvailable     Int                    @default(0)
   minStockLevel         Int?
+  shelfLife             Int?
   isDeleted             Boolean                @default(false)
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
@@ -82,6 +84,7 @@ model Batch {
   variant               Variant                @relation(fields: [variantId], references: [id], onDelete: Cascade)
   purchaseOrder         PurchaseOrder?         @relation(fields: [purchaseOrderId], references: [id], onDelete: SetNull)
   inventoryTransactions InventoryTransaction[]
+  orderItems            OrderItem[]
 
   @@index([batchNumber])
   @@index([variantId])
@@ -238,19 +241,28 @@ model Order {
 }
 
 model OrderItem {
-  id          String   @id @default(uuid())
-  orderId     String   @map("order_id")
-  variantId   String   @map("variant_id")
-  productName String   @map("product_name")
-  variantName String   @map("variant_name")
-  quantity    Int      @default(1)
-  unitPrice   Decimal  @db.Decimal(10, 2)
-  gstSlab     GstSlab  @map("gst_slab")
-  hsnCode     String   @map("hsn_code")
-  taxAmount   Decimal  @default(0) @map("tax_amount") @db.Decimal(10, 2)
-  createdAt   DateTime @default(now()) @map("created_at")
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  variant     Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  id          String @id @default(uuid())
+  orderId     String @map("order_id")
+  variantId   String @map("variant_id")
+  batchId     String @map("batch_id")
+  productName String @map("product_name")
+  variantName String @map("variant_name")
+  quantity    Int    @default(1)
+
+  // variant size at the time of order
+  netContent      Decimal         @map("net_content") @db.Decimal(10, 2)
+  measurementUnit MeasurementUnit @map("measurement_unit")
+  // product category at the time of order
+  productCategory ProductCategory @map("product_category")
+
+  unitPrice Decimal  @db.Decimal(10, 2)
+  gstSlab   GstSlab  @map("gst_slab")
+  hsnCode   String   @map("hsn_code")
+  taxAmount Decimal  @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  createdAt DateTime @default(now()) @map("created_at")
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant   Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  batch     Batch    @relation(fields: [batchId], references: [id], onDelete: Cascade)
 
   @@map("order_items")
 }
@@ -437,7 +449,7 @@ enum PaymentStatus {
 enum MeasurementUnit {
   ML
   L
-  G
+  GM
   KG
   PCS
 }
@@ -465,10 +477,6 @@ enum POStatus {
 
   @@map("PurchaseOrderStatus")
 }
-
-// ============================================================================
-// INTERNAL USERS & AUTHENTICATION
-// ============================================================================
 
 model InternalUser {
   id          String           @id @default(uuid())
