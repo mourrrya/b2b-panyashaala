@@ -25,10 +25,16 @@ pnpm db:migrate
 pnpm db:migrate:deploy
 
 # Never run Reset database and run all migrations
-npx prisma migrate reset
+pnpm prisma migrate reset
 
 # Check migration status
-npx prisma migrate status
+pnpm prisma migrate status
+
+# Create a migration without applying it
+pnpm prisma migrate dev --create-only --name "testing_db_status"
+
+# Execute raw SQL file
+pnpm prisma db execute --file prisma/manual_db_update.sql
 ```
 
 ## Important Notes
@@ -37,3 +43,7 @@ npx prisma migrate status
 - Use `db:migrate` for production-ready database changes
 - Always review generated migrations before applying them
 - Migrations are the recommended approach for production deployments
+
+```
+
+```
