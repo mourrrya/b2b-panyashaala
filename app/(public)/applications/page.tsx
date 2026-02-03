@@ -15,13 +15,13 @@ export default function ApplicationsPage() {
       app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.ingredients.some((ing) =>
-        ing.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+        ing.toLowerCase().includes(searchTerm.toLowerCase()),
+      ),
   );
 
   return (
     <main className="bg-texture min-h-screen">
-      <section className="max-w-6xl mx-auto px-6 py-16">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12 lg:py-16">
         <ApplicationHeader
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}

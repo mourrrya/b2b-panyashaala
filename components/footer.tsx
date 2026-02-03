@@ -4,19 +4,23 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-linear-to-br from-emerald-50/80 via-white/80 to-teal-50/80 border-t border-emerald-200/50 mt-20 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <h3 className="font-semibold text-slate-900 mb-4">About</h3>
-            <p className="text-sm text-slate-600">
+    <footer className="bg-linear-to-br from-emerald-50/80 via-white/80 to-teal-50/80 border-t border-emerald-200/50 mt-12 sm:mt-16 lg:mt-20 backdrop-blur-sm">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 lg:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
+          <div className="col-span-2 md:col-span-1">
+            <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+              About
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600">
               Natural cosmetic ingredients supplier for formulators and
               manufacturers.
             </p>
           </div>
           <nav>
-            <h3 className="font-semibold text-slate-900 mb-4">Products</h3>
-            <ul className="space-y-2 text-sm text-slate-600">
+            <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+              Products
+            </h3>
+            <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-600">
               <li>
                 <Link
                   href="/products?category=essential-oil"
@@ -52,8 +56,10 @@ export function Footer() {
             </ul>
           </nav>
           <nav>
-            <h3 className="font-semibold text-slate-900 mb-4">Resources</h3>
-            <ul className="space-y-2 text-sm text-slate-600">
+            <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+              Resources
+            </h3>
+            <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-600">
               <li>
                 <Link
                   href="/about"
@@ -91,8 +97,10 @@ export function Footer() {
             </ul>
           </nav>
           <div>
-            <h3 className="font-semibold text-slate-900 mb-4">Contact</h3>
-            <p className="text-sm text-slate-600 mb-3">
+            <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+              Contact
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mb-2 sm:mb-3">
               <a
                 href="tel:+918076450898"
                 className="hover:text-emerald-800 transition-colors duration-200 font-medium"
@@ -140,7 +148,7 @@ export function Footer() {
             </div> */}
           </div>
         </div>
-        <div className="border-t border-emerald-200/50 pt-8 text-center text-sm text-slate-600">
+        <div className="border-t border-emerald-200/50 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-slate-600">
           <p>
             &copy; {currentYear} Aukra Chem Essentials LLP. All rights reserved.
           </p>

@@ -344,3 +344,70 @@ select:focus-visible {
 
 /* Core Web Vitals: Font Display Optimization */
 /* Note: font-display: swap is configured in app/layout.tsx with next/font */
+
+/* =====================================================
+   MOBILE-FIRST RESPONSIVE UTILITIES
+   Optimized for mobile to medium screen sizes
+   ===================================================== */
+
+/* Global Mobile Spacing & Typography */
+@media (max-width: 640px) {
+  /* Reduce base padding on containers */
+  .max-w-6xl {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Floating action button adjustment for mobile */
+  .floating-action {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* Adjust tag pills for mobile */
+  .tag-pill {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  /* Card hover - reduce transform on mobile for better UX */
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  }
+}
+
+/* Medium screen adjustments (tablets) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .floating-action {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+/* Mobile Drawer Adjustments */
+@media (max-width: 640px) {
+  .basket-drawer .ant-drawer-header {
+    padding: 12px 16px !important;
+  }
+
+  .basket-drawer .ant-drawer-header .ant-drawer-title {
+    font-size: 16px;
+  }
+
+  .basket-card {
+    padding: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .basket-empty {
+    min-height: 200px;
+  }
+}
+
+/* Mobile-specific glass effect adjustment */
+@media (max-width: 640px) {
+  .glass-effect {
+    backdrop-filter: blur(8px);
+  }
+}

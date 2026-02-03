@@ -87,15 +87,15 @@ function AuthContent() {
     <main className="min-h-screen relative overflow-hidden">
       <BackgroundDecorations />
 
-      <div className="relative z-10 min-h-screen max-w-6xl mx-auto px-6 py-8 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start lg:items-center">
+      <div className="relative z-10 min-h-screen max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-start lg:items-center">
         <BrandingSidebar />
 
         <div className="w-full max-w-md justify-self-center lg:justify-self-end">
           <div className="relative">
-            <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-teal-500 to-emerald-600 rounded-2xl md:rounded-4xl blur-xl opacity-20" />
+            <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-teal-500 to-emerald-600 rounded-xl sm:rounded-2xl md:rounded-4xl blur-xl opacity-20" />
 
-            <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-2xl shadow-slate-200/50 border border-white/50 overflow-hidden">
-              <div className="p-5 sm:p-6 md:p-8 space-y-4 md:space-y-6">
+            <div className="relative bg-white/80 backdrop-blur-xl rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl shadow-slate-200/50 border border-white/50 overflow-hidden">
+              <div className="p-4 sm:p-5 md:p-6 lg:p-8 space-y-3 sm:space-y-4 md:space-y-6">
                 <FormHeader mode={mode} />
                 {error && <ErrorMessage error={error} />}
                 <GoogleSignInButton
@@ -118,12 +118,12 @@ function AuthContent() {
             </div>
           </div>
 
-          <div className="text-center pt-4 md:pt-6">
+          <div className="text-center pt-3 sm:pt-4 md:pt-6">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-500 hover:text-emerald-600 transition-colors duration-300 group"
+              className="inline-flex items-center gap-1 sm:gap-1.5 md:gap-2 text-xs md:text-sm text-slate-500 hover:text-emerald-600 transition-colors duration-300 group"
             >
-              <ArrowLeft className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:-translate-x-1 transition-transform duration-300" />
+              <ArrowLeft className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 group-hover:-translate-x-1 transition-transform duration-300" />
               Back to Home
             </Link>
           </div>

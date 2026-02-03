@@ -50,19 +50,20 @@ export function Header() {
 
   return (
     <header className="bg-white/90 backdrop-blur border-b border-slate-100 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         <Link href="/" className="text-emerald-800 font-semibold text-xl">
           <Image
             src="/logo-text.svg"
             alt="Aukra Chem Essentials LLP"
-            width={150}
-            height={50}
+            width={120}
+            height={40}
+            className="w-24 sm:w-28 md:w-36 h-auto"
           />
         </Link>
         <nav
           ref={navRef}
           aria-label="Main navigation"
-          className="hidden md:flex gap-6 text-sm font-medium text-slate-600 relative"
+          className="hidden md:flex gap-4 lg:gap-6 text-sm font-medium text-slate-600 relative"
         >
           {navLinks.map((link) => (
             <Link
@@ -90,7 +91,7 @@ export function Header() {
             />
           )}
         </nav>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           {/* Login/Profile Button */}
           {user ? (
             <Dropdown
@@ -120,12 +121,12 @@ export function Header() {
               trigger={["click"]}
             >
               <button
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 hover:from-emerald-200 hover:to-teal-200 transition-all duration-300 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 hover:from-emerald-200 hover:to-teal-200 transition-all duration-300 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
                 title="Account menu"
                 aria-label="Account menu"
               >
                 <User className="w-4 h-4" />
-                <span className="hidden sm:inline text-sm font-medium">
+                <span className="hidden sm:inline text-xs sm:text-sm font-medium">
                   {user.fullName || user.companyName || "Account"}
                 </span>
               </button>
@@ -133,12 +134,12 @@ export function Header() {
           ) : (
             <Link
               href={`/login?redirect=${pathname !== "/login" ? encodeURIComponent(pathname) : "/"}`}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-linear-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
               title="Login to your account"
               aria-label="Login"
             >
               <LogIn className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm font-medium">
+              <span className="hidden sm:inline text-xs sm:text-sm font-medium">
                 Login
               </span>
             </Link>
@@ -146,28 +147,28 @@ export function Header() {
 
           <button
             onClick={() => setBasketDrawerOpen(true)}
-            className="relative cursor-pointer inline-flex items-center gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+            className="relative cursor-pointer inline-flex items-center gap-1.5 sm:gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
             title={`View enquiry basket with ${basket.length} items`}
             aria-label="Open enquiry basket drawer"
             aria-expanded={basketDrawerOpen}
             aria-controls="basket-drawer"
           >
-            <ShoppingBag className="w-6 h-6" />
+            <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
             {basket.length > 0 && (
               <span
-                className="absolute -top-2 -right-2 bg-emerald-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse"
+                className="absolute -top-1.5 sm:-top-2 -right-1.5 sm:-right-2 bg-emerald-600 text-white text-[10px] sm:text-xs font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center animate-pulse"
                 aria-label={`${basket.length} items in enquiry basket`}
               >
                 {basket.length}
               </span>
             )}
-            <span className="hidden sm:inline text-sm font-medium">
+            <span className="hidden sm:inline text-xs sm:text-sm font-medium">
               Enquiry
             </span>
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-emerald-800"
+            className="md:hidden text-emerald-800 p-1"
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -177,7 +178,7 @@ export function Header() {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="w-7 h-7"
+              className="w-6 h-6 sm:w-7 sm:h-7"
               aria-hidden="true"
             >
               <path

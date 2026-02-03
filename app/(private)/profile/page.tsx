@@ -60,8 +60,8 @@ export default function ProfilePage() {
       <ProfileHeader user={user} onAvatarUpload={handleAvatarUpload} />
 
       {/* Profile Details */}
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="grid gap-6 md:gap-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="grid gap-4 sm:gap-6 md:gap-8">
           {/* Personal Information */}
           <PersonalInfoCard
             fullName={user.fullName}

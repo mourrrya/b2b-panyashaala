@@ -53,24 +53,26 @@ function BusinessInfoField({
 }) {
   return (
     <div className="group">
-      <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-        <div className="p-1 rounded-lg bg-linear-to-br from-slate-100 to-slate-200/80">
-          <Icon className="w-3.5 h-3.5 text-slate-600" />
+      <label className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">
+        <div className="p-0.5 sm:p-1 rounded-md sm:rounded-lg bg-linear-to-br from-slate-100 to-slate-200/80">
+          <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-600" />
         </div>
         {label}
       </label>
-      <SlateGlassCard className="p-3 transition-all duration-300 ease-out">
+      <SlateGlassCard className="p-2.5 sm:p-3 transition-all duration-300 ease-out">
         {isLink && value ? (
           <a
             href={value.startsWith("http") ? value : `https://${value}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-700 underline decoration-slate-300"
+            className="text-sm sm:text-base text-slate-700 underline decoration-slate-300"
           >
             {value}
           </a>
         ) : (
-          <span className="text-slate-800">{value || "Not provided"}</span>
+          <span className="text-sm sm:text-base text-slate-800">
+            {value || "Not provided"}
+          </span>
         )}
       </SlateGlassCard>
     </div>
@@ -83,29 +85,29 @@ export function BusinessInfoCard({
   website,
 }: BusinessInfoCardProps) {
   return (
-    <div className="relative bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200/60">
+    <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-slate-200/60">
       {/* Subtle background pattern for depth */}
       <div className="absolute inset-0 bg-radial-[ellipse_at_top_left] from-slate-50/50 via-transparent to-transparent pointer-events-none" />
 
       {/* Header with elegant gradient mask */}
-      <div className="relative bg-linear-to-r from-slate-50 via-slate-100/80 to-slate-50 px-6 py-5 border-b border-slate-200/60">
+      <div className="relative bg-linear-to-r from-slate-50 via-slate-100/80 to-slate-50 px-4 sm:px-5 md:px-6 py-4 sm:py-5 border-b border-slate-200/60">
         {/* Top edge highlight */}
         <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-white to-transparent" />
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <div className="relative">
             {/* Icon container with layered gradient */}
-            <div className="w-12 h-12 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-xl flex items-center justify-center shadow-lg shadow-slate-500/25">
-              <Building2 className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg shadow-slate-500/25">
+              <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
             {/* Subtle glow effect */}
-            <div className="absolute inset-0 bg-linear-to-br from-white/20 to-transparent rounded-xl" />
+            <div className="absolute inset-0 bg-linear-to-br from-white/20 to-transparent rounded-lg sm:rounded-xl" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-800 tracking-tight">
+            <h2 className="text-base sm:text-lg md:text-xl font-bold text-slate-800 tracking-tight">
               Business Information
             </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
               Your business details and tax information
             </p>
           </div>
@@ -113,9 +115,9 @@ export function BusinessInfoCard({
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="space-y-4">
+      <div className="p-4 sm:p-5 md:p-6">
+        <div className="grid gap-4 sm:gap-5 md:gap-6 md:grid-cols-2">
+          <div className="space-y-3 sm:space-y-4">
             {/* Company Name */}
             <BusinessInfoField
               label="Company Name"
@@ -127,7 +129,7 @@ export function BusinessInfoCard({
             <BusinessInfoField label="GST IN" value={gstIn} icon={FileText} />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Website */}
             <BusinessInfoField
               label="Website"

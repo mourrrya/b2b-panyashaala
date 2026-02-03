@@ -31,15 +31,15 @@ export default function QualityPage() {
   return (
     <>
       <main className="bg-texture min-h-screen">
-        <section className="max-w-6xl mx-auto px-6 py-16">
-          <p className="text-sm uppercase tracking-[0.2em] text-emerald-600">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12 lg:py-16">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.15em] sm:tracking-[0.2em] text-emerald-600 mb-2">
             Quality & Sourcing
           </p>
-          <h1 className="text-3xl font-semibold text-slate-900 mb-10">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 mb-6 sm:mb-8 lg:mb-10">
             Quality-first supply with transparent documentation
           </h1>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10 lg:mb-12">
             {[
               {
                 title: "Quality First",
@@ -59,12 +59,12 @@ export default function QualityPage() {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-2xl border border-slate-100 bg-white/95 gradient-card card-hover"
+                className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl border border-slate-100 bg-white/95 gradient-card card-hover"
               >
-                <h3 className="text-xl font-semibold text-slate-900">
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">
                   {item.title}
                 </h3>
-                <p className="text-sm text-slate-600 mt-3">
+                <p className="text-xs sm:text-sm text-slate-600 mt-2 sm:mt-3">
                   {item.description}
                 </p>
               </div>
@@ -72,22 +72,24 @@ export default function QualityPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 mb-6">FAQ</h2>
-            <div className="space-y-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-4 sm:mb-6">
+              FAQ
+            </h2>
+            <div className="space-y-3 sm:space-y-4">
               {faqs.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="accordion-item rounded-2xl border border-slate-100 bg-white/95 overflow-hidden"
+                  className="accordion-item rounded-xl sm:rounded-2xl border border-slate-100 bg-white/95 overflow-hidden"
                 >
                   <button
                     onClick={() =>
                       setOpenAccordion(openAccordion === idx ? null : idx)
                     }
-                    className="w-full text-left px-6 py-4 font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-50/80 transition-colors"
+                    className="w-full text-left px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-50/80 transition-colors"
                   >
                     {faq.question}
                     <svg
-                      className={`w-5 h-5 transition-transform ${
+                      className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ml-2 transition-transform ${
                         openAccordion === idx ? "rotate-180" : ""
                       }`}
                       fill="none"
@@ -103,7 +105,7 @@ export default function QualityPage() {
                     </svg>
                   </button>
                   {openAccordion === idx && (
-                    <div className="px-6 py-4 bg-gradient-to-br from-white/95 to-emerald-50/95 text-sm text-slate-600 border-t border-slate-100">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4 bg-linear-to-br from-white/95 to-emerald-50/95 text-xs sm:text-sm text-slate-600 border-t border-slate-100">
                       {faq.answer}
                     </div>
                   )}
