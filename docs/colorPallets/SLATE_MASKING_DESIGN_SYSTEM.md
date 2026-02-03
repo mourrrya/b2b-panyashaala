@@ -6,6 +6,21 @@
 
 This design system provides a collection of reusable masking and glass-morphism effects built with Tailwind CSS v4. The slate color palette creates a sophisticated, modern aesthetic suitable for professional B2B applications.
 
+**Design Philosophy**: Minimal border radius (`rounded-md` or `rounded-lg` max) for a clean, professional appearance.
+
+---
+
+## 🔲 Border Radius Guidelines
+
+| Usage                   | Class          | Pixels | When to Use                        |
+| ----------------------- | -------------- | ------ | ---------------------------------- |
+| Buttons, inputs, badges | `rounded-md`   | 6px    | Primary interactive elements       |
+| Cards, containers       | `rounded-lg`   | 8px    | Content containers, maximum radius |
+| Small elements          | `rounded`      | 4px    | Tiny elements, inner details       |
+| Pills/chips only        | `rounded-full` | 9999px | Status indicators, avatars only    |
+
+**Avoid**: `rounded-xl`, `rounded-2xl`, `rounded-3xl` - these create an overly soft appearance.
+
 ---
 
 ## 🎨 Color Palette
@@ -47,7 +62,7 @@ A subtle layered gradient overlay that creates depth and visual hierarchy.
 ```tsx
 function SlateMaskOverlay({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative overflow-hidden rounded-xl">
+    <div className="relative overflow-hidden rounded-lg">
       {/* Primary gradient mask layer */}
       <div className="absolute inset-0 bg-linear-to-br from-slate-100/80 via-slate-50/60 to-white/40 pointer-events-none z-0" />
       {/* Subtle radial gradient overlay for depth */}
@@ -82,7 +97,7 @@ function SlateGlassCard({
   return (
     <div
       className={`
-        relative overflow-hidden rounded-xl
+        relative overflow-hidden rounded-lg
         bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70
         backdrop-blur-sm
         border border-slate-200/60
@@ -115,7 +130,7 @@ Interactive cards with elegant transitions and depth layers. **Hover effects sho
 ```tsx
 <div
   className={`
-    relative flex-1 p-4 min-w-52 rounded-xl overflow-hidden
+    relative flex-1 p-4 min-w-52 rounded-lg overflow-hidden
     bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70
     border border-slate-200/60
     backdrop-blur-sm
@@ -149,7 +164,7 @@ Interactive cards with elegant transitions and depth layers. **Hover effects sho
 ### Default Badge (Slate Gradient)
 
 ```tsx
-<span className="inline-flex items-center gap-1 px-2.5 py-1 bg-linear-to-r from-slate-600 to-slate-700 text-white text-xs font-semibold rounded-full shadow-sm">
+<span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-linear-to-r from-slate-600 to-slate-700 text-white text-xs font-semibold rounded-md shadow-sm">
   <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
   Default
 </span>
@@ -162,7 +177,7 @@ Interactive cards with elegant transitions and depth layers. **Hover effects sho
 ### Gradient Icon Box (Small)
 
 ```tsx
-<div className="p-1.5 rounded-lg bg-linear-to-br from-slate-100 to-slate-200/80">
+<div className="p-1.5 rounded-md bg-linear-to-br from-slate-100 to-slate-200/80">
   <Icon className="w-4 h-4 text-slate-600" />
 </div>
 ```
@@ -171,11 +186,9 @@ Interactive cards with elegant transitions and depth layers. **Hover effects sho
 
 ```tsx
 <div className="relative">
-  <div className="w-12 h-12 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-xl flex items-center justify-center shadow-lg shadow-slate-500/25">
-    <Icon className="w-6 h-6 text-white" />
+  <div className="w-11 h-11 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-lg flex items-center justify-center shadow-lg shadow-slate-500/25">
+    <Icon className="w-5 h-5 text-white" />
   </div>
-  {/* Subtle glow overlay */}
-  <div className="absolute inset-0 bg-linear-to-br from-white/20 to-transparent rounded-xl" />
 </div>
 ```
 
@@ -198,11 +211,11 @@ Interactive cards with elegant transitions and depth layers. **Hover effects sho
 
 ```tsx
 <div className="flex whitespace-nowrap items-center gap-2 mb-4 pb-2 border-b border-slate-200/60">
-  <div className="p-1.5 rounded-lg bg-linear-to-br from-slate-100 to-slate-200/80">
+  <div className="p-1.5 rounded-md bg-linear-to-br from-slate-100 to-slate-200/80">
     <Icon className="w-4 h-4 text-slate-600" />
   </div>
   <h3 className="font-bold text-slate-800">Section Title</h3>
-  <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+  <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
     {count}
   </span>
 </div>
@@ -266,7 +279,7 @@ animate-pulse
 ## 📋 Complete Card Example
 
 ```tsx
-<div className="relative bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200/60">
+<div className="relative bg-white rounded-lg shadow-xl overflow-hidden border border-slate-200/60">
   {/* Subtle background pattern */}
   <div className="absolute inset-0 bg-radial-[ellipse_at_top_left] from-slate-50/50 via-transparent to-transparent pointer-events-none" />
 
@@ -275,10 +288,9 @@ animate-pulse
     <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-white to-transparent" />
     <div className="flex items-center gap-4">
       <div className="relative">
-        <div className="w-12 h-12 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-xl flex items-center justify-center shadow-lg shadow-slate-500/25">
-          <Icon className="w-6 h-6 text-white" />
+        <div className="w-11 h-11 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-lg flex items-center justify-center shadow-lg shadow-slate-500/25">
+          <Icon className="w-5 h-5 text-white" />
         </div>
-        <div className="absolute inset-0 bg-linear-to-br from-white/20 to-transparent rounded-xl" />
       </div>
       <div>
         <h2 className="text-xl font-bold text-slate-800 tracking-tight">
@@ -306,6 +318,15 @@ This design system uses Tailwind CSS v4 syntax:
 - Use `bg-radial-[...]` for radial gradients
 - Arbitrary values use square bracket notation
 
+### Border Radius Convention
+
+**Always use minimal radius for a professional look:**
+
+- `rounded-md` (6px) for buttons, inputs, badges
+- `rounded-lg` (8px) for cards and containers (maximum)
+- `rounded` (4px) for small inner elements
+- Avoid `rounded-xl`, `rounded-2xl`, `rounded-3xl`
+
 ### Browser Support
 
 - `backdrop-blur-sm` requires modern browsers
@@ -325,6 +346,8 @@ This design system uses Tailwind CSS v4 syntax:
 - `app/(private)/profile/components/BusinessInfoCard.tsx`
 - `app/(private)/profile/components/PersonalInfoCard.tsx`
 - `app/(private)/profile/components/ProfileHeader.tsx`
+- `app/(private)/order/page.tsx`
+- `app/(private)/order/[id]/page.tsx`
 
 ---
 
@@ -332,12 +355,13 @@ This design system uses Tailwind CSS v4 syntax:
 
 When creating new components, follow these principles:
 
-1. **Layer gradients intentionally** - Max 2-3 overlay layers
-2. **Use opacity variants** - Creates subtle, not harsh effects
-3. **Include edge highlights** - Adds polish and depth
-4. **Consistent shadows** - Use the shadow system above
-5. **Smooth transitions** - `duration-300 ease-out` is the standard
-6. **Hover effects only on interactive elements** - Maintain UX expectations and accessibility
+1. **Minimal radius** - Use `rounded-md` or `rounded-lg` maximum
+2. **Layer gradients intentionally** - Max 2-3 overlay layers
+3. **Use opacity variants** - Creates subtle, not harsh effects
+4. **Include edge highlights** - Adds polish and depth
+5. **Consistent shadows** - Use the shadow system above
+6. **Smooth transitions** - `duration-300 ease-out` is the standard
+7. **Hover effects only on interactive elements** - Maintain UX expectations and accessibility
 
 ---
 

@@ -1,9 +1,10 @@
 "use client";
 
 import { CustomerType } from "@/prisma/generated/prisma/browser";
-import { Camera } from "lucide-react";
+import { Camera, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface ProfileHeaderProps {
@@ -21,6 +22,26 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [orderCount, setOrderCount] = useState<number | null>(null);
+  const router = useRouter();
+
+  // Fetch order count on mount
+  useEffect(() => {
+    async function fetchOrderCount() {
+      try {
+        const response = await fetch("/api/orders");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && Array.isArray(data.data)) {
+            setOrderCount(data.data.length);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch order count:", error);
+      }
+    }
+    fetchOrderCount();
+  }, []);
 
   const ALLOWED_FILE_TYPES = [
     "image/png",
@@ -83,7 +104,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
       <div className="absolute inset-0 bg-radial-[ellipse_at_top_left] from-slate-50/50 via-transparent to-transparent pointer-events-none" />
 
       {/* Header with elegant gradient mask */}
-      <div className="relative bg-linear-to-r from-slate-50 via-slate-100/80 to-slate-50 px-6 py-8 border-b border-slate-200/60">
+      <div className="relative bg-linear-to-r from-slate-50 via-slate-100/80 to-slate-50 px-2 md:px-6 py-8 border-b border-slate-200/60">
         {/* Top edge highlight */}
         <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-white to-transparent" />
 
@@ -137,17 +158,34 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
 
             {/* Orders Stats Card */}
             <div
-              className="relative overflow-hidden rounded-xl bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70 backdrop-blur-sm border border-slate-200/60 shadow-[0_2px_12px_-3px_rgba(51,65,85,0.08)] px-6 py-4 before:absolute before:inset-0 before:bg-linear-to-tr before:from-emerald-50/20 before:via-transparent before:to-white/30 before:pointer-events-none transition-all duration-300 ease-out hover:shadow-[0_8px_24px_-6px_rgba(51,65,85,0.15)] hover:-translate-y-0.5 cursor-pointer"
-              onClick={() => {
-                // Future: Navigate to orders page or open orders modal
-                console.log("Orders card clicked - implement navigation here");
+              className="relative overflow-hidden rounded-xl bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70 backdrop-blur-sm border border-slate-200/60 shadow-[0_2px_12px_-3px_rgba(51,65,85,0.08)] px-6 py-4 before:absolute before:inset-0 before:bg-linear-to-tr before:from-emerald-50/20 before:via-transparent before:to-white/30 before:pointer-events-none transition-all duration-300 ease-out hover:shadow-[0_8px_24px_-6px_rgba(51,65,85,0.15)] hover:-translate-y-0.5 cursor-pointer group"
+              onClick={() => router.push("/order")}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  router.push("/order");
+                }
               }}
             >
-              <div className="relative z-10 text-center">
-                <div className="text-2xl font-bold text-slate-800">0</div>
-                <div className="text-xs text-slate-500 uppercase tracking-wide">
-                  Orders
+              {/* Top edge highlight */}
+              <div className="absolute top-0 left-3 right-3 h-px bg-linear-to-r from-transparent via-white/60 to-transparent z-10" />
+
+              <div className="relative z-10 flex items-center gap-3">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-slate-800">
+                    {orderCount !== null ? (
+                      orderCount
+                    ) : (
+                      <span className="inline-block w-6 h-6 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin" />
+                    )}
+                  </div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wide">
+                    Orders
+                  </div>
                 </div>
+                <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all duration-200" />
               </div>
             </div>
           </div>

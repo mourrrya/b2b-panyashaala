@@ -13,6 +13,7 @@ export async function getOrCreateProfile(
     let profile = await prisma.customer.findUnique({
       where: { id: userId },
       include: {
+        orders: true,
         addresses: {
           orderBy: { isDefault: "desc" }, // Default addresses first
         },
@@ -26,6 +27,7 @@ export async function getOrCreateProfile(
         fullName: userData.name || null,
       },
       include: {
+        orders: true,
         addresses: true,
       },
     });
