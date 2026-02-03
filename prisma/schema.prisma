@@ -163,7 +163,6 @@ model Customer {
 
   // Business Specific (B2B)
   companyName String? @map("company_name")
-  taxId       String? @map("tax_id") // GSTIN, VAT, etc.
   website     String?
   notes       String?
 

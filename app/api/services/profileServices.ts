@@ -12,6 +12,11 @@ export async function getOrCreateProfile(
   try {
     let profile = await prisma.customer.findUnique({
       where: { id: userId },
+      include: {
+        addresses: {
+          orderBy: { isDefault: "desc" }, // Default addresses first
+        },
+      },
     });
     if (profile) return profile;
     profile = await prisma.customer.create({
@@ -19,6 +24,9 @@ export async function getOrCreateProfile(
         id: userId,
         email: userData.email || null,
         fullName: userData.name || null,
+      },
+      include: {
+        addresses: true,
       },
     });
     logger.info({ userId }, "Profile created");
@@ -36,7 +44,6 @@ export async function updateProfile(
     phone?: string;
     avatarUrl?: string;
     companyName?: string;
-    taxId?: string;
     gstIn?: string;
     website?: string;
     notes?: string;
@@ -51,10 +58,14 @@ export async function updateProfile(
         phone: data.phone,
         avatarUrl: data.avatarUrl,
         companyName: data.companyName,
-        taxId: data.taxId,
         gstIn: data.gstIn,
         website: data.website,
         notes: data.notes,
+      },
+      include: {
+        addresses: {
+          orderBy: { isDefault: "desc" },
+        },
       },
     });
     logger.info({ userId }, "Profile updated successfully");

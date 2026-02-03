@@ -2,6 +2,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { ProductDataProvider } from "@/components/ProductDataProvider";
+import { Sonner } from "@/components/sonner";
 import {
   createOrganizationSchema,
   createWebsiteSchema,
@@ -134,6 +135,7 @@ export default function RootLayout({
             </AntdRegistry>
           </AuthProvider>
           <Footer />
+          <Sonner />
         </ClientOnly>
         <Analytics />
       </body>
