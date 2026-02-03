@@ -14,7 +14,7 @@ export function ToggleMode({ mode, onToggle }: ToggleModeProps) {
           <button
             type="button"
             onClick={onToggle}
-            className="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
+            className="text-emerald-600 cursor-pointer font-semibold hover:text-emerald-700 transition-colors"
           >
             Sign In
           </button>
@@ -25,7 +25,7 @@ export function ToggleMode({ mode, onToggle }: ToggleModeProps) {
           <button
             type="button"
             onClick={onToggle}
-            className="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
+            className="text-emerald-600 cursor-pointer font-semibold hover:text-emerald-700 transition-colors"
           >
             Create Account
           </button>

@@ -7,9 +7,14 @@ import {
 import { z } from "zod";
 
 export const UpdateProfileReqSchema = z.object({
-  full_name: z.string().optional(),
+  fullName: z.string().optional(),
   phone: z.string().optional(),
-  avatar_url: z.string().url("Invalid avatar URL").optional(),
+  avatarUrl: z.string().url("Invalid avatar URL").optional(),
+  companyName: z.string().optional(),
+  taxId: z.string().optional(),
+  gstIn: z.string().optional(),
+  website: z.string().url("Invalid website URL").optional(),
+  notes: z.string().optional(),
 });
 
 export const UpdateProductReqSchema = z.object({

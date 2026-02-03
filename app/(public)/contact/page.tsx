@@ -247,10 +247,10 @@ export default function ContactPage() {
               <h3 className="font-semibold text-slate-900 mb-2">Email</h3>
               <p className="text-slate-600">
                 <a
-                  href="mailto:anil@aukra.co.in"
+                  href="mailto:care@aukra.co.in"
                   className="hover:text-emerald-700 transition-colors"
                 >
-                  anil@aukra.co.in
+                  care@aukra.co.in
                 </a>
               </p>
             </div>

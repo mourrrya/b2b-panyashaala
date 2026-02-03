@@ -126,7 +126,7 @@ export function createOrganizationSchema(): Organization {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Customer Service",
-      email: "anil@aukra.co.in",
+      email: "care@aukra.co.in",
       telephone: "+91 80764 50898",
     },
     sameAs: [
@@ -236,7 +236,7 @@ interface BreadcrumbSchema {
 }
 
 export function createBreadcrumbSchema(
-  items: BreadcrumbItem[]
+  items: BreadcrumbItem[],
 ): BreadcrumbSchema {
   return {
     "@context": "https://schema.org",

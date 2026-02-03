@@ -31,16 +31,30 @@ export async function getOrCreateProfile(
 
 export async function updateProfile(
   userId: string,
-  data: { full_name?: string; phone?: string; avatar_url?: string },
+  data: {
+    fullName?: string;
+    phone?: string;
+    avatarUrl?: string;
+    companyName?: string;
+    taxId?: string;
+    gstIn?: string;
+    website?: string;
+    notes?: string;
+  },
 ): Promise<Customer> {
   logger.info({ userId }, "Updating profile");
   try {
     const profile = await prisma.customer.update({
       where: { id: userId },
       data: {
-        fullName: data.full_name,
+        fullName: data.fullName,
         phone: data.phone,
-        avatarUrl: data.avatar_url,
+        avatarUrl: data.avatarUrl,
+        companyName: data.companyName,
+        taxId: data.taxId,
+        gstIn: data.gstIn,
+        website: data.website,
+        notes: data.notes,
       },
     });
     logger.info({ userId }, "Profile updated successfully");
