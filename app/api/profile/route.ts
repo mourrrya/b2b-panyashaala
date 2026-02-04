@@ -2,7 +2,7 @@ import { protect, ProtectedRequest } from "@/lib/auth/protect";
 import { ErrorResponse, handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { validateRequestBody } from "@/lib/backend/validation";
-import { UpdateProfileReqSchema } from "@/lib/schemas";
+import { UpdateProfileReqSchema } from "@/lib/schema/schemas";
 import { Customer } from "@/prisma/generated/prisma/client";
 import type { SuccessRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";

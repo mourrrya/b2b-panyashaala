@@ -1,11 +1,11 @@
 "use client";
 
 import {
+  ContactFormData,
   ContactFormDataSchema,
   sendEmail,
   verifyTurnstile,
-  type ContactFormData,
-} from "@/lib/validation/email";
+} from "@/lib/schema/email";
 import type { Product } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
