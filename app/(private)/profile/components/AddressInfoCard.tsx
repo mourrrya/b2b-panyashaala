@@ -130,7 +130,7 @@ function AddressSection({
   const colors = colorClasses[colorScheme];
 
   return (
-    <div className="flex-1 min-w-0 sm:min-w-75">
+    <div className="flex-1 min-w-60 sm:min-w-75">
       {/* Section header with elegant gradient underline */}
       <div
         className={`flex whitespace-nowrap items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 pb-2 border-b ${colors.border}`}

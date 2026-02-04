@@ -2,20 +2,22 @@ import { AuthUser } from "@/lib/auth/protect";
 import { ErrorUnknown } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { prisma } from "@/lib/backend/prisma";
-import { Customer } from "@/prisma/generated/prisma/client";
+import { Address, Customer } from "@/prisma/generated/prisma/client";
 
 export async function getOrCreateProfile(
   userId: string,
   userData: AuthUser,
-): Promise<Customer> {
+): Promise<Customer & { _count?: { orders: number }; addresses: Address[] }> {
   logger.info({ userId }, "Getting or creating profile");
   try {
     let profile = await prisma.customer.findUnique({
       where: { id: userId },
       include: {
-        orders: true,
         addresses: {
           orderBy: { isDefault: "desc" }, // Default addresses first
+        },
+        _count: {
+          select: { orders: true },
         },
       },
     });
@@ -27,8 +29,10 @@ export async function getOrCreateProfile(
         fullName: userData.name || null,
       },
       include: {
-        orders: true,
         addresses: true,
+        _count: {
+          select: { orders: true },
+        },
       },
     });
     logger.info({ userId }, "Profile created");
@@ -50,7 +54,7 @@ export async function updateProfile(
     website?: string;
     notes?: string;
   },
-): Promise<Customer> {
+): Promise<Customer & { _count?: { orders: number } }> {
   logger.info({ userId }, "Updating profile");
   try {
     const profile = await prisma.customer.update({
@@ -67,6 +71,9 @@ export async function updateProfile(
       include: {
         addresses: {
           orderBy: { isDefault: "desc" },
+        },
+        _count: {
+          select: { orders: true },
         },
       },
     });

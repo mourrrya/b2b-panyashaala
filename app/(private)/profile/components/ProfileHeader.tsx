@@ -1,47 +1,20 @@
 "use client";
 
-import { CustomerType } from "@/prisma/generated/prisma/browser";
-import { Camera, ChevronRight } from "lucide-react";
+import { Address, Customer } from "@/prisma/generated/prisma/browser";
+import { Camera } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface ProfileHeaderProps {
-  user: {
-    avatarUrl?: string | null;
-    fullName?: string | null;
-    companyName?: string | null;
-    email?: string | null;
-    phone?: string | null;
-    type?: CustomerType;
-    createdAt?: Date;
-  };
+  user: Customer & { _count?: { orders: number }; addresses: Address[] };
   onAvatarUpload: (file: File) => Promise<void>;
 }
 
 export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  const [orderCount, setOrderCount] = useState<number | null>(null);
   const router = useRouter();
-
-  // Fetch order count on mount
-  useEffect(() => {
-    async function fetchOrderCount() {
-      try {
-        const response = await fetch("/api/orders");
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success && Array.isArray(data.data)) {
-            setOrderCount(data.data.length);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch order count:", error);
-      }
-    }
-    fetchOrderCount();
-  }, []);
 
   const ALLOWED_FILE_TYPES = [
     "image/png",
@@ -175,8 +148,9 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
               <div className="relative z-10 flex items-center gap-2 sm:gap-3">
                 <div className="text-center">
                   <div className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
-                    {orderCount !== null ? (
-                      orderCount
+                    {/*FIXME Loading should show only while fetching */}
+                    {!!user._count?.orders ? (
+                      user._count.orders
                     ) : (
                       <span className="inline-block w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin" />
                     )}
@@ -185,7 +159,6 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
                     Orders
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all duration-200" />
               </div>
             </div>
           </div>

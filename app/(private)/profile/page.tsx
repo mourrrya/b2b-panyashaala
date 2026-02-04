@@ -80,7 +80,7 @@ export default function ProfilePage() {
           )}
 
           {/* Address Information */}
-          <AddressInfoCard addresses={(user as any).addresses || []} />
+          <AddressInfoCard addresses={user.addresses || []} />
         </div>
       </div>
     </div>

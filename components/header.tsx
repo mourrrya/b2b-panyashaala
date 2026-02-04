@@ -2,12 +2,13 @@
 
 import { useStore } from "@/lib/store";
 import { useAuthStore } from "@/store/auth-store";
-import { LogIn, LogOut, Menu, ShoppingBag, User } from "lucide-react";
+import { LogIn, LogOut, Menu, Package, ShoppingBag, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BasketDrawer } from "./BasketDrawer";
+import { MobileNav } from "./MobileNav";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,14 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 
+const NAV_LINKS = [
+  { href: "/products", label: "Products" },
+  { href: "/about", label: "About" },
+  { href: "/applications", label: "Applications" },
+  { href: "/quality", label: "Quality" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [basketDrawerOpen, setBasketDrawerOpen] = useState(false);
@@ -33,19 +42,10 @@ export function Header() {
   const { basket, products, removeFromBasketOptimistic } = useStore();
   const { user, signOut, isLoading } = useAuthStore();
 
-  // Memoize basketProducts to avoid infinite loops
   const basketProducts = useMemo(
     () => products.filter((product) => basket.includes(product.id)),
     [products, basket],
   );
-
-  const navLinks = [
-    { href: "/products", label: "Products" },
-    { href: "/about", label: "About" },
-    { href: "/applications", label: "Applications" },
-    { href: "/quality", label: "Quality" },
-    { href: "/contact", label: "Contact" },
-  ];
 
   const activeLink = navRef?.current?.querySelector(
     `a[href="${pathname}"]`,
@@ -77,7 +77,7 @@ export function Header() {
           aria-label="Main navigation"
           className="hidden lg:flex gap-4 lg:gap-6 text-sm font-medium text-slate-600 relative"
         >
-          {navLinks.map((link) => (
+          {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -123,6 +123,10 @@ export function Header() {
                 <DropdownMenuItem onClick={() => router.push("/profile")}>
                   <User className="w-4 h-4 mr-2" />
                   My Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/order")}>
+                  <Package className="w-4 h-4 mr-2" />
+                  My Orders
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -190,86 +194,26 @@ export function Header() {
           </Sheet>
 
           {/* Mobile Sidebar Menu */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
+          <MobileNav
+            open={mobileMenuOpen}
+            onOpenChange={setMobileMenuOpen}
+            pathname={pathname}
+            navLinks={[...NAV_LINKS]}
+            user={user}
+            isLoading={isLoading}
+            onSignOut={async () => {
+              await signOut();
+              router.push("/");
+            }}
+            trigger={
               <button
                 className="lg:hidden text-emerald-800 p-1 hover:bg-emerald-50 rounded-md transition-colors"
                 aria-label="Toggle navigation menu"
               >
                 <Menu className="w-6 h-6 sm:w-7 sm:h-7" />
               </button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-72 sm:w-80 p-0">
-              <SheetHeader className="px-6 py-4 border-b border-slate-100">
-                <div className="flex items-center justify-between">
-                  <Image
-                    src="/logo-text.svg"
-                    alt="Aukra Chem Essentials LLP"
-                    width={100}
-                    height={33}
-                    className="h-8 w-auto"
-                  />
-                </div>
-              </SheetHeader>
-              <nav
-                className="flex flex-col py-4"
-                aria-label="Mobile navigation"
-              >
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`px-6 py-3 text-sm font-medium transition-colors ${
-                      pathname === link.href
-                        ? "text-emerald-800 bg-emerald-50 border-l-4 border-emerald-800"
-                        : "text-slate-600 hover:text-emerald-800 hover:bg-slate-50"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    aria-current={pathname === link.href ? "page" : undefined}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-
-                {/* Mobile User Actions */}
-                <div className="mt-4 px-6 pt-4 border-t border-slate-100">
-                  {user ? (
-                    <div className="space-y-2">
-                      <Link
-                        href="/profile"
-                        className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-emerald-800 hover:bg-slate-50 transition-colors"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <User className="w-4 h-4" />
-                        My Profile
-                      </Link>
-                      <button
-                        className="flex items-center gap-2 w-full px-4 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
-                        disabled={isLoading}
-                        onClick={async () => {
-                          await signOut();
-                          setMobileMenuOpen(false);
-                          router.push("/");
-                        }}
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Sign Out
-                      </button>
-                    </div>
-                  ) : (
-                    <Link
-                      href={`/login?redirect=${pathname !== "/login" ? encodeURIComponent(pathname) : "/"}`}
-                      className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg bg-linear-to-r from-emerald-600 to-teal-600 text-white text-sm font-medium hover:from-emerald-700 hover:to-teal-700 transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <LogIn className="w-4 h-4" />
-                      Login
-                    </Link>
-                  )}
-                </div>
-              </nav>
-            </SheetContent>
-          </Sheet>
+            }
+          />
         </div>
       </div>
     </header>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Customer } from "@/prisma/generated/prisma/browser";
+import { Address, Customer } from "@/prisma/generated/prisma/browser";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -19,7 +19,9 @@ interface AuthResult {
 }
 
 interface AuthState {
-  user: Customer | null;
+  user:
+    | (Customer & { _count?: { orders: number }; addresses: Address[] })
+    | null;
   isLoading: boolean;
   isInitialized: boolean;
 }
@@ -38,7 +40,11 @@ interface AuthActions {
 
   // State management
   initialize: () => Promise<void>;
-  setUser: (user: Customer | null) => void;
+  setUser: (
+    user:
+      | (Customer & { _count?: { orders: number }; addresses: Address[] })
+      | null,
+  ) => void;
   setLoading: (loading: boolean) => void;
 }
 

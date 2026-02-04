@@ -12,6 +12,7 @@ import {
   MapPin,
   Package,
   Receipt,
+  ReceiptIndianRupee,
   ShoppingBag,
   Truck,
   XCircle,
@@ -431,7 +432,7 @@ export default function OrderDetailPage() {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="w-11 h-11 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-lg flex items-center justify-center shadow-lg shadow-slate-500/25">
-                    <Receipt className="w-5 h-5 text-white" />
+                    <ReceiptIndianRupee className="w-5 h-5 text-white" />
                   </div>
                 </div>
                 <div>

@@ -2,7 +2,6 @@
 
 import { OrderWithDetails } from "@/types/order";
 import {
-  ArrowLeft,
   Calendar,
   ChevronRight,
   Download,
@@ -213,8 +212,8 @@ function EmptyOrdersState() {
         </div>
         <h3 className="text-xl font-bold text-slate-800 mb-2">No Orders Yet</h3>
         <p className="text-slate-500 mb-6 max-w-md mx-auto">
-          You haven't placed any orders yet. Browse our products and place your
-          first order today!
+          You haven't placed any orders yet. Browse our products and contact us
+          for your first order today!
         </p>
         <Link
           href="/products"
@@ -287,12 +286,6 @@ export default function OrdersPage() {
 
         <div className="relative max-w-6xl mx-auto px-6 py-5">
           <div className="flex items-center gap-4">
-            <Link
-              href="/profile"
-              className="p-2 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="w-11 h-11 bg-linear-to-br from-slate-500 via-slate-600 to-slate-700 rounded-lg flex items-center justify-center shadow-lg shadow-slate-500/25">
