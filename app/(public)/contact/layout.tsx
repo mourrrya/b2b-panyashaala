@@ -1,25 +1,19 @@
+import { UI_LABELS } from "@/lib/constants";
+import { PAGE_SEO } from "@/lib/constants/seo";
 import { createBreadcrumbSchema, createMetadata, JsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import type React from "react";
 
 export const metadata: Metadata = createMetadata({
-  title: "Contact Us | Get in Touch with Our Sourcing Team",
-  description:
-    "Contact our cosmetic ingredients sourcing team for product inquiries, custom solutions, and technical support. We respond within 24 hours.",
-  canonical: "/contact",
-  keywords: [
-    "contact",
-    "inquiry",
-    "sourcing team",
-    "technical support",
-    "custom solutions",
-    "B2B",
-  ],
+  title: PAGE_SEO.CONTACT.title,
+  description: PAGE_SEO.CONTACT.description,
+  canonical: PAGE_SEO.CONTACT.canonical,
+  keywords: [...PAGE_SEO.CONTACT.keywords],
 });
 
 const breadcrumbItems = [
-  { name: "Home", path: "/" },
-  { name: "Contact", path: "/contact" },
+  { name: UI_LABELS.BREADCRUMBS.HOME, path: "/" },
+  { name: UI_LABELS.BREADCRUMBS.CONTACT, path: "/contact" },
 ];
 
 export default function ContactLayout({

@@ -1,5 +1,6 @@
 "use client";
 
+import { ERROR_MESSAGES } from "@/lib/constants";
 import {
   ContactFormData,
   ContactFormDataSchema,
@@ -50,7 +51,7 @@ export function useContactForm(products: Product[] = []) {
         if (!isTokenValid) {
           setError("turnstileToken", {
             type: "manual",
-            message: "Security verification failed. Please try again.",
+            message: ERROR_MESSAGES.TURNSTILE.SECURITY_VERIFICATION_FAILED,
           });
           return;
         }
@@ -58,9 +59,7 @@ export function useContactForm(products: Product[] = []) {
         // Send email with verified data
         const emailSent = await sendEmail(data, products);
         if (!emailSent) {
-          setSubmitError(
-            "Failed to send your message. Please try again or contact us directly.",
-          );
+          setSubmitError(ERROR_MESSAGES.FORM.SEND_FAILED);
           return;
         }
 
@@ -74,7 +73,7 @@ export function useContactForm(products: Product[] = []) {
         }, 5000);
       } catch (error) {
         console.error("Form submission error:", error);
-        setSubmitError("An unexpected error occurred. Please try again.");
+        setSubmitError(ERROR_MESSAGES.FORM.UNEXPECTED_ERROR);
       }
     },
     [reset, getValues, setError, products],
@@ -98,7 +97,7 @@ export function useContactForm(products: Product[] = []) {
     setValue("turnstileToken", "");
     setError("turnstileToken", {
       type: "manual",
-      message: "Security verification failed. Please try again.",
+      message: ERROR_MESSAGES.TURNSTILE.SECURITY_VERIFICATION_FAILED,
     });
   }, [setValue, setError]);
 
@@ -109,7 +108,7 @@ export function useContactForm(products: Product[] = []) {
     setValue("turnstileToken", "");
     setError("turnstileToken", {
       type: "manual",
-      message: "Security verification expired. Please verify again.",
+      message: ERROR_MESSAGES.TURNSTILE.EXPIRED,
     });
   }, [setValue, setError]);
 

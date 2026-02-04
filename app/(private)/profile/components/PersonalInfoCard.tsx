@@ -1,5 +1,6 @@
 "use client";
 
+import { UI_LABELS } from "@/lib/constants";
 import { Mail, Phone, User } from "lucide-react";
 
 interface PersonalInfoCardProps {
@@ -63,10 +64,10 @@ function PersonalInfoField({
       <SlateGlassCard className="p-2.5 sm:p-3 transition-all duration-300 ease-out">
         <span className="text-sm sm:text-base text-slate-800">
           {isCapitalized
-            ? (value || "Not provided")
+            ? (value || UI_LABELS.PROFILE.NOT_PROVIDED)
                 .toLowerCase()
                 .replace(/\b\w/g, (l) => l.toUpperCase())
-            : value || "Not provided"}
+            : value || UI_LABELS.PROFILE.NOT_PROVIDED}
         </span>
       </SlateGlassCard>
     </div>
@@ -100,10 +101,10 @@ export function PersonalInfoCard({
           </div>
           <div>
             <h2 className="text-base sm:text-lg md:text-xl font-bold text-slate-800 tracking-tight">
-              Personal Information
+              {UI_LABELS.PROFILE.PERSONAL_INFO}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Your personal details and contact information
+              {UI_LABELS.PROFILE.PERSONAL_INFO_SUBTITLE}
             </p>
           </div>
         </div>
@@ -114,11 +115,15 @@ export function PersonalInfoCard({
         <div className="grid gap-4 sm:gap-5 md:gap-6 md:grid-cols-2">
           <div className="space-y-3 sm:space-y-4">
             {/* Full Name */}
-            <PersonalInfoField label="Full Name" value={fullName} icon={User} />
+            <PersonalInfoField
+              label={UI_LABELS.PROFILE.FULL_NAME}
+              value={fullName}
+              icon={User}
+            />
 
             {/* Email */}
             <PersonalInfoField
-              label="Email Address"
+              label={UI_LABELS.PROFILE.EMAIL_ADDRESS}
               value={email}
               icon={Mail}
             />
@@ -127,14 +132,14 @@ export function PersonalInfoCard({
           <div className="space-y-3 sm:space-y-4">
             {/* Phone */}
             <PersonalInfoField
-              label="Phone Number"
+              label={UI_LABELS.PROFILE.PHONE_NUMBER}
               value={phone}
               icon={Phone}
             />
 
             {/* Account Type */}
             <PersonalInfoField
-              label="Account Type"
+              label={UI_LABELS.PROFILE.ACCOUNT_TYPE}
               value={accountType}
               icon={User}
               isCapitalized={true}

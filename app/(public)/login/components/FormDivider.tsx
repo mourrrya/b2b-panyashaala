@@ -1,3 +1,5 @@
+import { UI_LABELS } from "@/lib/constants";
+
 export function FormDivider() {
   return (
     <div className="relative">
@@ -6,7 +8,7 @@ export function FormDivider() {
       </div>
       <div className="relative flex justify-center text-xs md:text-sm">
         <span className="px-3 md:px-4 bg-white/80 text-slate-400">
-          or continue with email
+          {UI_LABELS.AUTH.OR_DIVIDER}
         </span>
       </div>
     </div>

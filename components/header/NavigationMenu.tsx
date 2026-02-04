@@ -1,15 +1,8 @@
 "use client";
 
+import { NAV_LINKS, UI_LABELS } from "@/lib/constants";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
-const NAV_LINKS = [
-  { href: "/products", label: "Products" },
-  { href: "/about", label: "About" },
-  { href: "/applications", label: "Applications" },
-  { href: "/quality", label: "Quality" },
-  { href: "/contact", label: "Contact" },
-] as const;
 
 interface NavigationMenuProps {
   pathname: string;
@@ -35,7 +28,7 @@ export function NavigationMenu({ pathname }: NavigationMenuProps) {
   return (
     <nav
       ref={navRef}
-      aria-label="Main navigation"
+      aria-label={UI_LABELS.NAV.MAIN_NAVIGATION}
       className="hidden lg:flex gap-4 lg:gap-6 text-sm font-medium text-slate-600 relative"
     >
       {NAV_LINKS.map((link) => (
@@ -67,4 +60,5 @@ export function NavigationMenu({ pathname }: NavigationMenuProps) {
   );
 }
 
+// Re-export NAV_LINKS from constants for backward compatibility
 export { NAV_LINKS };

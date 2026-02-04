@@ -5,6 +5,7 @@ import {
   handleError,
 } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
+import { ERROR_MESSAGES } from "@/lib/constants";
 import type { SuccessRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
 import { getOrderById, OrderWithDetails } from "../../services/orderServices";
@@ -20,7 +21,7 @@ async function getOrderHandler(
     const order = await getOrderById(user.id, id);
 
     if (!order) {
-      throw new ErrorNotFound("Order not found");
+      throw new ErrorNotFound(ERROR_MESSAGES.RESOURCE.ORDER_NOT_FOUND);
     }
 
     return NextResponse.json({ data: order, success: true });

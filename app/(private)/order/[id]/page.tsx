@@ -1,5 +1,6 @@
 "use client";
 
+import { API_CONFIG, ERROR_MESSAGES, UI_LABELS } from "@/lib/constants";
 import { GST_SLAB_PERCENT_MAP } from "@/lib/utils";
 import { OrderItemDetails, OrderWithDetails } from "@/types/order";
 import {
@@ -28,37 +29,37 @@ const orderStatusConfig: Record<
   { label: string; color: string; bgColor: string; icon: typeof Clock }
 > = {
   PENDING: {
-    label: "Pending",
+    label: UI_LABELS.ORDERS.STATUS.PENDING,
     color: "text-amber-700",
     bgColor: "bg-amber-50 border-amber-200",
     icon: Clock,
   },
   CONFIRMED: {
-    label: "Confirmed",
+    label: UI_LABELS.ORDERS.STATUS.CONFIRMED,
     color: "text-blue-700",
     bgColor: "bg-blue-50 border-blue-200",
     icon: CheckCircle2,
   },
   PROCESSING: {
-    label: "Processing",
+    label: UI_LABELS.ORDERS.STATUS.PROCESSING,
     color: "text-indigo-700",
     bgColor: "bg-indigo-50 border-indigo-200",
     icon: Package,
   },
   SHIPPED: {
-    label: "Shipped",
+    label: UI_LABELS.ORDERS.STATUS.SHIPPED,
     color: "text-purple-700",
     bgColor: "bg-purple-50 border-purple-200",
     icon: Truck,
   },
   DELIVERED: {
-    label: "Delivered",
+    label: UI_LABELS.ORDERS.STATUS.DELIVERED,
     color: "text-emerald-700",
     bgColor: "bg-emerald-50 border-emerald-200",
     icon: CheckCircle2,
   },
   CANCELLED: {
-    label: "Cancelled",
+    label: UI_LABELS.ORDERS.STATUS.CANCELLED,
     color: "text-red-700",
     bgColor: "bg-red-50 border-red-200",
     icon: XCircle,
@@ -70,22 +71,22 @@ const paymentStatusConfig: Record<
   { label: string; color: string; bgColor: string }
 > = {
   PENDING: {
-    label: "Payment Pending",
+    label: UI_LABELS.ORDERS.PAYMENT_STATUS.PENDING,
     color: "text-amber-700",
     bgColor: "bg-amber-50 border-amber-200",
   },
   PAID: {
-    label: "Paid",
+    label: UI_LABELS.ORDERS.PAYMENT_STATUS.PAID,
     color: "text-emerald-700",
     bgColor: "bg-emerald-50 border-emerald-200",
   },
   FAILED: {
-    label: "Payment Failed",
+    label: UI_LABELS.ORDERS.PAYMENT_STATUS.FAILED,
     color: "text-red-700",
     bgColor: "bg-red-50 border-red-200",
   },
   REFUNDED: {
-    label: "Refunded",
+    label: UI_LABELS.ORDERS.PAYMENT_STATUS.REFUNDED,
     color: "text-slate-700",
     bgColor: "bg-slate-50 border-slate-200",
   },
@@ -168,32 +169,39 @@ function OrderItemCard({
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-md transition-colors shrink-0"
             >
               <FileText className="w-3.5 h-3.5" />
-              Download COA
+              {UI_LABELS.ORDERS.DOWNLOAD_COA}
             </button>
           </div>
 
-          {/* Product Details Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
-              <p className="text-xs text-slate-500">Batch No.</p>
+              <p className="text-xs text-slate-500">
+                {UI_LABELS.ORDERS.BATCH_NO}
+              </p>
               <p className="font-medium text-slate-700 text-sm">
                 {item.batchNumber}
               </p>
             </div>
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
-              <p className="text-xs text-slate-500">HSN Code</p>
+              <p className="text-xs text-slate-500">
+                {UI_LABELS.ORDERS.HSN_CODE}
+              </p>
               <p className="font-medium text-slate-700 text-sm">
                 {item.hsnCode}
               </p>
             </div>
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
-              <p className="text-xs text-slate-500">Net Content</p>
+              <p className="text-xs text-slate-500">
+                {UI_LABELS.ORDERS.NET_CONTENT}
+              </p>
               <p className="font-medium text-slate-700 text-sm">
                 {item.netContent} {item.measurementUnit}
               </p>
             </div>
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
-              <p className="text-xs text-slate-500">GST Slab</p>
+              <p className="text-xs text-slate-500">
+                {UI_LABELS.ORDERS.GST_SLAB}
+              </p>
               <p className="font-medium text-slate-700 text-sm">
                 {GST_SLAB_PERCENT_MAP[item.gstSlab]}%
               </p>
@@ -202,32 +210,37 @@ function OrderItemCard({
 
           {/* Dates */}
           <div className="flex flex-wrap gap-4 mt-3 text-xs text-slate-500">
-            <span>Mfg: {formatDate(item.mfgDate)}</span>
-            <span>Exp: {formatDate(item.expiryDate)}</span>
+            <span>
+              {UI_LABELS.ORDERS.MFG_DATE}: {formatDate(item.mfgDate)}
+            </span>
+            <span>
+              {UI_LABELS.ORDERS.EXP_DATE}: {formatDate(item.expiryDate)}
+            </span>
           </div>
         </div>
 
-        {/* Pricing Section */}
         <div className="lg:w-48 lg:text-right lg:border-l lg:border-slate-200/60 lg:pl-4">
           <div className="flex lg:flex-col items-center lg:items-end gap-4 lg:gap-2">
             <div>
-              <p className="text-xs text-slate-500">Unit Price</p>
+              <p className="text-xs text-slate-500">
+                {UI_LABELS.ORDERS.UNIT_PRICE}
+              </p>
               <p className="font-semibold text-slate-800">
                 ₹{item.unitPrice.toFixed(2)}
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-500">Qty</p>
+              <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.QTY}</p>
               <p className="font-semibold text-slate-800">{item.quantity}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-500">Tax</p>
+              <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.TAX}</p>
               <p className="font-semibold text-slate-800">
                 ₹{item.taxAmount.toFixed(2)}
               </p>
             </div>
             <div className="lg:pt-2 lg:border-t lg:border-slate-200/60 lg:mt-2">
-              <p className="text-xs text-slate-500">Total</p>
+              <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.TOTAL}</p>
               <p className="font-bold text-lg text-slate-800">
                 ₹{itemTotal.toFixed(2)}
               </p>
@@ -255,7 +268,9 @@ function AddressCard({
           <Icon className="w-4 h-4 text-slate-400" />
           <h5 className="font-semibold text-slate-700 text-sm">{title}</h5>
         </div>
-        <p className="text-sm text-slate-400">Not provided</p>
+        <p className="text-sm text-slate-400">
+          {UI_LABELS.ORDERS.NOT_PROVIDED}
+        </p>
       </div>
     );
   }
@@ -328,7 +343,7 @@ function ErrorState({
       <div className="relative overflow-hidden rounded-lg p-8 bg-red-50 border border-red-200 text-center max-w-md">
         <XCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-red-800 mb-2">
-          Error Loading Order
+          {UI_LABELS.ORDERS.ERROR_LOADING_ORDER}
         </h3>
         <p className="text-red-600 mb-6">{message}</p>
         <div className="flex gap-3 justify-center">
@@ -336,13 +351,13 @@ function ErrorState({
             href="/order"
             className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
           >
-            Back to Orders
+            {UI_LABELS.ORDERS.BACK_TO_ORDERS}
           </Link>
           <button
             onClick={onRetry}
             className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors"
           >
-            Try Again
+            {UI_LABELS.ORDERS.TRY_AGAIN}
           </button>
         </div>
       </div>
@@ -362,21 +377,21 @@ export default function OrderDetailPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/orders/${orderId}`);
+      const response = await fetch(`${API_CONFIG.ENDPOINTS.ORDERS}/${orderId}`);
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error("Order not found");
+          throw new Error(UI_LABELS.ORDERS.ORDER_NOT_FOUND);
         }
-        throw new Error("Failed to fetch order");
+        throw new Error(UI_LABELS.ORDERS.FETCH_ERROR);
       }
       const data = await response.json();
       if (data.success) {
         setOrder(data.data);
       } else {
-        throw new Error(data.error || "Failed to fetch order");
+        throw new Error(data.error || UI_LABELS.ORDERS.FETCH_ERROR);
       }
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      setError(err.message || ERROR_MESSAGES.GENERIC);
     } finally {
       setIsLoading(false);
     }
@@ -413,7 +428,12 @@ export default function OrderDetailPage() {
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState message={error} onRetry={fetchOrder} />;
   if (!order)
-    return <ErrorState message="Order not found" onRetry={fetchOrder} />;
+    return (
+      <ErrorState
+        message={UI_LABELS.ORDERS.ORDER_NOT_FOUND}
+        onRetry={fetchOrder}
+      />
+    );
 
   return (
     <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50">
@@ -472,7 +492,9 @@ export default function OrderDetailPage() {
                 <div className="p-1.5 rounded-md bg-linear-to-br from-slate-100 to-slate-200/80">
                   <ShoppingBag className="w-4 h-4 text-slate-600" />
                 </div>
-                <h2 className="font-bold text-slate-800">Order Items</h2>
+                <h2 className="font-bold text-slate-800">
+                  {UI_LABELS.ORDERS.ORDER_ITEMS}
+                </h2>
                 <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
                   {order.orderItems.length}
                 </span>
@@ -490,11 +512,10 @@ export default function OrderDetailPage() {
               ))}
             </div>
 
-            {/* Notes */}
             {order.notes && (
               <div className="p-4 bg-amber-50/70 rounded-lg border border-amber-100">
                 <h5 className="font-semibold text-amber-800 text-sm mb-1">
-                  Order Notes
+                  {UI_LABELS.ORDERS.ORDER_NOTES}
                 </h5>
                 <p className="text-sm text-amber-700">{order.notes}</p>
               </div>
@@ -518,32 +539,38 @@ export default function OrderDetailPage() {
               <div className="p-4 border-b border-slate-200/60">
                 <h3 className="font-bold text-slate-800 flex items-center gap-2">
                   <Receipt className="w-4 h-4" />
-                  Order Summary
+                  {UI_LABELS.ORDERS.ORDER_SUMMARY}
                 </h3>
               </div>
 
               <div className="p-4 space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">Subtotal</span>
+                  <span className="text-slate-500">
+                    {UI_LABELS.ORDERS.SUBTOTAL}
+                  </span>
                   <span className="font-medium text-slate-700">
                     ₹{order.subtotal.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">Tax</span>
+                  <span className="text-slate-500">{UI_LABELS.ORDERS.TAX}</span>
                   <span className="font-medium text-slate-700">
                     ₹{order.totalTax.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">Shipping</span>
+                  <span className="text-slate-500">
+                    {UI_LABELS.ORDERS.SHIPPING}
+                  </span>
                   <span className="font-medium text-slate-700">
                     ₹{order.shippingCost.toFixed(2)}
                   </span>
                 </div>
                 {order.discount > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">Discount</span>
+                    <span className="text-slate-500">
+                      {UI_LABELS.ORDERS.DISCOUNT}
+                    </span>
                     <span className="font-medium text-emerald-600">
                       -₹{order.discount.toFixed(2)}
                     </span>
@@ -551,7 +578,9 @@ export default function OrderDetailPage() {
                 )}
                 <div className="pt-3 border-t border-slate-200/60">
                   <div className="flex justify-between">
-                    <span className="font-semibold text-slate-800">Total</span>
+                    <span className="font-semibold text-slate-800">
+                      {UI_LABELS.ORDERS.TOTAL}
+                    </span>
                     <span className="text-xl font-bold text-slate-800">
                       ₹{order.totalAmount.toFixed(2)}
                     </span>
@@ -566,7 +595,7 @@ export default function OrderDetailPage() {
                   className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-linear-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 rounded-md shadow-sm transition-all duration-200 hover:shadow-md"
                 >
                   <Download className="w-4 h-4" />
-                  Download Invoice
+                  {UI_LABELS.ORDERS.DOWNLOAD_INVOICE}
                 </button>
               </div>
             </div>
@@ -577,21 +606,22 @@ export default function OrderDetailPage() {
                 <div className="p-1.5 rounded-md bg-linear-to-br from-slate-100 to-slate-200/80">
                   <CreditCard className="w-4 h-4 text-slate-600" />
                 </div>
-                <h5 className="font-semibold text-slate-700">Payment Method</h5>
+                <h5 className="font-semibold text-slate-700">
+                  {UI_LABELS.ORDERS.PAYMENT_METHOD}
+                </h5>
               </div>
               <p className="text-sm text-slate-600 capitalize">
                 {order.paymentMethod.replace(/_/g, " ")}
               </p>
             </div>
 
-            {/* Addresses */}
             <AddressCard
-              title="Shipping Address"
+              title={UI_LABELS.PROFILE.SHIPPING_ADDRESS}
               address={order.shippingAddress}
               icon={Truck}
             />
             <AddressCard
-              title="Billing Address"
+              title={UI_LABELS.PROFILE.BILLING_ADDRESS}
               address={order.billingAddress}
               icon={MapPin}
             />

@@ -1,3 +1,5 @@
+import { ERROR_MESSAGES } from "@/lib/constants";
+
 type AuthMode = "signin" | "signup";
 
 interface FormData {
@@ -12,23 +14,23 @@ export function validateForm(
   mode: AuthMode,
 ): string | null {
   if (!formData.email.trim()) {
-    return "Email is required";
+    return ERROR_MESSAGES.VALIDATION.EMAIL_REQUIRED;
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    return "Please enter a valid email address";
+    return ERROR_MESSAGES.VALIDATION.EMAIL_INVALID;
   }
   if (!formData.password) {
-    return "Password is required";
+    return ERROR_MESSAGES.VALIDATION.PASSWORD_REQUIRED;
   }
   if (formData.password.length < 8) {
-    return "Password must be at least 8 characters";
+    return ERROR_MESSAGES.VALIDATION.PASSWORD_MIN_LENGTH;
   }
   if (mode === "signup") {
     if (!formData.name.trim()) {
-      return "Name is required";
+      return ERROR_MESSAGES.VALIDATION.NAME_REQUIRED;
     }
     if (formData.password !== formData.confirmPassword) {
-      return "Passwords do not match";
+      return ERROR_MESSAGES.VALIDATION.PASSWORDS_NO_MATCH;
     }
   }
   return null;

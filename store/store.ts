@@ -1,3 +1,4 @@
+import { ERROR_MESSAGES } from "@/lib/constants";
 import type {
   DbProduct,
   Image,
@@ -117,12 +118,14 @@ export const useStore = create<StoreState>((set, get) => ({
         setProducts(transformedProducts);
         setLoadingProducts(false);
       } else {
-        setProductsError((result as any).message || "Failed to load products");
+        setProductsError(
+          (result as any).message || ERROR_MESSAGES.PRODUCT.LOAD_FAILED,
+        );
         setLoadingProducts(false);
       }
     } catch (error) {
-      console.error("Failed to fetch products:", error);
-      setProductsError("Failed to load products");
+      console.error(ERROR_MESSAGES.PRODUCT.LOAD_FAILED, error);
+      setProductsError(ERROR_MESSAGES.PRODUCT.LOAD_FAILED);
       setLoadingProducts(false);
     }
   },

@@ -1,5 +1,6 @@
 "use client";
 
+import { UI_LABELS } from "@/lib/constants";
 import { useStore } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { Application } from "../data/applications";
@@ -72,7 +73,7 @@ export function ApplicationCard({
         <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-200 space-y-3 sm:space-y-4 animate-fadeIn">
           <div>
             <h4 className="font-semibold text-sm sm:text-base text-slate-900 mb-2 sm:mb-3">
-              Key Ingredients:
+              {UI_LABELS.APPLICATIONS.KEY_INGREDIENTS}
             </h4>
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {application.ingredients.map((ingredient, iIdx) => (
@@ -91,7 +92,7 @@ export function ApplicationCard({
             onClick={(e) => handleQuickEnquiry(e, application.title)}
             className="w-full mt-3 sm:mt-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold py-2.5 sm:py-3 rounded-lg sm:rounded-xl transition-colors"
           >
-            Search - All Ingredients
+            {UI_LABELS.APPLICATIONS.SEARCH_ALL_INGREDIENTS}
           </button>
         </div>
       )}
@@ -100,7 +101,7 @@ export function ApplicationCard({
       {!isSelected && (
         <div className="pt-2 sm:pt-3 border-t border-slate-100">
           <p className="text-xs sm:text-sm text-emerald-600 font-medium">
-            Click to view ingredients{" "}
+            {UI_LABELS.APPLICATIONS.CLICK_TO_VIEW}{" "}
           </p>
         </div>
       )}

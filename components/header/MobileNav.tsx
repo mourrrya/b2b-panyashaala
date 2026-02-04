@@ -1,5 +1,6 @@
 "use client";
 
+import { SITE_CONFIG, UI_LABELS } from "@/lib/constants";
 import { LogIn, LogOut, Package, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -47,15 +48,18 @@ export function MobileNav({
       >
         <SheetHeader className="px-4 sm:px-6 py-3 sm:py-4 border-b border-emerald-100/50 ">
           <Image
-            src="/logo-text.svg"
-            alt="Aukra Chem Essentials LLP"
+            src={SITE_CONFIG.LOGO.TEXT}
+            alt={SITE_CONFIG.NAME}
             width={100}
             height={33}
             className="w-24 sm:w-28 md:w-36 h-auto"
           />
         </SheetHeader>
 
-        <nav className="flex flex-col py-4" aria-label="Mobile navigation">
+        <nav
+          className="flex flex-col py-4"
+          aria-label={UI_LABELS.NAV.MOBILE_NAVIGATION}
+        >
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -82,7 +86,7 @@ export function MobileNav({
                   onClick={closeMenu}
                 >
                   <User className="w-4 h-4" />
-                  My Profile
+                  {UI_LABELS.NAV.MY_PROFILE}
                 </Link>
                 <Link
                   href="/order"
@@ -90,7 +94,7 @@ export function MobileNav({
                   onClick={closeMenu}
                 >
                   <Package className="w-4 h-4" />
-                  My Orders
+                  {UI_LABELS.NAV.MY_ORDERS}
                 </Link>
                 <button
                   className="flex items-center gap-2 w-full px-4 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
@@ -98,7 +102,7 @@ export function MobileNav({
                   onClick={handleSignOut}
                 >
                   <LogOut className="w-4 h-4" />
-                  Sign Out
+                  {UI_LABELS.NAV.SIGN_OUT}
                 </button>
               </div>
             ) : (
@@ -108,7 +112,7 @@ export function MobileNav({
                 onClick={closeMenu}
               >
                 <LogIn className="w-4 h-4" />
-                Login
+                {UI_LABELS.NAV.LOGIN_BUTTON}
               </Link>
             )}
           </div>

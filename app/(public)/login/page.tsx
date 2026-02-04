@@ -1,5 +1,6 @@
 "use client";
 
+import { ERROR_MESSAGES } from "@/lib/constants";
 import { useAuthStore } from "@/store/auth-store";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -65,7 +66,7 @@ function AuthContent() {
     });
 
     if (!result.success) {
-      setError(result.error || "Authentication failed");
+      setError(result.error || ERROR_MESSAGES.AUTH.AUTHENTICATION_FAILED);
       return;
     }
 

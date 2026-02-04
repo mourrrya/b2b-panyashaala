@@ -1,26 +1,19 @@
+import { UI_LABELS } from "@/lib/constants";
+import { PAGE_SEO } from "@/lib/constants/seo";
 import { createBreadcrumbSchema, createMetadata, JsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import type React from "react";
 
 export const metadata: Metadata = createMetadata({
-  title: "Applications | Cosmetic Formulation Use Cases",
-  description:
-    "Discover how our natural ingredients are used in skincare, haircare, personal care, and clean beauty formulations. Application guides for formulators.",
-  canonical: "/applications",
-  keywords: [
-    "applications",
-    "formulations",
-    "skincare",
-    "haircare",
-    "clean beauty",
-    "use cases",
-    "cosmetic formulations",
-  ],
+  title: PAGE_SEO.APPLICATIONS.title,
+  description: PAGE_SEO.APPLICATIONS.description,
+  canonical: PAGE_SEO.APPLICATIONS.canonical,
+  keywords: [...PAGE_SEO.APPLICATIONS.keywords],
 });
 
 const breadcrumbItems = [
-  { name: "Home", path: "/" },
-  { name: "Applications", path: "/applications" },
+  { name: UI_LABELS.BREADCRUMBS.HOME, path: "/" },
+  { name: UI_LABELS.BREADCRUMBS.APPLICATIONS, path: "/applications" },
 ];
 
 export default function ApplicationsLayout({

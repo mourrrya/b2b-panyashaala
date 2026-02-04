@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { UI_LABELS } from "@/lib/constants";
 import { CustomerType } from "@/prisma/generated/prisma/browser";
 import { useAuthStore } from "@/store/auth-store";
 import { useEffect, useState } from "react";
@@ -27,14 +28,14 @@ export default function ProfilePage() {
           const avatarUrl = e.target?.result as string;
           const result = await updateProfile({ avatarUrl });
           if (result.success) {
-            console.log("Profile picture updated successfully");
+            console.log(UI_LABELS.PROFILE.UPDATE_SUCCESS);
             resolve();
           } else {
-            reject(new Error("Failed to update profile picture"));
+            reject(new Error(UI_LABELS.PROFILE.UPDATE_FAILED));
           }
         };
         reader.onerror = () => {
-          reject(new Error("Failed to read file"));
+          reject(new Error(UI_LABELS.PROFILE.FILE_READ_FAILED));
         };
         reader.readAsDataURL(file);
       } catch (error) {
@@ -48,7 +49,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading profile...</p>
+          <p className="text-slate-600">{UI_LABELS.PROFILE.LOADING}</p>
         </div>
       </div>
     );

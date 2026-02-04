@@ -1,3 +1,4 @@
+import { UI_LABELS } from "@/lib/constants";
 import { Mail, User } from "lucide-react";
 import { FormInput } from "./FormInput";
 import { PasswordInput } from "./PasswordInput";
@@ -34,51 +35,49 @@ export function AuthForm({
     <form onSubmit={onSubmit} className="space-y-4">
       {mode === "signup" && (
         <FormInput
-          label="Full Name"
+          label={UI_LABELS.FORM.FULL_NAME}
           name="name"
           type="text"
           icon={<User className="w-5 h-5" />}
           value={formData.name}
           onChange={onInputChange}
-          placeholder="John Doe"
+          placeholder={UI_LABELS.PLACEHOLDERS.FULL_NAME}
           autoComplete="name"
         />
       )}
 
       <FormInput
-        label="Email Address"
+        label={UI_LABELS.FORM.EMAIL_ADDRESS}
         name="email"
         type="email"
         icon={<Mail className="w-5 h-5" />}
         value={formData.email}
         onChange={onInputChange}
-        placeholder="you@company.com"
+        placeholder={UI_LABELS.PLACEHOLDERS.EMAIL_LOGIN}
         autoComplete="email"
         required
       />
 
       <PasswordInput
-        label="Password"
+        label={UI_LABELS.FORM.PASSWORD}
         name="password"
         value={formData.password}
         onChange={onInputChange}
-        placeholder="••••••••"
+        placeholder={UI_LABELS.PLACEHOLDERS.PASSWORD}
         showPassword={showPassword}
         onTogglePassword={onTogglePassword}
         autoComplete={mode === "signup" ? "new-password" : "current-password"}
         required
-        helpText={
-          mode === "signup" ? "Must be at least 8 characters" : undefined
-        }
+        helpText={mode === "signup" ? UI_LABELS.FORM.PASSWORD_HELP : undefined}
       />
 
       {mode === "signup" && (
         <PasswordInput
-          label="Confirm Password"
+          label={UI_LABELS.FORM.CONFIRM_PASSWORD}
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={onInputChange}
-          placeholder="••••••••"
+          placeholder={UI_LABELS.PLACEHOLDERS.PASSWORD}
           showPassword={showPassword}
           onTogglePassword={onTogglePassword}
           autoComplete="new-password"
@@ -112,12 +111,14 @@ export function AuthForm({
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               />
             </svg>
-            {mode === "signup" ? "Creating Account..." : "Signing In..."}
+            {mode === "signup"
+              ? UI_LABELS.ACTIONS.CREATING_ACCOUNT
+              : UI_LABELS.ACTIONS.SIGNING_IN}
           </span>
         ) : mode === "signup" ? (
-          "Create Account"
+          UI_LABELS.ACTIONS.SIGN_UP
         ) : (
-          "Sign In"
+          UI_LABELS.ACTIONS.SIGN_IN
         )}
       </button>
     </form>

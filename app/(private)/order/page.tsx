@@ -1,5 +1,6 @@
 "use client";
 
+import { API_CONFIG, ERROR_MESSAGES, UI_LABELS } from "@/lib/constants";
 import { OrderWithDetails } from "@/types/order";
 import {
   Calendar,
@@ -18,32 +19,32 @@ const orderStatusConfig: Record<
   { label: string; color: string; bgColor: string }
 > = {
   PENDING: {
-    label: "Pending",
+    label: UI_LABELS.ORDERS.STATUS.PENDING,
     color: "text-amber-700",
     bgColor: "bg-amber-50 border-amber-200",
   },
   CONFIRMED: {
-    label: "Confirmed",
+    label: UI_LABELS.ORDERS.STATUS.CONFIRMED,
     color: "text-blue-700",
     bgColor: "bg-blue-50 border-blue-200",
   },
   PROCESSING: {
-    label: "Processing",
+    label: UI_LABELS.ORDERS.STATUS.PROCESSING,
     color: "text-indigo-700",
     bgColor: "bg-indigo-50 border-indigo-200",
   },
   SHIPPED: {
-    label: "Shipped",
+    label: UI_LABELS.ORDERS.STATUS.SHIPPED,
     color: "text-purple-700",
     bgColor: "bg-purple-50 border-purple-200",
   },
   DELIVERED: {
-    label: "Delivered",
+    label: UI_LABELS.ORDERS.STATUS.DELIVERED,
     color: "text-emerald-700",
     bgColor: "bg-emerald-50 border-emerald-200",
   },
   CANCELLED: {
-    label: "Cancelled",
+    label: UI_LABELS.ORDERS.STATUS.CANCELLED,
     color: "text-red-700",
     bgColor: "bg-red-50 border-red-200",
   },
@@ -54,22 +55,22 @@ const paymentStatusConfig: Record<
   { label: string; color: string; bgColor: string }
 > = {
   PENDING: {
-    label: "Pending",
+    label: UI_LABELS.ORDERS.PAYMENT_STATUS.PENDING,
     color: "text-amber-700",
     bgColor: "bg-amber-50 border-amber-200",
   },
   PAID: {
-    label: "Paid",
+    label: UI_LABELS.ORDERS.PAYMENT_STATUS.PAID,
     color: "text-emerald-700",
     bgColor: "bg-emerald-50 border-emerald-200",
   },
   FAILED: {
-    label: "Failed",
+    label: UI_LABELS.ORDERS.PAYMENT_STATUS.FAILED,
     color: "text-red-700",
     bgColor: "bg-red-50 border-red-200",
   },
   REFUNDED: {
-    label: "Refunded",
+    label: UI_LABELS.ORDERS.PAYMENT_STATUS.REFUNDED,
     color: "text-slate-700",
     bgColor: "bg-slate-50 border-slate-200",
   },
@@ -170,7 +171,7 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
           <div className="flex items-center justify-end gap-4 sm:gap-6">
             <div className="text-right">
               <p className="text-xs text-slate-500 uppercase tracking-wide">
-                Total
+                {UI_LABELS.ORDERS.TOTAL}
               </p>
               <p className="text-lg font-bold text-slate-800">
                 ₹{order.totalAmount.toFixed(2)}
@@ -180,10 +181,12 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
             <button
               onClick={handleDownloadInvoice}
               className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
-              title="Download Invoice"
+              title={UI_LABELS.ORDERS.DOWNLOAD_INVOICE}
             >
               <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Invoice</span>
+              <span className="hidden sm:inline">
+                {UI_LABELS.ORDERS.INVOICE}
+              </span>
             </button>
 
             <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
@@ -212,17 +215,18 @@ function EmptyOrdersState() {
         <div className="w-16 h-16 mx-auto mb-5 bg-linear-to-br from-slate-100 to-slate-200/80 rounded-lg flex items-center justify-center">
           <ShoppingBag className="w-8 h-8 text-slate-400" />
         </div>
-        <h3 className="text-xl font-bold text-slate-800 mb-2">No Orders Yet</h3>
+        <h3 className="text-xl font-bold text-slate-800 mb-2">
+          {UI_LABELS.ORDERS.NO_ORDERS_TITLE}
+        </h3>
         <p className="text-slate-500 mb-6 max-w-md mx-auto">
-          You haven't placed any orders yet. Browse our products and contact us
-          for your first order today!
+          {UI_LABELS.ORDERS.NO_ORDERS_SUBTITLE}
         </p>
         <Link
           href="/products"
           className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-linear-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 rounded-md shadow-md shadow-emerald-500/25 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
         >
           <ShoppingBag className="w-4 h-4" />
-          Browse Products
+          {UI_LABELS.ORDERS.BROWSE_PRODUCTS}
         </Link>
       </div>
     </div>
@@ -259,18 +263,18 @@ export default function OrdersPage() {
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const response = await fetch("/api/orders");
+        const response = await fetch(API_CONFIG.ENDPOINTS.ORDERS);
         if (!response.ok) {
-          throw new Error("Failed to fetch orders");
+          throw new Error(UI_LABELS.ORDERS.FETCH_ERROR);
         }
         const data = await response.json();
         if (data.success) {
           setOrders(data.data);
         } else {
-          throw new Error(data.error || "Failed to fetch orders");
+          throw new Error(data.error || UI_LABELS.ORDERS.FETCH_ERROR);
         }
       } catch (err: any) {
-        setError(err.message || "An error occurred");
+        setError(err.message || ERROR_MESSAGES.GENERIC);
       } finally {
         setIsLoading(false);
       }
@@ -296,16 +300,19 @@ export default function OrdersPage() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-                  My Orders
+                  {UI_LABELS.ORDERS.MY_ORDERS}
                 </h1>
                 <p className="text-sm text-slate-500">
-                  View and manage your order history
+                  {UI_LABELS.ORDERS.MY_ORDERS_SUBTITLE}
                 </p>
               </div>
             </div>
             {!isLoading && orders.length > 0 && (
               <span className="ml-auto px-2.5 py-1 text-sm font-medium text-slate-600 bg-slate-100 rounded-md">
-                {orders.length} order{orders.length !== 1 ? "s" : ""}
+                {orders.length}{" "}
+                {orders.length !== 1
+                  ? UI_LABELS.ORDERS.ORDERS_PLURAL
+                  : UI_LABELS.ORDERS.ORDER}
               </span>
             )}
           </div>
@@ -323,7 +330,7 @@ export default function OrdersPage() {
               onClick={() => window.location.reload()}
               className="mt-4 px-4 py-2 text-sm font-medium text-red-700 bg-white border border-red-200 rounded-md hover:bg-red-50 transition-colors"
             >
-              Try Again
+              {UI_LABELS.ORDERS.TRY_AGAIN}
             </button>
           </div>
         ) : orders.length === 0 ? (

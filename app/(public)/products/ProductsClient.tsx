@@ -2,6 +2,7 @@
 
 import { ProductCard } from "@/components/ProductCard";
 import { ProductFilters } from "@/components/ProductFilters";
+import { UI_LABELS } from "@/lib/constants";
 import { useStore } from "@/store/store";
 
 export function ProductsClient() {
@@ -46,7 +47,7 @@ export function ProductsClient() {
           {filteredProducts.length === 0 && (
             <div className="text-center py-8 sm:py-12">
               <p className="text-slate-600 text-base sm:text-lg">
-                No products found matching your search.
+                {UI_LABELS.PRODUCTS_PAGE.NO_PRODUCTS_FOUND}
               </p>
               <button
                 onClick={() => {
@@ -55,7 +56,7 @@ export function ProductsClient() {
                 }}
                 className="mt-3 sm:mt-4 text-emerald-800 text-sm sm:text-base font-medium hover:text-emerald-900"
               >
-                Clear filters
+                {UI_LABELS.PRODUCTS_PAGE.CLEAR_FILTERS}
               </button>
             </div>
           )}

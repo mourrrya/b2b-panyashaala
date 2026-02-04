@@ -1,26 +1,26 @@
+import {
+  CONTACT_INFO,
+  SCHEMA_CONFIG,
+  SITE_CONFIG,
+  SOCIAL_HANDLES as SOCIAL_HANDLES_CONST,
+  SOCIAL_LINKS,
+  VERIFICATION_TOKENS as VERIFICATION_TOKENS_CONST,
+} from "@/lib/constants";
 import { Metadata } from "next";
 import React, { type ReactElement } from "react";
 
 /**
  * Site Configuration Constants
+ * Re-exported from centralized constants for backward compatibility
  */
-export const SITE_URL = "https://aukra.co.in"; // Change to production domain
-export const SITE_NAME = "Aukra Chem Essentials LLP";
-export const SITE_DESCRIPTION =
-  "Professional B2B supplier of natural cosmetic ingredients including essential oils, carrier oils, botanical extracts, and hydrosols for formulators and manufacturers.";
-export const DEFAULT_OG_IMAGE = "/og-image-default.jpg";
+export const SITE_URL = SITE_CONFIG.URL;
+export const SITE_NAME = SITE_CONFIG.NAME;
+export const SITE_DESCRIPTION = SITE_CONFIG.DESCRIPTION;
+export const DEFAULT_OG_IMAGE = SITE_CONFIG.DEFAULT_OG_IMAGE;
 
-// Social media and verification
-export const SOCIAL_HANDLES = {
-  twitter: "cosmeticsupply",
-  linkedin: "aukra-chemical-essentials",
-  instagram: "aukra.co.in",
-};
-
-export const VERIFICATION_TOKENS = {
-  googleSiteVerification: "YOUR_GOOGLE_VERIFICATION_TOKEN",
-  bingMsvalidate: "YOUR_BING_VERIFICATION_TOKEN",
-};
+// Social media and verification - re-exported for backward compatibility
+export const SOCIAL_HANDLES = SOCIAL_HANDLES_CONST;
+export const VERIFICATION_TOKENS = VERIFICATION_TOKENS_CONST;
 
 /**
  * Metadata builder function
@@ -118,21 +118,21 @@ interface Organization {
 
 export function createOrganizationSchema(): Organization {
   return {
-    "@context": "https://schema.org",
-    "@type": "Organization",
+    "@context": SCHEMA_CONFIG.CONTEXT,
+    "@type": SCHEMA_CONFIG.TYPES.ORGANIZATION,
     name: SITE_NAME,
     url: SITE_URL,
-    logo: getAbsoluteUrl("/logo-text.svg"),
+    logo: getAbsoluteUrl(SITE_CONFIG.LOGO.TEXT),
     contactPoint: {
-      "@type": "ContactPoint",
-      contactType: "Customer Service",
-      email: "care@aukra.co.in",
-      telephone: "+91 80764 50898",
+      "@type": SCHEMA_CONFIG.TYPES.CONTACT_POINT,
+      contactType: SCHEMA_CONFIG.CONTACT_TYPE,
+      email: CONTACT_INFO.EMAIL.SUPPORT,
+      telephone: CONTACT_INFO.PHONE_DISPLAY,
     },
     sameAs: [
-      `https://twitter.com/${SOCIAL_HANDLES.twitter}`,
-      `https://linkedin.com/company/${SOCIAL_HANDLES.linkedin}`,
-      `https://instagram.com/${SOCIAL_HANDLES.instagram}`,
+      SOCIAL_LINKS.twitter,
+      SOCIAL_LINKS.linkedin,
+      SOCIAL_LINKS.instagram,
     ],
   };
 }
@@ -154,14 +154,14 @@ interface Website {
 
 export function createWebsiteSchema(): Website {
   return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
+    "@context": SCHEMA_CONFIG.CONTEXT,
+    "@type": SCHEMA_CONFIG.TYPES.WEBSITE,
     name: SITE_NAME,
     url: SITE_URL,
     potentialAction: {
-      "@type": "SearchAction",
+      "@type": SCHEMA_CONFIG.TYPES.SEARCH_ACTION,
       target: {
-        "@type": "EntryPoint",
+        "@type": SCHEMA_CONFIG.TYPES.ENTRY_POINT,
         urlTemplate: `${SITE_URL}/products?search={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
@@ -202,19 +202,19 @@ interface ProductSchema {
 
 export function createProductSchema(product: Product): ProductSchema {
   return {
-    "@context": "https://schema.org",
-    "@type": "Product",
+    "@context": SCHEMA_CONFIG.CONTEXT,
+    "@type": SCHEMA_CONFIG.TYPES.PRODUCT,
     name: product.name,
     description: `${product.description} INCI: ${product.inci}. Applications: ${product.applications}`,
     brand: {
-      "@type": "Brand",
+      "@type": SCHEMA_CONFIG.TYPES.BRAND,
       name: SITE_NAME,
     },
     category: product.category,
     offers: {
-      "@type": "Offer",
-      availability: "https://schema.org/InStock",
-      priceCurrency: "USD",
+      "@type": SCHEMA_CONFIG.TYPES.OFFER,
+      availability: SCHEMA_CONFIG.AVAILABILITY,
+      priceCurrency: SITE_CONFIG.CURRENCY,
     },
   };
 }
@@ -239,10 +239,10 @@ export function createBreadcrumbSchema(
   items: BreadcrumbItem[],
 ): BreadcrumbSchema {
   return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    "@context": SCHEMA_CONFIG.CONTEXT,
+    "@type": SCHEMA_CONFIG.TYPES.BREADCRUMB_LIST,
     itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
+      "@type": SCHEMA_CONFIG.TYPES.LIST_ITEM,
       position: index + 1,
       name: item.name,
       item: getAbsoluteUrl(item.path),
@@ -273,15 +273,15 @@ interface ArticleSchema {
 
 export function createArticleSchema(article: Article): ArticleSchema {
   return {
-    "@context": "https://schema.org",
-    "@type": "Article",
+    "@context": SCHEMA_CONFIG.CONTEXT,
+    "@type": SCHEMA_CONFIG.TYPES.ARTICLE,
     headline: article.headline,
     description: article.description,
     ...(article.image && { image: getAbsoluteUrl(article.image) }),
     ...(article.datePublished && { datePublished: article.datePublished }),
     ...(article.author && {
       author: {
-        "@type": "Person",
+        "@type": SCHEMA_CONFIG.TYPES.PERSON,
         name: article.author,
       },
     }),

@@ -1,5 +1,6 @@
 "use client";
 
+import { PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
 import { useEffect, useState } from "react";
 
 interface ProductFiltersProps {
@@ -32,13 +33,6 @@ export function ProductFilters({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const categories = [
-    { value: "essential-oil", label: "Essential Oils" },
-    { value: "fixed-oil", label: "Fixed/Carrier Oils" },
-    { value: "extract", label: "Plant Extracts" },
-    { value: "hydrosol", label: "Hydrosols" },
-  ];
-
   return (
     <>
       <div
@@ -50,7 +44,7 @@ export function ProductFilters({
           <div className="relative">
             <input
               type="text"
-              placeholder="Search by product name, INCI, or application..."
+              placeholder={UI_LABELS.PLACEHOLDERS.SEARCH_PRODUCTS}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-9 sm:pl-10 border border-slate-200 rounded-lg text-sm sm:text-base text-slate-900 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
@@ -84,7 +78,7 @@ export function ProductFilters({
           >
             All Products
           </button>
-          {categories.map((cat) => (
+          {PRODUCT_CATEGORIES.map((cat) => (
             <button
               key={cat.value}
               onClick={() => setSelectedCategory(cat.value)}

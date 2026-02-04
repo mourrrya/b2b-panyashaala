@@ -1,5 +1,6 @@
 "use client";
 
+import { UI_LABELS } from "@/lib/constants";
 import { Building2, FileText, Globe } from "lucide-react";
 
 interface BusinessInfoCardProps {
@@ -71,7 +72,7 @@ function BusinessInfoField({
           </a>
         ) : (
           <span className="text-sm sm:text-base text-slate-800">
-            {value || "Not provided"}
+            {value || UI_LABELS.PROFILE.NOT_PROVIDED}
           </span>
         )}
       </SlateGlassCard>
@@ -105,10 +106,10 @@ export function BusinessInfoCard({
           </div>
           <div>
             <h2 className="text-base sm:text-lg md:text-xl font-bold text-slate-800 tracking-tight">
-              Business Information
+              {UI_LABELS.PROFILE.BUSINESS_INFO}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Your business details and tax information
+              {UI_LABELS.PROFILE.BUSINESS_INFO_SUBTITLE}
             </p>
           </div>
         </div>
@@ -120,19 +121,23 @@ export function BusinessInfoCard({
           <div className="space-y-3 sm:space-y-4">
             {/* Company Name */}
             <BusinessInfoField
-              label="Company Name"
+              label={UI_LABELS.PROFILE.COMPANY_NAME}
               value={companyName}
               icon={Building2}
             />
 
             {/* GST IN */}
-            <BusinessInfoField label="GST IN" value={gstIn} icon={FileText} />
+            <BusinessInfoField
+              label={UI_LABELS.PROFILE.GST_IN}
+              value={gstIn}
+              icon={FileText}
+            />
           </div>
 
           <div className="space-y-3 sm:space-y-4">
             {/* Website */}
             <BusinessInfoField
-              label="Website"
+              label={UI_LABELS.PROFILE.WEBSITE}
               value={website}
               icon={Globe}
               isLink={true}

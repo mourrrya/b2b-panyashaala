@@ -1,5 +1,11 @@
 "use client";
 
+import {
+  AUTH_CONFIG,
+  ERROR_MESSAGES,
+  SUCCESS_MESSAGES,
+  UI_LABELS,
+} from "@/lib/constants";
 import { Address, Customer } from "@/prisma/generated/prisma/browser";
 import { Camera } from "lucide-react";
 import Image from "next/image";
@@ -16,23 +22,15 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const router = useRouter();
 
-  const ALLOWED_FILE_TYPES = [
-    "image/png",
-    "image/jpeg",
-    "image/jpg",
-    "image/webp",
-  ];
-  const MAX_FILE_SIZE = 200 * 1024; // 200KB in bytes
-
   const validateFile = (file: File): string | null => {
     // Check file type
-    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      return "Invalid file type. Allowed types: PNG, JPG, JPEG, WebP";
+    if (!AUTH_CONFIG.AVATAR.ALLOWED_FILE_TYPES.includes(file.type as any)) {
+      return ERROR_MESSAGES.FILE.INVALID_TYPE;
     }
 
     // Check file size
-    if (file.size > MAX_FILE_SIZE) {
-      return `File size exceeds 200KB limit. Your file is ${(file.size / 1024).toFixed(2)}KB`;
+    if (file.size > AUTH_CONFIG.AVATAR.MAX_FILE_SIZE) {
+      return `${ERROR_MESSAGES.FILE.SIZE_EXCEEDED} Your file is ${(file.size / 1024).toFixed(2)}KB`;
     }
 
     return null;
@@ -51,10 +49,12 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
       try {
         setUploadingAvatar(true);
         await onAvatarUpload(file);
-        toast.success("Profile picture updated successfully!");
+        toast.success(SUCCESS_MESSAGES.FORM.PROFILE_UPDATED);
       } catch (err) {
         toast.error(
-          err instanceof Error ? err.message : "Failed to upload avatar",
+          err instanceof Error
+            ? err.message
+            : ERROR_MESSAGES.FILE.UPLOAD_FAILED,
         );
       } finally {
         setUploadingAvatar(false);
@@ -68,7 +68,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
     const month = new Date(user.createdAt).toLocaleDateString("en-US", {
       month: "short",
     });
-    return `Member Since ${month} ${year}`;
+    return `${UI_LABELS.PROFILE.MEMBER_SINCE} ${month} ${year}`;
   };
 
   return (
@@ -87,7 +87,11 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 sm:border-4 border-slate-200 shadow-xl bg-white">
               <Image
                 src={user.avatarUrl || "/placeholder-user.jpg"}
-                alt={user.fullName || user.companyName || "Profile"}
+                alt={
+                  user.fullName ||
+                  user.companyName ||
+                  UI_LABELS.PROFILE.PROFILE_ALT
+                }
                 width={128}
                 height={128}
                 className="w-full h-full object-cover"
@@ -97,7 +101,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
               <Camera className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
               <input
                 type="file"
-                accept=".png,.jpg,.jpeg,.webp"
+                accept={AUTH_CONFIG.AVATAR.ACCEPTED_EXTENSIONS}
                 onChange={handleFileChange}
                 disabled={uploadingAvatar}
                 className="hidden"
@@ -115,7 +119,9 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
             <div className="flex-1">
               <div className="w-fit sm:text-left">
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1.5 sm:mb-2 text-slate-800 wrap-break-word">
-                  {user.fullName || user.companyName || "Welcome"}
+                  {user.fullName ||
+                    user.companyName ||
+                    UI_LABELS.PROFILE.WELCOME}
                 </h1>
 
                 {/* Member Since */}
@@ -156,7 +162,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
                     )}
                   </div>
                   <div className="text-[10px] sm:text-xs text-slate-500 uppercase tracking-wide">
-                    Orders
+                    {UI_LABELS.PROFILE.ORDERS}
                   </div>
                 </div>
               </div>

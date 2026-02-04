@@ -1,5 +1,6 @@
 "use client";
 
+import { SITE_CONFIG, UI_LABELS } from "@/lib/constants";
 import { useAuthStore } from "@/store/auth-store";
 import { Menu } from "lucide-react";
 import Image from "next/image";
@@ -22,8 +23,8 @@ export function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         <Link href="/" className="text-emerald-800 font-semibold text-xl">
           <Image
-            src="/logo-text.svg"
-            alt="Aukra Chem Essentials LLP"
+            src={SITE_CONFIG.LOGO.TEXT}
+            alt={SITE_CONFIG.NAME}
             width={120}
             height={40}
             className="w-24 sm:w-28 md:w-36 h-auto"
@@ -53,7 +54,7 @@ export function Header() {
             trigger={
               <button
                 className="lg:hidden text-emerald-800 p-1 hover:bg-emerald-50 rounded-md transition-colors"
-                aria-label="Toggle navigation menu"
+                aria-label={UI_LABELS.NAV.TOGGLE_MENU}
               >
                 <Menu className="w-6 h-6 sm:w-7 sm:h-7" />
               </button>

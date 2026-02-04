@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { ERROR_MESSAGES, HTTP_STATUS } from "@/lib/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 export type AuthUser = {
@@ -33,8 +34,8 @@ export function protect<TParams = Record<string, string>>(
 
       if (!session?.user?.id || !session?.user?.email) {
         return NextResponse.json(
-          { error: "Unauthorized", success: false },
-          { status: 401 },
+          { error: ERROR_MESSAGES.AUTH.UNAUTHORIZED, success: false },
+          { status: HTTP_STATUS.UNAUTHORIZED },
         );
       }
 
@@ -53,8 +54,8 @@ export function protect<TParams = Record<string, string>>(
     } catch (error) {
       console.error("Auth error:", error);
       return NextResponse.json(
-        { error: "Authentication error", success: false },
-        { status: 401 },
+        { error: ERROR_MESSAGES.AUTH.AUTHENTICATION_ERROR, success: false },
+        { status: HTTP_STATUS.UNAUTHORIZED },
       );
     }
   };

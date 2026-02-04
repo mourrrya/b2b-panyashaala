@@ -1,5 +1,6 @@
 import { ErrorInvalidRequest, handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
+import { ERROR_MESSAGES } from "@/lib/constants";
 import type {
   ErrorResponse,
   ProductWithVariantsImagesReviews,
@@ -19,7 +20,8 @@ export async function GET(
   NextResponse<SuccessRes<ProductWithVariantsImagesReviews> | ErrorResponse>
 > {
   const { id } = await context.params;
-  if (!id) throw new ErrorInvalidRequest("Invalid Product ID");
+  if (!id)
+    throw new ErrorInvalidRequest(ERROR_MESSAGES.RESOURCE.INVALID_PRODUCT_ID);
 
   try {
     const product = await getProductById(id);

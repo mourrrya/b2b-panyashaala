@@ -1,5 +1,6 @@
 "use client";
 
+import { ERROR_MESSAGES } from "@/lib/constants";
 import { Address, Customer } from "@/prisma/generated/prisma/browser";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -88,7 +89,7 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: false });
           return {
             success: false,
-            error: error?.message || "An unexpected error occurred",
+            error: error?.message || ERROR_MESSAGES.UNEXPECTED,
           };
         }
       },
@@ -140,9 +141,15 @@ export const useAuthStore = create<AuthStore>()(
             }
           }
 
-          return { success: false, error: "Failed to update profile" };
+          return {
+            success: false,
+            error: ERROR_MESSAGES.PROFILE.UPDATE_FAILED,
+          };
         } catch (error: any) {
-          return { success: false, error: error?.message || "Update failed" };
+          return {
+            success: false,
+            error: error?.message || ERROR_MESSAGES.PROFILE.UPDATE_FAILED,
+          };
         }
       },
 

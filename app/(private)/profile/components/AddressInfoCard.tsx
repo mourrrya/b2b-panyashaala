@@ -1,5 +1,6 @@
 "use client";
 
+import { UI_LABELS } from "@/lib/constants";
 import { AddressType } from "@/prisma/generated/prisma/browser";
 import { Building, Home, InfoIcon, LucideIcon, MapPin } from "lucide-react";
 
@@ -170,7 +171,7 @@ function AddressSection({
               {showDefaultBadge && address.isDefault && (
                 <span className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 mb-2 sm:mb-3 bg-linear-to-r from-slate-600 to-slate-700 text-white text-xs font-semibold rounded-full shadow-sm">
                   <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse" />
-                  Default
+                  {UI_LABELS.PROFILE.DEFAULT}
                 </span>
               )}
               <div className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-slate-700">
@@ -226,10 +227,10 @@ export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
           </div>
           <div>
             <h2 className="text-base sm:text-lg md:text-xl font-bold text-slate-800 tracking-tight">
-              Saved Addresses
+              {UI_LABELS.PROFILE.ADDRESS_INFO}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Your shipping and billing addresses
+              {UI_LABELS.PROFILE.ADDRESS_INFO_SUBTITLE}
             </p>
           </div>
         </div>
@@ -241,10 +242,10 @@ export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
           <div className="text-center py-8 sm:py-10 md:py-12">
             <MapPin className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 sm:mb-4 text-slate-300" />
             <p className="text-slate-600 text-base sm:text-lg font-semibold mb-1.5 sm:mb-2">
-              No addresses saved yet
+              {UI_LABELS.PROFILE.NO_ADDRESSES_TITLE}
             </p>
             <p className="text-xs sm:text-sm text-slate-500">
-              You haven't added any addresses to your profile
+              {UI_LABELS.PROFILE.NO_ADDRESSES_SUBTITLE}
             </p>
           </div>
         ) : (
@@ -253,7 +254,7 @@ export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
             {shippingAddresses.length > 0 && (
               <AddressSection
                 addresses={shippingAddresses}
-                title="Shipping Address"
+                title={UI_LABELS.PROFILE.SHIPPING_ADDRESS}
                 icon={Home}
                 colorScheme="slate"
               />
@@ -263,7 +264,7 @@ export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
             {billingAddresses.length > 0 && (
               <AddressSection
                 addresses={billingAddresses}
-                title="Billing Address"
+                title={UI_LABELS.PROFILE.BILLING_ADDRESS}
                 icon={Building}
                 colorScheme="slate"
                 showDefaultBadge={true}
@@ -276,13 +277,13 @@ export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
         <div className="mt-6 sm:mt-7 md:mt-8 pt-4 sm:pt-5 md:pt-6 border-t border-slate-200">
           <div className="space-y-3 sm:space-y-4">
             <AddressTypeInfo
-              title="Shipping Address"
-              description="The address where your orders will be delivered. You can add multiple shipping addresses for convenience."
+              title={UI_LABELS.PROFILE.SHIPPING_ADDRESS}
+              description={UI_LABELS.PROFILE.SHIPPING_ADDRESS_DESC}
             />
 
             <AddressTypeInfo
-              title="Billing Address"
-              description="The address that appears on invoices and payment records. This is often your business registered address."
+              title={UI_LABELS.PROFILE.BILLING_ADDRESS}
+              description={UI_LABELS.PROFILE.BILLING_ADDRESS_DESC}
             />
           </div>
         </div>

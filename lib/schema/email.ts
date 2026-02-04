@@ -1,3 +1,9 @@
+import {
+  API_CONFIG,
+  CONTACT_INFO,
+  EMAIL_DEFAULTS,
+  ERROR_MESSAGES,
+} from "@/lib/constants";
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
 import type { Product } from "../../store/store";
@@ -13,13 +19,13 @@ if (
  * Form data type for contact form submissions
  */
 export const ContactFormDataSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
+  name: z.string().min(2, ERROR_MESSAGES.VALIDATION.NAME_MIN_LENGTH),
+  email: z.string().email(ERROR_MESSAGES.VALIDATION.INVALID_EMAIL),
   company: z.string().optional(),
   message: z.string().optional(),
   turnstileToken: z
     .string()
-    .min(1, "Please complete the security verification"),
+    .min(1, ERROR_MESSAGES.VALIDATION.SECURITY_VERIFICATION_REQUIRED),
 });
 
 export type ContactFormData = z.infer<typeof ContactFormDataSchema>;
@@ -32,7 +38,7 @@ export type ContactFormData = z.infer<typeof ContactFormDataSchema>;
  */
 export async function verifyTurnstile(token: string): Promise<boolean> {
   try {
-    const response = await fetch("/api/verify-turnstile", {
+    const response = await fetch(API_CONFIG.ENDPOINTS.VERIFY_TURNSTILE, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,16 +81,16 @@ export const sendEmail = async (
                 `- ${product.name} (${product.category}) - INCI: ${product.inci}`,
             )
             .join("\n")
-        : "No products enquired";
+        : EMAIL_DEFAULTS.NO_PRODUCTS_ENQUIRED;
 
     const templateParams = {
-      to_name: "Sai Enterprise",
+      to_name: CONTACT_INFO.RECIPIENT_NAME,
       from_name: data.name,
-      from_email: data.email || "No email provided",
+      from_email: data.email || EMAIL_DEFAULTS.NO_EMAIL_PROVIDED,
       sent_at: new Date().toISOString(),
       page_url: window.location.href,
-      company: data.company || "Not provided",
-      message: data.message || "No message provided",
+      company: data.company || EMAIL_DEFAULTS.NOT_PROVIDED,
+      message: data.message || EMAIL_DEFAULTS.NO_MESSAGE_PROVIDED,
       enquired_products: enquiredProductsText,
       product_count: products.length.toString(),
 

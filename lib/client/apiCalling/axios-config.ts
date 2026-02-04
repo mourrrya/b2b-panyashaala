@@ -1,7 +1,8 @@
+import { API_CONFIG, ERROR_MESSAGES, HTTP_STATUS } from "@/lib/constants";
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: API_CONFIG.BASE_URL,
 });
 
 axiosInstance.interceptors.request.use(
@@ -10,7 +11,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     console.error("Request interceptor error:", error);
-  }
+  },
 );
 
 axiosInstance.interceptors.response.use(
@@ -19,24 +20,24 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       const { status, data } = error.response;
       switch (status) {
-        case 401:
+        case HTTP_STATUS.UNAUTHORIZED:
           break;
-        case 403:
+        case HTTP_STATUS.FORBIDDEN:
           // Show access denied
           break;
-        case 404:
+        case HTTP_STATUS.NOT_FOUND:
           // Show not found
           break;
-        case 422:
+        case HTTP_STATUS.UNPROCESSABLE_ENTITY:
           // Handle validation errors
           break;
         default:
         // Generic error
       }
 
-      error.message = data.error || "Something went wrong";
+      error.message = data.error || ERROR_MESSAGES.GENERIC;
     } else {
-      error.message = "Network error";
+      error.message = ERROR_MESSAGES.NETWORK;
     }
-  }
+  },
 );

@@ -10,6 +10,8 @@ import {
   ProductSpecifications,
   RelatedProducts,
 } from "@/components/products/components";
+import { UI_LABELS } from "@/lib/constants";
+import { PAGE_SEO } from "@/lib/constants/seo";
 import { transformDbProductToProduct } from "@/lib/productUtils";
 import {
   createBreadcrumbSchema,
@@ -57,9 +59,9 @@ export async function generateMetadata({
     });
   } catch (error) {
     return createMetadata({
-      title: "Product Not Found",
-      description: "The requested product could not be found.",
-      canonical: "/products",
+      title: PAGE_SEO.PRODUCT_NOT_FOUND.title,
+      description: PAGE_SEO.PRODUCT_NOT_FOUND.description,
+      canonical: PAGE_SEO.PRODUCT_NOT_FOUND.canonical,
       noIndex: true,
     });
   }
@@ -85,8 +87,8 @@ export default async function ProductDetailPage({
   const categoryLabel = product.category.split("_").join(" ");
 
   const breadcrumbItems = [
-    { name: "Home", path: "/" },
-    { name: "Products", path: "/products" },
+    { name: UI_LABELS.BREADCRUMBS.HOME, path: "/" },
+    { name: UI_LABELS.BREADCRUMBS.PRODUCTS, path: "/products" },
     { name: product.name, path: `/products/${product.id}` },
   ];
 

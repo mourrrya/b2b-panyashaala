@@ -1,3 +1,4 @@
+import { AUTH_CONFIG } from "@/lib/constants";
 import type { NextAuthConfig } from "next-auth";
 
 /**
@@ -7,8 +8,8 @@ import type { NextAuthConfig } from "next-auth";
  */
 export const authConfigEdge: NextAuthConfig = {
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: AUTH_CONFIG.PAGES.SIGN_IN,
+    error: AUTH_CONFIG.PAGES.ERROR,
   },
   providers: [], // Providers are added in the full config
   callbacks: {
@@ -17,13 +18,13 @@ export const authConfigEdge: NextAuthConfig = {
       const pathname = nextUrl.pathname;
 
       // Protected routes that require authentication
-      const protectedRoutes = ["/profile"];
+      const protectedRoutes = AUTH_CONFIG.PROTECTED_ROUTES;
       const isProtectedRoute = protectedRoutes.some((route) =>
         pathname.startsWith(route),
       );
 
       // Auth routes that should redirect if already logged in
-      const authRoutes = ["/login"];
+      const authRoutes = AUTH_CONFIG.AUTH_ROUTES;
       const isAuthRoute = authRoutes.some((route) =>
         pathname.startsWith(route),
       );
@@ -46,7 +47,7 @@ export const authConfigEdge: NextAuthConfig = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: AUTH_CONFIG.SESSION_MAX_AGE,
   },
   secret: process.env.AUTH_SECRET,
   trustHost: true,

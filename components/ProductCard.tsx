@@ -1,3 +1,4 @@
+import { PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
 import type { Product } from "@/store/store";
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -15,13 +16,6 @@ export function ProductCard({
   addToBasket,
   removeFromBasket,
 }: ProductCardProps) {
-  const categories = [
-    { value: "essential-oil", label: "Essential Oils" },
-    { value: "fixed-oil", label: "Fixed/Carrier Oils" },
-    { value: "extract", label: "Plant Extracts" },
-    { value: "hydrosol", label: "Hydrosols" },
-  ];
-
   const isInBasket = basket.includes(product.id);
 
   return (
@@ -34,7 +28,11 @@ export function ProductCard({
           {product.name}
         </h3>
         <span className="text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-medium whitespace-nowrap shrink-0">
-          {categories.find((c) => c.value === product.category)?.label}
+          {
+            PRODUCT_CATEGORIES.find(
+              (c) => c.value === (product.category as string),
+            )?.label
+          }
         </span>
       </div>
       <p className="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 line-clamp-3">
@@ -69,10 +67,10 @@ export function ProductCard({
         {isInBasket ? (
           <>
             <Check className="inline w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1" />
-            Added to Enquiry
+            {UI_LABELS.ACTIONS.ADDED_TO_ENQUIRY}
           </>
         ) : (
-          "Add to Enquiry"
+          UI_LABELS.ACTIONS.ADD_TO_ENQUIRY
         )}
       </button>
     </Link>

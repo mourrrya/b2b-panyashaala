@@ -1,10 +1,7 @@
+import { FEATURE_HIGHLIGHTS } from "@/lib/constants";
+
 export function FeatureHighlights() {
-  const features = [
-    { icon: "🌿", title: "500+", subtitle: "Natural Ingredients" },
-    { icon: "🔬", title: "ISO", subtitle: "Certified Quality" },
-    { icon: "🚚", title: "72hrs", subtitle: "Sample Dispatch" },
-    { icon: "🌍", title: "Global", subtitle: "Sourcing Network" },
-  ];
+  const features = FEATURE_HIGHLIGHTS.LOGIN_PAGE;
 
   return (
     <div className="grid grid-cols-2 gap-3 lg:gap-4">

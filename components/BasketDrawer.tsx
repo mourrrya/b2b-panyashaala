@@ -1,5 +1,6 @@
 "use client";
 
+import { UI_LABELS } from "@/lib/constants";
 import type { Product } from "@/store/store";
 import { Package, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -25,17 +26,17 @@ export function Basket({
       <div className="basket-empty h-full flex flex-col items-center justify-center py-8 gap-2 px-6">
         <Package className="w-12 h-12 text-emerald-300 mb-4" />
         <p className="text-center text-slate-600 font-medium mb-2">
-          Your enquiry basket is empty
+          {UI_LABELS.BASKET.EMPTY_TITLE}
         </p>
         <p className="text-center text-sm text-slate-500 mb-6">
-          Add products to get started with your enquiry
+          {UI_LABELS.BASKET.EMPTY_SUBTITLE}
         </p>
         <Link href="/products">
           <Button
             className="bg-emerald-800 hover:bg-emerald-700 text-white"
             onClick={() => setBasketDrawerOpen(false)}
           >
-            Browse Products
+            {UI_LABELS.ACTIONS.BROWSE_PRODUCTS}
           </Button>
         </Link>
       </div>
@@ -93,7 +94,7 @@ export function Basket({
             disabled={basketLength === 0}
             onClick={() => setBasketDrawerOpen(false)}
           >
-            Send Enquiry
+            {UI_LABELS.ACTIONS.SEND_ENQUIRY}
           </Button>
         </Link>
       </div>
