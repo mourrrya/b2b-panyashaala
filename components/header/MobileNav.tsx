@@ -3,7 +3,7 @@
 import { LogIn, LogOut, Package, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet";
 
 interface NavLink {
   href: string;
@@ -43,7 +43,7 @@ export function MobileNav({
       <SheetTrigger asChild>{trigger}</SheetTrigger>
       <SheetContent
         side="right"
-        className="w-72 sm:w-80 p-0 bg-linear-to-b from-emerald-50 via-white to-teal-50 border-l border-emerald-100"
+        className="max-w-85 w-[calc(100%-80px)] min-w-50 p-0 bg-linear-to-b from-emerald-50 via-white to-teal-50 border-l border-emerald-100"
       >
         <SheetHeader className="px-6 py-4 border-b border-emerald-100/50 bg-linear-to-r from-emerald-600 to-teal-600">
           <Image

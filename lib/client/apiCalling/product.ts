@@ -2,7 +2,7 @@ import {
   ErrorResponse,
   ProductWithVariantsImagesReviews,
   SuccessRes,
-} from "@/lib/types/api.payload.types";
+} from "@/types/api.payload.types";
 import { axiosInstance } from "./axios-config";
 
 export const productListFetcher = async (

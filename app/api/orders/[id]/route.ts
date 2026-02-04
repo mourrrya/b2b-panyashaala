@@ -5,7 +5,7 @@ import {
   handleError,
 } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
-import type { SuccessRes } from "@/lib/types/api.payload.types";
+import type { SuccessRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
 import { getOrderById, OrderWithDetails } from "../../services/orderServices";
 

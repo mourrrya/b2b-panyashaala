@@ -4,7 +4,7 @@ import type {
   ErrorResponse,
   ProductWithVariantsImagesReviews,
   SuccessRes,
-} from "@/lib/types/api.payload.types";
+} from "@/types/api.payload.types";
 import { NextRequest, NextResponse } from "next/server";
 import { getProductById } from "../../services/productServices";
 
@@ -14,7 +14,7 @@ interface RouteContext<TParams = Record<string, string>> {
 
 export async function GET(
   _: NextRequest,
-  context: RouteContext<{ id: string }>
+  context: RouteContext<{ id: string }>,
 ): Promise<
   NextResponse<SuccessRes<ProductWithVariantsImagesReviews> | ErrorResponse>
 > {

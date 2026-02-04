@@ -1,5 +1,5 @@
-import { SuccessRes } from "@/lib/types/api.payload.types";
 import { Customer } from "@/prisma/generated/prisma/browser";
+import { SuccessRes } from "@/types/api.payload.types";
 import { User } from "@supabase/supabase-js";
 import { axiosInstance } from "./axios-config";
 

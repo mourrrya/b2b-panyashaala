@@ -3,8 +3,8 @@ import { ErrorResponse, handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { validateRequestBody } from "@/lib/backend/validation";
 import { UpdateProfileReqSchema } from "@/lib/schemas";
-import type { SuccessRes } from "@/lib/types/api.payload.types";
 import { Customer } from "@/prisma/generated/prisma/client";
+import type { SuccessRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
 import { getOrCreateProfile, updateProfile } from "../services/profileServices";
 

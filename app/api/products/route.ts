@@ -5,12 +5,12 @@ import type {
   ErrorResponse,
   ProductWithVariantsImagesReviews,
   SuccessRes,
-} from "@/lib/types/api.payload.types";
+} from "@/types/api.payload.types";
 import { NextRequest, NextResponse } from "next/server";
 import { getProducts } from "../services/productServices";
 
 async function getProductsController(
-  request: NextRequest
+  request: NextRequest,
 ): Promise<
   NextResponse<SuccessRes<ProductWithVariantsImagesReviews[]> | ErrorResponse>
 > {
@@ -18,7 +18,7 @@ async function getProductsController(
     const { searchParams } = new URL(request.url);
     const validation = validateQueryParams(
       searchParams,
-      ProductFiltersQuerySchema
+      ProductFiltersQuerySchema,
     );
     const filters = validation.data;
     const products = await getProducts(filters);
