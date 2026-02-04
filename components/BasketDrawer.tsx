@@ -14,7 +14,7 @@ interface BasketDrawerProps {
   setBasketDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export function BasketDrawer({
+export function Basket({
   basketProducts,
   basketLength,
   removeFromBasket,
@@ -43,7 +43,7 @@ export function BasketDrawer({
   }
 
   return (
-    <div className="flex flex-col h-full gap-4">
+    <div className="flex flex-col gap-4 h-[calc(100dvh-76px)]">
       <div className="flex-1 overflow-y-auto p-4">
         <div className="space-y-2">
           {basketProducts.map((product, index) => (

@@ -3,13 +3,7 @@
 1. **Sidebar Menu Enhancement**
    - Fix header size and spacing
 
-2. **Enquiry Drawer Footer Issue**
-   - Investigate missing footer in drawer component
-   - Check z-index and overflow properties
-   - Verify footer content visibility on mobile/tablet
-   - Test drawer opening/closing behavior
-
-3. **Product Page Issues**
+2. **Product Page Issues**
    - Review product content rendering
    - Fix page loader display and timing
    - Resolve category filtering/selection logic

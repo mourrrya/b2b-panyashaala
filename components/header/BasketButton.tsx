@@ -3,7 +3,7 @@
 import { useStore } from "@/lib/store";
 import { ShoppingBag } from "lucide-react";
 import { useMemo, useState } from "react";
-import { BasketDrawer } from "../BasketDrawer";
+import { Basket } from "../BasketDrawer";
 import {
   Sheet,
   SheetContent,
@@ -52,12 +52,12 @@ export function BasketButton() {
         side="right"
         className="max-w-85 w-[calc(100%-80px)] min-w-50 p-0"
       >
-        <SheetHeader className="px-6 py-4 border-b border-slate-100">
+        <SheetHeader className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100">
           <SheetTitle className="text-lg font-semibold text-emerald-900">
             Enquiry Basket ({basket.length})
           </SheetTitle>
         </SheetHeader>
-        <BasketDrawer
+        <Basket
           basketProducts={basketProducts}
           basketLength={basket.length}
           removeFromBasket={removeFromBasketOptimistic}

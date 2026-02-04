@@ -43,15 +43,15 @@ export function MobileNav({
       <SheetTrigger asChild>{trigger}</SheetTrigger>
       <SheetContent
         side="right"
-        className="max-w-85 w-[calc(100%-80px)] min-w-50 p-0 bg-linear-to-b from-emerald-50 via-white to-teal-50 border-l border-emerald-100"
+        className="max-w-85 w-[calc(100%-80px)] min-w-50 p-0 bg-linear-to-b from-emerald-50 via-white to-teal-50 "
       >
-        <SheetHeader className="px-6 py-4 border-b border-emerald-100/50 bg-linear-to-r from-emerald-600 to-teal-600">
+        <SheetHeader className="px-4 sm:px-6 py-3 sm:py-4 border-b border-emerald-100/50 ">
           <Image
             src="/logo-text.svg"
             alt="Aukra Chem Essentials LLP"
             width={100}
             height={33}
-            className="h-8 w-auto brightness-0 invert"
+            className="w-24 sm:w-28 md:w-36 h-auto"
           />
         </SheetHeader>
 
