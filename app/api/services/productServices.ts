@@ -2,7 +2,7 @@ import { ErrorNotFound, ErrorUnknown } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { prisma } from "@/lib/backend/prisma";
 import { serializeProductData } from "@/lib/productUtils";
-import { ProductFiltersQuery } from "@/lib/schema";
+import { ProductFiltersQuery } from "@/lib/schema/schema";
 import { Prisma, ProductCategory } from "@prisma/client";
 
 export async function getProducts(filters: ProductFiltersQuery) {
@@ -40,7 +40,7 @@ export async function getProducts(filters: ProductFiltersQuery) {
           },
         },
         orderBy: { createdAt: "desc" },
-      })
+      }),
     );
   } catch (error) {
     logger.error({ error }, "Error getting products");

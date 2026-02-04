@@ -1,6 +1,6 @@
 "use client";
 
-import { useStore } from "@/lib/store";
+import { useStore } from "@/store/store";
 import { ShoppingBag } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Basket } from "../BasketDrawer";

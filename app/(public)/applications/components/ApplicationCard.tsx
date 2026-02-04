@@ -1,6 +1,6 @@
 "use client";
 
-import { useStore } from "@/lib/store";
+import { useStore } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { Application } from "../data/applications";
 

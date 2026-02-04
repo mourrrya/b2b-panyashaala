@@ -2,6 +2,14 @@ import {
   getProductById,
   getProducts,
 } from "@/app/api/services/productServices";
+import { BreadcrumbNavigation } from "@/components/BreadcrumbNavigation";
+import {
+  ProductDescription,
+  ProductHeader,
+  ProductSidebar,
+  ProductSpecifications,
+  RelatedProducts,
+} from "@/components/products/components";
 import { transformDbProductToProduct } from "@/lib/productUtils";
 import {
   createBreadcrumbSchema,
@@ -9,14 +17,7 @@ import {
   createProductSchema,
   JsonLd,
 } from "@/lib/seo";
-import {
-  ProductDescription,
-  ProductHeader,
-  ProductSidebar,
-  ProductSpecifications,
-  RelatedProducts,
-} from "@/src/features/products/components";
-import { BreadcrumbNavigation } from "@/src/shared/components/navigation/BreadcrumbNavigation";
+
 import type { Metadata } from "next";
 
 export const revalidate = 3600; // ISR: Revalidate every hour

@@ -1,5 +1,6 @@
 "use client";
 
+import { GST_SLAB_PERCENT_MAP } from "@/lib/utils";
 import { OrderWithDetails } from "@/types/order";
 import {
   ArrowLeft,
@@ -193,7 +194,7 @@ function OrderItemCard({
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
               <p className="text-xs text-slate-500">GST Slab</p>
               <p className="font-medium text-slate-700 text-sm">
-                {item.gstSlab}
+                {GST_SLAB_PERCENT_MAP[item.gstSlab]}
               </p>
             </div>
           </div>

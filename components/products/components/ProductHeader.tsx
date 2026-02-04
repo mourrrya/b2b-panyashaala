@@ -1,4 +1,4 @@
-import type { Product } from "@/lib/store";
+import type { Product } from "@/store/store";
 
 interface ProductHeaderProps {
   product: Product;

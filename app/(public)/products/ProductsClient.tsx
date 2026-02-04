@@ -2,7 +2,7 @@
 
 import { ProductCard } from "@/components/ProductCard";
 import { ProductFilters } from "@/components/ProductFilters";
-import { useStore } from "@/lib/store";
+import { useStore } from "@/store/store";
 
 export function ProductsClient() {
   const {

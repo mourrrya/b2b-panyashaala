@@ -2,7 +2,7 @@
 
 import { Turnstile } from "@/components/turnstile";
 import { useContactForm } from "@/hooks/use-contact-form";
-import { useStore } from "@/lib/store";
+import { useStore } from "@/store/store";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 

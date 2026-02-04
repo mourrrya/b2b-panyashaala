@@ -5,8 +5,8 @@ import {
   sendEmail,
   verifyTurnstile,
   type ContactFormData,
-} from "@/lib/email";
-import type { Product } from "@/lib/store";
+} from "@/lib/validation/email";
+import type { Product } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";

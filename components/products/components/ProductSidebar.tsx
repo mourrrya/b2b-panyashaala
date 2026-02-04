@@ -1,6 +1,6 @@
 "use client";
-import type { Product } from "@/lib/store";
-import { useStore } from "@/lib/store";
+import type { Product } from "@/store/store";
+import { useStore } from "@/store/store";
 import { Check } from "lucide-react";
 import Link from "next/link";
 

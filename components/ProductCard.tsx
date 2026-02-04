@@ -1,4 +1,4 @@
-import type { Product } from "@/lib/store";
+import type { Product } from "@/store/store";
 import { Check } from "lucide-react";
 import Link from "next/link";
 

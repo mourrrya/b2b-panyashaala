@@ -1,4 +1,4 @@
-import type { Product } from "@/lib/store";
+import type { Product } from "@/store/store";
 import Link from "next/link";
 
 interface RelatedProductsProps {
@@ -15,7 +15,7 @@ export function RelatedProducts({
   const relatedProducts = products
     .filter(
       (p) =>
-        p.category === currentProduct.category && p.id !== currentProduct.id
+        p.category === currentProduct.category && p.id !== currentProduct.id,
     )
     .slice(0, 3);
 

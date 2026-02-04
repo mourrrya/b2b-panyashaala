@@ -1,6 +1,6 @@
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
-import type { Product } from "./store";
+import type { Product } from "../../store/store";
 
 if (
   typeof window !== "undefined" &&

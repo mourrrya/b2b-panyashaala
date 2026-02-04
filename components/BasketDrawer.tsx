@@ -1,6 +1,6 @@
 "use client";
 
-import type { Product } from "@/lib/store";
+import type { Product } from "@/store/store";
 import { Package, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";

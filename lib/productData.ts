@@ -1,4 +1,4 @@
-import type { Product } from "./store";
+import type { Product } from "../store/store";
 
 // INCI name mappings for common products
 const inciMappings: Record<string, Record<string, string>> = {

@@ -9,12 +9,9 @@
    - Resolve category filtering/selection logic
    - Ensure proper data fetching and state management
 
-## Medium Priority
+3. **URL upload for image**
 
-4. **Quality Page FAQ Icons**
-   - Review current chevron animation
-   - Ensure icon alignment and sizing
-   - Test accessibility and touch targets on mobile
+## Medium Priority
 
 5. **Applications Page Link Verification**
    - Test all application item links
