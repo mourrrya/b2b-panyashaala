@@ -17,6 +17,7 @@ import {
   createProductSchema,
   JsonLd,
 } from "@/lib/seo";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 
 import type { Metadata } from "next";
 
@@ -32,18 +33,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { productId } = await params;
   try {
+    // need to fetch product data using swr
     const productDb = await getProductById(productId.toString());
     const product = transformDbProductToProduct(productDb);
-
-    const categoryLabel =
-      (
-        {
-          "essential-oil": "Essential Oil",
-          "fixed-oil": "Carrier Oil",
-          extract: "Extract",
-          hydrosol: "Hydrosol",
-        } as Record<string, string>
-      )[product.category] || "Product";
+    const categoryLabel = product.category
+      .toLocaleLowerCase()
+      .split("_")
+      .join(" ");
     return createMetadata({
       title: `${product.name} | ${categoryLabel}`,
       description: `${product.description} INCI name: ${product.inci}. Common applications: ${product.applications}.`,
@@ -76,20 +72,17 @@ export default async function ProductDetailPage({
   params: Promise<{ productId: string }>;
 }) {
   const { productId } = await params;
-  const productDb = await getProductById(productId.toString());
+  const productDb: ProductWithVariantsImagesReviews = await getProductById(
+    productId.toString(),
+  );
+
+  console.log("Fetched product from DB:", productDb);
+
   const product = transformDbProductToProduct(productDb);
   const allProductsDb = await getProducts({});
   const allProducts = allProductsDb.map(transformDbProductToProduct);
 
-  const categoryLabel =
-    (
-      {
-        "essential-oil": "Essential Oil",
-        "fixed-oil": "Carrier Oil",
-        extract: "Extract",
-        hydrosol: "Hydrosol",
-      } as Record<string, string>
-    )[product.category] || "Product";
+  const categoryLabel = product.category.split("_").join(" ");
 
   const breadcrumbItems = [
     { name: "Home", path: "/" },

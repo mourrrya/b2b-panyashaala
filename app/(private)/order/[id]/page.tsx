@@ -1,7 +1,7 @@
 "use client";
 
 import { GST_SLAB_PERCENT_MAP } from "@/lib/utils";
-import { OrderWithDetails } from "@/types/order";
+import { OrderItemDetails, OrderWithDetails } from "@/types/order";
 import {
   ArrowLeft,
   Calendar,
@@ -127,7 +127,7 @@ function OrderItemCard({
   item,
   onDownloadCOA,
 }: {
-  item: OrderWithDetails["orderItems"][number];
+  item: OrderItemDetails;
   onDownloadCOA: (batchNumber: string) => void;
 }) {
   const formatDate = (date: Date) => {
@@ -153,14 +153,15 @@ function OrderItemCard({
       <div className="flex flex-col lg:flex-row lg:items-start gap-4">
         {/* Product Info */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start flex-wrap justify-between gap-3">
             <div>
-              <h4 className="font-semibold text-slate-800">
-                {item.productName}
+              <h4 className="font-semibold text-slate-800 capitalize">
+                {item.productName.toLocaleLowerCase()}{" "}
+                {item.productCategory.toLocaleLowerCase().split("_").join(" ")}
               </h4>
-              <p className="text-sm text-slate-500 mt-0.5">
+              {/* <p className="text-sm text-slate-500 mt-0.5">
                 {item.variantName}
-              </p>
+              </p> */}
             </div>
             <button
               onClick={() => onDownloadCOA(item.batchNumber)}
@@ -194,7 +195,7 @@ function OrderItemCard({
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
               <p className="text-xs text-slate-500">GST Slab</p>
               <p className="font-medium text-slate-700 text-sm">
-                {GST_SLAB_PERCENT_MAP[item.gstSlab]}
+                {GST_SLAB_PERCENT_MAP[item.gstSlab]}%
               </p>
             </div>
           </div>

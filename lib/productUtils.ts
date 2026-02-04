@@ -4,20 +4,6 @@
 
 import type { Product } from "@/types/product";
 
-export const mapCategoryToUI = (category: string): string => {
-  const categoryMap: Record<string, string> = {
-    ESSENTIAL_OIL: "essential-oil",
-    FIXED_OIL: "fixed-oil",
-    EXTRACT: "extract",
-    HYDROSOL: "hydrosol",
-    HERBAL_OILS: "herbal-oils",
-    CHEMICALS: "chemicals",
-  };
-  return (
-    categoryMap[category] || (category || "").toLowerCase().replace("_", "-")
-  );
-};
-
 export const generateINCI = (product: any): string => {
   if (!product) return "";
   if (product.botanicalName) {
@@ -52,7 +38,7 @@ export const serializeProductData = (data: any): any => {
         return Number(value);
       }
       return value;
-    })
+    }),
   );
   return serialized;
 };
@@ -60,7 +46,7 @@ export const serializeProductData = (data: any): any => {
 export const transformDbProductToProduct = (dbProduct: any): Product => ({
   id: dbProduct.id,
   name: dbProduct.name,
-  category: mapCategoryToUI(dbProduct.category),
+  category: dbProduct.category,
   description: dbProduct.description || "",
   inci: generateINCI(dbProduct),
   applications: generateApplications(dbProduct),

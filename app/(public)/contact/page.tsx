@@ -196,13 +196,16 @@ export default function ContactPage() {
                         className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-lg bg-linear-to-r hover:from-emerald-50 hover:to-transparent transition-all duration-200 animate-fade-in"
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 capitalize">
                           <h4 className="font-semibold text-slate-900 text-xs sm:text-sm truncate">
-                            {product.name}
+                            {product.name.toLocaleLowerCase()}
                           </h4>
                           <div className="flex items-center gap-1.5 sm:gap-2 mt-0.5 sm:mt-1">
                             <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-800">
-                              {product.category}
+                              {product.category
+                                .toLocaleLowerCase()
+                                .split("_")
+                                .join(" ")}
                             </span>
                           </div>
                           <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 truncate">

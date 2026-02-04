@@ -1,4 +1,4 @@
-import { GstSlab } from "@/prisma/generated/prisma/enums";
+import { GstSlab, ProductCategory } from "@/prisma/generated/prisma/enums";
 
 export interface OrderItemDetails {
   id: string;
@@ -14,7 +14,7 @@ export interface OrderItemDetails {
   expiryDate: Date;
   hsnCode: string;
   gstSlab: GstSlab;
-  productCategory: string;
+  productCategory: ProductCategory;
 }
 
 export interface AddressDetails {

@@ -68,13 +68,10 @@ export function Basket({
                     <h3 className="text-lg font-semibold text-emerald-900 mb-1">
                       {product.name}
                     </h3>
-                    <p className="text-sm text-slate-600 mb-2">
+                    <p className="text-sm capitalize text-slate-600 mb-2">
                       {product.category
-                        .split("-")
-                        .map(
-                          (word: string) =>
-                            word.charAt(0).toUpperCase() + word.slice(1),
-                        )
+                        .toLocaleLowerCase()
+                        .split("_")
                         .join(" ")}
                     </p>
                     <p className="text-xs text-slate-500 italic font-mono">

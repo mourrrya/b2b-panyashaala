@@ -1,3 +1,4 @@
+import { ProductCategory } from "@/prisma/generated/prisma/enums";
 import type { Product } from "../store/store";
 
 // INCI name mappings for common products
@@ -473,7 +474,7 @@ export function getProductsData(): Product[] {
     products.push({
       id: productId++,
       name: oilName + " Essential Oil",
-      category: "essential-oil",
+      category: ProductCategory.ESSENTIAL_OIL,
       description: getDescription(oilName, "essential-oil"),
       inci: getInci(oilName, "essential-oil"),
       applications: getApplications(oilName, "essential-oil"),
@@ -532,7 +533,7 @@ export function getProductsData(): Product[] {
     products.push({
       id: productId++,
       name: oilName + (oilName.includes("Oil") ? "" : " Oil"),
-      category: "fixed-oil",
+      category: ProductCategory.FIXED_OIL,
       description: getDescription(oilName, "fixed-oil"),
       inci: getInci(oilName, "fixed-oil"),
       applications: getApplications(oilName, "fixed-oil"),
@@ -668,7 +669,7 @@ export function getProductsData(): Product[] {
     products.push({
       id: productId++,
       name: commonName + " Extract",
-      category: "extract",
+      category: ProductCategory.EXTRACT,
       description: getDescription(commonName, "extract"),
       inci: getInci(extractName, "extract"),
       applications: getApplications(commonName, "extract"),
@@ -703,7 +704,7 @@ export function getProductsData(): Product[] {
     products.push({
       id: productId++,
       name: hydrosol + " Hydrosol",
-      category: "hydrosol",
+      category: ProductCategory.HYDROSOL,
       description: getDescription(hydrosol, "hydrosol"),
       inci: getInci(hydrosol, "hydrosol"),
       applications: getApplications(hydrosol, "hydrosol"),

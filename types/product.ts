@@ -1,6 +1,8 @@
 // Product-related type definitions
 // Extracted to avoid circular imports between store and utils
 
+import { ProductCategory } from "@/prisma/generated/prisma/enums";
+
 export interface Variant {
   id: string;
   variantName: string;
@@ -37,7 +39,7 @@ export interface Review {
 export interface Product {
   id: string | number; // Support both number (legacy) and string (UUID)
   name: string;
-  category: string;
+  category: ProductCategory;
   description: string;
   inci: string;
   applications: string;

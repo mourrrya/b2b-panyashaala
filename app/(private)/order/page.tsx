@@ -137,21 +137,23 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
 
       {/* Order Content */}
       <div className="relative z-10 p-4 sm:p-5">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-8">
           {/* Order Info */}
           <div className="flex items-center gap-3 flex-1">
-            <div className="p-2 rounded-md bg-linear-to-br from-slate-100 to-slate-200/80">
+            <div className="self-start p-2 rounded-md bg-linear-to-br from-slate-100 to-slate-200/80">
               <Package className="w-5 h-5 text-slate-600" />
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 space-y-4 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-bold text-slate-800">
                   {order.orderNumber}
                 </h3>
-                <StatusBadge status={order.status} type="order" />
-                <StatusBadge status={order.paymentStatus} type="payment" />
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={order.status} type="order" />
+                  <StatusBadge status={order.paymentStatus} type="payment" />
+                </div>
               </div>
-              <div className="flex items-center gap-4 mt-1 text-sm text-slate-500">
+              <div className="flex items-center gap-4 text-sm text-slate-500">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5" />
                   {formatDate(order.createdAt)}
@@ -165,7 +167,7 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
           </div>
 
           {/* Price & Actions */}
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex items-center justify-end gap-4 sm:gap-6">
             <div className="text-right">
               <p className="text-xs text-slate-500 uppercase tracking-wide">
                 Total
