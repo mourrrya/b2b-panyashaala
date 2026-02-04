@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 export default function QualityPage() {
@@ -79,7 +80,7 @@ export default function QualityPage() {
               {faqs.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="accordion-item rounded-xl sm:rounded-2xl border border-slate-100 bg-white/95 overflow-hidden"
+                  className="rounded-xl sm:rounded-2xl border border-slate-100 bg-white/95 overflow-hidden"
                 >
                   <button
                     onClick={() =>
@@ -88,21 +89,11 @@ export default function QualityPage() {
                     className="w-full text-left px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-50/80 transition-colors"
                   >
                     {faq.question}
-                    <svg
-                      className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ml-2 transition-transform ${
+                    <ChevronDown
+                      className={`w-4 h-4 sm:w-5 sm:h-5 shrink-0 ml-2 transition-transform duration-300 ease-out ${
                         openAccordion === idx ? "rotate-180" : ""
                       }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                      />
-                    </svg>
+                    />
                   </button>
                   {openAccordion === idx && (
                     <div className="px-4 sm:px-6 py-3 sm:py-4 bg-linear-to-br from-white/95 to-emerald-50/95 text-xs sm:text-sm text-slate-600 border-t border-slate-100">
