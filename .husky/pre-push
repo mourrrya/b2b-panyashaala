@@ -1,0 +1,5 @@
+#!/bin/sh
+powershell.exe -ExecutionPolicy Bypass -File .husky/pre-push.ps1
+
+
+
