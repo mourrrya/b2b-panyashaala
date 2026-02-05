@@ -1,7 +1,8 @@
-import type { Product } from "@/store/store";
+import { generateApplications, generateINCI } from "@/lib/productUtils";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 
 interface ProductDescriptionProps {
-  product: Product;
+  product: ProductWithVariantsImagesReviews;
 }
 
 export function ProductDescription({ product }: ProductDescriptionProps) {
@@ -14,14 +15,15 @@ export function ProductDescription({ product }: ProductDescriptionProps) {
         {product.description} This product is designed for professional use in
         cosmetic formulations. With INCI designation{" "}
         <code className="text-sm font-mono bg-slate-100 px-2 py-1 rounded">
-          {product.inci}
+          {generateINCI(product)}
         </code>
         , it complies with international cosmetic ingredient standards.
       </p>
       <p className="text-slate-600 leading-relaxed">
-        Common applications include: {product.applications.toLowerCase()}. Our
-        product comes with full traceability, documentation, and technical
-        support for your formulation needs.
+        Common applications include:{" "}
+        {generateApplications(product).toLowerCase()}. Our product comes with
+        full traceability, documentation, and technical support for your
+        formulation needs.
       </p>
     </div>
   );

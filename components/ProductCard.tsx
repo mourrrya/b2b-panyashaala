@@ -1,10 +1,11 @@
 import { PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
-import type { Product } from "@/store/store";
+import { generateApplications, generateINCI } from "@/lib/productUtils";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductWithVariantsImagesReviews;
   basket: (number | string)[];
   addToBasket: (id: number | string) => void;
   removeFromBasket: (id: number | string) => void;
@@ -40,13 +41,13 @@ export function ProductCard({
       </p>
       <div className="space-y-1.5 sm:space-y-2 pt-3 sm:pt-4 border-t border-slate-100 mb-2">
         <p className="text-[10px] sm:text-xs text-slate-500">
-          <span className="font-medium">INCI:</span> {product.inci}
+          <span className="font-medium">INCI:</span> {generateINCI(product)}
         </p>
         <p className="text-[10px] sm:text-xs text-emerald-700 font-medium">
           <span className="block text-slate-600 font-normal">
             Applications:
           </span>
-          {product.applications}
+          {generateApplications(product)}
         </p>
       </div>
       <button

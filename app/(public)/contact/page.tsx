@@ -3,13 +3,13 @@
 import { Turnstile } from "@/components/turnstile";
 import { useContactForm } from "@/hooks/use-contact-form";
 import { CONTACT_INFO, MARKETING_COPY, UI_LABELS } from "@/lib/constants";
-import { useStore } from "@/store/store";
+import { useProductStore } from "@/store/store";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 
 export default function ContactPage() {
   const { basket, products, removeFromBasketOptimistic, clearBasket } =
-    useStore();
+    useProductStore();
 
   const basketProducts = useMemo(() => {
     return products.filter((product) => basket.includes(product.id));

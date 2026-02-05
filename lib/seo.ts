@@ -6,8 +6,10 @@ import {
   SOCIAL_LINKS,
   VERIFICATION_TOKENS as VERIFICATION_TOKENS_CONST,
 } from "@/lib/constants";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import { Metadata } from "next";
 import React, { type ReactElement } from "react";
+import { generateApplications, generateINCI } from "./productUtils";
 
 /**
  * Site Configuration Constants
@@ -200,12 +202,14 @@ interface ProductSchema {
   };
 }
 
-export function createProductSchema(product: Product): ProductSchema {
+export function createProductSchema(
+  product: ProductWithVariantsImagesReviews,
+): ProductSchema {
   return {
     "@context": SCHEMA_CONFIG.CONTEXT,
     "@type": SCHEMA_CONFIG.TYPES.PRODUCT,
     name: product.name,
-    description: `${product.description} INCI: ${product.inci}. Applications: ${product.applications}`,
+    description: `${product.description} INCI: ${generateINCI(product)}. Applications: ${generateApplications(product)}`,
     brand: {
       "@type": SCHEMA_CONFIG.TYPES.BRAND,
       name: SITE_NAME,

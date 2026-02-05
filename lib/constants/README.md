@@ -6,8 +6,7 @@ This directory contains all centralized constants, configuration values, and har
 
 ```
 lib/constants/
-├── index.ts          # Barrel re-export of all constants
-├── barrel.ts         # Complete barrel export (includes utilities)
+├── index.ts          # Complete index export (includes utilities)
 ├── config.ts         # Site configuration, contact info, social media
 ├── navigation.ts     # Navigation links (header and footer)
 ├── products.ts       # Product categories and descriptions
@@ -31,7 +30,7 @@ lib/constants/
 ### Importing Constants
 
 ```typescript
-// Import multiple constants from barrel export
+// Import multiple constants from index export
 import { SITE_CONFIG, ERROR_MESSAGES, NAV_LINKS } from "@/lib/constants";
 
 // Or import from specific files for better tree-shaking
@@ -213,7 +212,7 @@ When adding new constants:
 2. Add the constant with a descriptive name
 3. Use SCREAMING_SNAKE_CASE for constant names
 4. Add JSDoc comment if the purpose isn't obvious
-5. Export from barrel.ts if needed for external use
+5. Export from index.ts if needed for external use
 
 Example:
 

@@ -1,8 +1,8 @@
-import { API_CONFIG, ERROR_MESSAGES, HTTP_STATUS } from "@/lib/constants";
+import { ERROR_MESSAGES, HTTP_STATUS } from "@/lib/constants";
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: API_CONFIG.BASE_URL,
+  // baseURL: API_CONFIG.BASE_URL,
 });
 
 axiosInstance.interceptors.request.use(

@@ -45,3 +45,31 @@ export const PRODUCT_CATEGORY_DESCRIPTIONS: Record<ProductCategory, string> = {
     "Herbal oils infused with botanical actives for enhanced performance.",
   POWDER: "Powdered ingredients for versatile formulation applications.",
 } as const;
+
+// =============================================================================
+// FUSE SEARCH CONFIGURATION
+// =============================================================================
+
+export const FUSE_CONFIG = {
+  SEARCH_KEYS: ["name", "description", "inci", "applications"],
+
+  SEARCH_THRESHOLD: 0.4,
+
+  INCLUDE_SCORE: true,
+} as const;
+
+// =============================================================================
+// LOCAL STORAGE CONFIGURATION
+// =============================================================================
+
+export const STORAGE_CONFIG = {
+  BASKET_KEY: "aukra_basket",
+} as const;
+
+// =============================================================================
+// STORE BEHAVIOR CONFIGURATION
+// =============================================================================
+
+export const STORE_CONFIG = {
+  OPTIMISTIC_UPDATE_DELAY: 100,
+} as const;

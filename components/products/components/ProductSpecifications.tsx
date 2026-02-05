@@ -1,7 +1,8 @@
-import type { Product } from "@/store/store";
+import { generateApplications, generateINCI } from "@/lib/productUtils";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 
 interface ProductSpecificationsProps {
-  product: Product;
+  product: ProductWithVariantsImagesReviews;
   categoryLabel: string;
 }
 
@@ -18,7 +19,7 @@ export function ProductSpecifications({
         <div>
           <dt className="font-semibold text-slate-900 mb-2">INCI Name</dt>
           <dd className="text-slate-600 font-mono text-sm bg-slate-50 p-3 rounded border border-slate-200">
-            {product.inci}
+            {generateINCI(product)}
           </dd>
         </div>
         <div>
@@ -27,7 +28,7 @@ export function ProductSpecifications({
         </div>
         <div>
           <dt className="font-semibold text-slate-900 mb-2">Applications</dt>
-          <dd className="text-slate-600">{product.applications}</dd>
+          <dd className="text-slate-600">{generateApplications(product)}</dd>
         </div>
       </dl>
     </div>

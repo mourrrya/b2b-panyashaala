@@ -1,7 +1,7 @@
 "use client";
 
 import { UI_LABELS } from "@/lib/constants";
-import { useStore } from "@/store/store";
+import { useProductStore } from "@/store/store";
 import { ShoppingBag } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Basket } from "../BasketDrawer";
@@ -20,7 +20,7 @@ interface BasketButtonProps {
 
 export function BasketButton() {
   const [basketDrawerOpen, setBasketDrawerOpen] = useState(false);
-  const { basket, products, removeFromBasketOptimistic } = useStore();
+  const { basket, products, removeFromBasketOptimistic } = useProductStore();
 
   const basketProducts = useMemo(
     () => products.filter((product) => basket.includes(product.id)),

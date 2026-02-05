@@ -1,10 +1,10 @@
 "use client";
 
-import { useStore } from "@/store/store";
+import { useProductStore } from "@/store/store";
 import { useEffect } from "react";
 
 export function ProductDataProvider() {
-  const { initialize } = useStore();
+  const { initialize } = useProductStore();
 
   useEffect(() => {
     initialize();

@@ -12,7 +12,6 @@ import {
 } from "@/components/products/components";
 import { UI_LABELS } from "@/lib/constants";
 import { PAGE_SEO } from "@/lib/constants/seo";
-import { transformDbProductToProduct } from "@/lib/productUtils";
 import {
   createBreadcrumbSchema,
   createMetadata,
@@ -35,9 +34,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { productId } = await params;
   try {
-    // need to fetch product data using swr
-    const productDb = await getProductById(productId.toString());
-    const product = transformDbProductToProduct(productDb);
+    // FIXME : need to fetch product data using swr
+    const product = await getProductById(productId.toString());
     const categoryLabel = product.category
       .toLocaleLowerCase()
       .split("_")
@@ -77,24 +75,21 @@ export default async function ProductDetailPage({
   const productDb: ProductWithVariantsImagesReviews = await getProductById(
     productId.toString(),
   );
+  const allProductsDb = await getProducts({});
 
   console.log("Fetched product from DB:", productDb);
 
-  const product = transformDbProductToProduct(productDb);
-  const allProductsDb = await getProducts({});
-  const allProducts = allProductsDb.map(transformDbProductToProduct);
-
-  const categoryLabel = product.category.split("_").join(" ");
+  const categoryLabel = productDb.category.split("_").join(" ");
 
   const breadcrumbItems = [
     { name: UI_LABELS.BREADCRUMBS.HOME, path: "/" },
     { name: UI_LABELS.BREADCRUMBS.PRODUCTS, path: "/products" },
-    { name: product.name, path: `/products/${product.id}` },
+    { name: productDb.name, path: `/products/${productDb.id}` },
   ];
 
   return (
     <main className="bg-texture min-h-screen">
-      <JsonLd schema={createProductSchema(product)} />
+      <JsonLd schema={createProductSchema(productDb)} />
       <JsonLd schema={createBreadcrumbSchema(breadcrumbItems)} />
 
       <BreadcrumbNavigation items={breadcrumbItems} />
@@ -104,23 +99,23 @@ export default async function ProductDetailPage({
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Product Info */}
           <div className="lg:col-span-2">
-            <ProductHeader product={product} categoryLabel={categoryLabel} />
+            <ProductHeader product={productDb} categoryLabel={categoryLabel} />
 
             <ProductSpecifications
-              product={product}
+              product={productDb}
               categoryLabel={categoryLabel}
             />
 
-            <ProductDescription product={product} />
+            <ProductDescription product={productDb} />
           </div>
 
-          <ProductSidebar product={product} />
+          <ProductSidebar product={productDb} />
         </div>
       </section>
 
       <RelatedProducts
-        products={allProducts}
-        currentProduct={product}
+        products={allProductsDb}
+        currentProduct={productDb}
         categoryLabel={categoryLabel}
       />
     </main>

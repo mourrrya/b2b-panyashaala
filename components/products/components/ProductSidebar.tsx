@@ -1,16 +1,16 @@
 "use client";
-import type { Product } from "@/store/store";
-import { useStore } from "@/store/store";
+import { useProductStore } from "@/store/store";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
 interface ProductSidebarProps {
-  product: Product;
+  product: ProductWithVariantsImagesReviews;
 }
 
 export function ProductSidebar({ product }: ProductSidebarProps) {
   const { basket, addToBasketOptimistic, removeFromBasketOptimistic } =
-    useStore();
+    useProductStore();
   const isInBasket = basket.includes(product.id);
 
   const handleEnquiryToggle = () => {

@@ -1,7 +1,7 @@
-import type { Product } from "@/store/store";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 
 interface ProductHeaderProps {
-  product: Product;
+  product: ProductWithVariantsImagesReviews;
   categoryLabel: string;
 }
 

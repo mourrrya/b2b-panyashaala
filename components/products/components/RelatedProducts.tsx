@@ -1,9 +1,10 @@
-import type { Product } from "@/store/store";
+import { generateINCI } from "@/lib/productUtils";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import Link from "next/link";
 
 interface RelatedProductsProps {
-  products: Product[];
-  currentProduct: Product;
+  products: ProductWithVariantsImagesReviews[];
+  currentProduct: ProductWithVariantsImagesReviews;
   categoryLabel: string;
 }
 
@@ -42,7 +43,7 @@ export function RelatedProducts({
                 {relatedProduct.description}
               </p>
               <p className="text-xs text-emerald-600 font-mono mt-4">
-                {relatedProduct.inci}
+                {generateINCI(relatedProduct)}
               </p>
             </Link>
           ))}

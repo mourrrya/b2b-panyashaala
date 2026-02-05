@@ -3,7 +3,7 @@
 import { ProductCard } from "@/components/ProductCard";
 import { ProductFilters } from "@/components/ProductFilters";
 import { UI_LABELS } from "@/lib/constants";
-import { useStore } from "@/store/store";
+import { useProductStore } from "@/store/store";
 
 export function ProductsClient() {
   const {
@@ -16,7 +16,7 @@ export function ProductsClient() {
     addToBasketOptimistic,
     removeFromBasketOptimistic,
     getFilteredProducts,
-  } = useStore();
+  } = useProductStore();
 
   const filteredProducts = getFilteredProducts();
 
