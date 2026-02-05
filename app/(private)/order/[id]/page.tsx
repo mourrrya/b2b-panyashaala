@@ -1,12 +1,10 @@
 "use client";
 
-import {
-  API_CONFIG,
-  ERROR_MESSAGES,
-  PRIVATE_NAV,
-  UI_LABELS,
-} from "@/lib/constants";
+import { swrFetcher } from "@/lib/client/api/axios";
+import { apiKeys, swrConfig } from "@/lib/client/api/swr-config";
+import { PRIVATE_NAV, UI_LABELS } from "@/lib/constants";
 import { GST_SLAB_PERCENT_MAP } from "@/lib/utils";
+import { SuccessRes } from "@/types/api.payload.types";
 import { OrderItemDetails, OrderWithDetails } from "@/types/order";
 import {
   ArrowLeft,
@@ -26,7 +24,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 // Status configuration with colors and icons
 const orderStatusConfig: Record<
@@ -374,39 +372,16 @@ export default function OrderDetailPage() {
   const params = useParams();
   const orderId = params.id as string;
 
-  const [order, setOrder] = useState<OrderWithDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Fetch order using SWR
+  const { data, isLoading, error, mutate } = useSWR<
+    SuccessRes<OrderWithDetails>
+  >(orderId ? apiKeys.orders.detail(orderId) : null, swrFetcher, swrConfig);
 
-  const fetchOrder = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${API_CONFIG.ENDPOINTS.ORDERS}/${orderId}`);
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error(UI_LABELS.ORDERS.ORDER_NOT_FOUND);
-        }
-        throw new Error(UI_LABELS.ORDERS.FETCH_ERROR);
-      }
-      const data = await response.json();
-      if (data.success) {
-        setOrder(data.data);
-      } else {
-        throw new Error(data.error || UI_LABELS.ORDERS.FETCH_ERROR);
-      }
-    } catch (err: any) {
-      setError(err.message || ERROR_MESSAGES.GENERIC);
-    } finally {
-      setIsLoading(false);
-    }
+  const order = data?.data;
+
+  const handleRetry = () => {
+    mutate();
   };
-
-  useEffect(() => {
-    if (orderId) {
-      fetchOrder();
-    }
-  }, [orderId]);
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("en-IN", {
@@ -431,12 +406,13 @@ export default function OrderDetailPage() {
   };
 
   if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState message={error} onRetry={fetchOrder} />;
+  if (error)
+    return <ErrorState message={error.message} onRetry={handleRetry} />;
   if (!order)
     return (
       <ErrorState
         message={UI_LABELS.ORDERS.ORDER_NOT_FOUND}
-        onRetry={fetchOrder}
+        onRetry={handleRetry}
       />
     );
 

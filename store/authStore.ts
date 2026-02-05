@@ -1,7 +1,10 @@
 "use client";
 
+import { apiClient } from "@/lib/client/api/axios";
+import { apiKeys } from "@/lib/client/api/swr-config";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { Address, Customer } from "@/prisma/generated/prisma/browser";
+import { SuccessRes } from "@/types/api.payload.types";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -19,10 +22,13 @@ interface AuthResult {
   error?: string;
 }
 
+type UserData = Customer & {
+  _count?: { orders: number };
+  addresses: Address[];
+};
+
 interface AuthState {
-  user:
-    | (Customer & { _count?: { orders: number }; addresses: Address[] })
-    | null;
+  user: UserData | null;
   isLoading: boolean;
   isInitialized: boolean;
 }
@@ -41,11 +47,7 @@ interface AuthActions {
 
   // State management
   initialize: () => Promise<void>;
-  setUser: (
-    user:
-      | (Customer & { _count?: { orders: number }; addresses: Address[] })
-      | null,
-  ) => void;
+  setUser: (user: UserData | null) => void;
   setLoading: (loading: boolean) => void;
 }
 
@@ -113,12 +115,11 @@ export const useAuthStore = create<AuthStore>()(
 
       fetchProfile: async () => {
         try {
-          const response = await fetch("/api/profile");
-          if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.data) {
-              set({ user: data.data });
-            }
+          const response = await apiClient.get<SuccessRes<UserData>>(
+            apiKeys.profile.me(),
+          );
+          if (response.success && response.data) {
+            set({ user: response.data });
           }
         } catch (error) {
           console.error("Error fetching profile:", error);
@@ -127,18 +128,14 @@ export const useAuthStore = create<AuthStore>()(
 
       updateProfile: async (data) => {
         try {
-          const response = await fetch("/api/profile", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-          });
+          const response = await apiClient.put<SuccessRes<UserData>>(
+            apiKeys.profile.me(),
+            data,
+          );
 
-          if (response.ok) {
-            const result = await response.json();
-            if (result.success && result.data) {
-              set({ user: result.data });
-              return { success: true };
-            }
+          if (response.success && response.data) {
+            set({ user: response.data });
+            return { success: true };
           }
 
           return {

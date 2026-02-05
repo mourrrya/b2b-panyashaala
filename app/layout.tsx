@@ -1,7 +1,6 @@
 import { AuthProvider } from "@/components/AuthProvider";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
-import { ProductDataProvider } from "@/components/ProductDataProvider";
 import { Sonner } from "@/components/sonner";
 import {
   createOrganizationSchema,
@@ -127,7 +126,6 @@ export default function RootLayout({
       >
         <ClientOnly>
           <AuthProvider>
-            <ProductDataProvider />
             <Header />
             <ProgressBar>{children}</ProgressBar>
           </AuthProvider>

@@ -1,9 +1,14 @@
 "use client";
 
+import { swrFetcher } from "@/lib/client/api/axios";
+import { apiKeys, swrConfig } from "@/lib/client/api/swr-config";
 import { UI_LABELS } from "@/lib/constants";
 import { useProductStore } from "@/store/productStore";
+import { SuccessRes } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { ShoppingBag } from "lucide-react";
 import { useMemo, useState } from "react";
+import useSWR from "swr";
 import { Basket } from "../BasketDrawer";
 import {
   Sheet,
@@ -13,18 +18,20 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 
-interface BasketButtonProps {
-  basketProducts?: any[];
-  basketLength?: number;
-}
-
 export function BasketButton() {
   const [basketDrawerOpen, setBasketDrawerOpen] = useState(false);
-  const { basket, products, removeFromBasketOptimistic } = useProductStore();
+  const { basket, removeFromBasketOptimistic } = useProductStore();
+
+  // Fetch products using SWR (deduplicated with ProductsProvider)
+  const { data } = useSWR<SuccessRes<ProductWithVariantsImagesReviews[]>>(
+    apiKeys.products.list(),
+    swrFetcher,
+    swrConfig,
+  );
 
   const basketProducts = useMemo(
-    () => products.filter((product) => basket.includes(product.id)),
-    [products, basket],
+    () => (data?.data ?? []).filter((product) => basket.includes(product.id)),
+    [data?.data, basket],
   );
 
   return (

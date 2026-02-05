@@ -2,12 +2,14 @@
 
 import { ProductCard } from "@/components/ProductCard";
 import { ProductFilters } from "@/components/ProductFilters";
+import { useApiProducts } from "@/lib/client/providers/ProductsApiProvider";
 import { UI_LABELS } from "@/lib/constants";
 import { useProductStore } from "@/store/productStore";
+import { useMemo } from "react";
 
 export function ProductsClient() {
+  const { products, isLoading } = useApiProducts();
   const {
-    products,
     basket,
     searchTerm,
     selectedCategory,
@@ -18,7 +20,18 @@ export function ProductsClient() {
     getFilteredProducts,
   } = useProductStore();
 
-  const filteredProducts = getFilteredProducts();
+  const filteredProducts = useMemo(
+    () => getFilteredProducts(products),
+    [products, getFilteredProducts, searchTerm, selectedCategory],
+  );
+
+  if (isLoading) {
+    return (
+      <main className="bg-texture min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600" />
+      </main>
+    );
+  }
 
   return (
     <main className="bg-texture min-h-screen">

@@ -1,6 +1,9 @@
 "use client";
 
-import { API_CONFIG, ERROR_MESSAGES, UI_LABELS } from "@/lib/constants";
+import { swrFetcher } from "@/lib/client/api/axios";
+import { apiKeys, swrConfig } from "@/lib/client/api/swr-config";
+import { UI_LABELS } from "@/lib/constants";
+import { SuccessRes } from "@/types/api.payload.types";
 import { OrderWithDetails } from "@/types/order";
 import {
   Calendar,
@@ -11,7 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 // Status configuration with colors
 const orderStatusConfig: Record<
@@ -256,32 +259,14 @@ function LoadingState() {
 }
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<OrderWithDetails[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Fetch orders using SWR
+  const { data, isLoading, error } = useSWR<SuccessRes<OrderWithDetails[]>>(
+    apiKeys.orders.list(),
+    swrFetcher,
+    swrConfig,
+  );
 
-  useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const response = await fetch(API_CONFIG.ENDPOINTS.ORDERS);
-        if (!response.ok) {
-          throw new Error(UI_LABELS.ORDERS.FETCH_ERROR);
-        }
-        const data = await response.json();
-        if (data.success) {
-          setOrders(data.data);
-        } else {
-          throw new Error(data.error || UI_LABELS.ORDERS.FETCH_ERROR);
-        }
-      } catch (err: any) {
-        setError(err.message || ERROR_MESSAGES.GENERIC);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchOrders();
-  }, []);
+  const orders = data?.data ?? [];
 
   return (
     <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50">

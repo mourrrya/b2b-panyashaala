@@ -2,15 +2,28 @@
 
 import { Turnstile } from "@/components/turnstile";
 import { useContactForm } from "@/hooks/use-contact-form";
+import { swrFetcher } from "@/lib/client/api/axios";
+import { apiKeys, swrConfig } from "@/lib/client/api/swr-config";
 import { CONTACT_INFO, MARKETING_COPY, UI_LABELS } from "@/lib/constants";
 import { generateINCI } from "@/lib/productUtils";
 import { useProductStore } from "@/store/productStore";
+import { SuccessRes } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
 import { useMemo } from "react";
+import useSWR from "swr";
 
 export default function ContactPage() {
-  const { basket, products, removeFromBasketOptimistic, clearBasket } =
-    useProductStore();
+  const { basket, removeFromBasketOptimistic, clearBasket } = useProductStore();
+
+  // Fetch products using SWR
+  const { data } = useSWR<SuccessRes<ProductWithVariantsImagesReviews[]>>(
+    apiKeys.products.list(),
+    swrFetcher,
+    swrConfig,
+  );
+
+  const products = data?.data ?? [];
 
   const basketProducts = useMemo(() => {
     return products.filter((product) => basket.includes(product.id));
