@@ -15,14 +15,13 @@ export function ProductCard({ product, basket, addToBasket, removeFromBasket }: 
   const isInBasket = basket.includes(product.id);
 
   return (
-    <Link
-      href={`/products/${product.id}`}
-      className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl border border-slate-100 bg-white card-hover cursor-pointer transition-all hover:border-emerald-200 hover:shadow-lg flex flex-col"
-    >
+    <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl border border-slate-100 bg-white card-hover transition-all hover:border-emerald-200 hover:shadow-lg flex flex-col">
       <div className="sticky top-0 z-10 -mx-4 sm:-mx-5 lg:-mx-6 -mt-4 sm:-mt-5 lg:-mt-6 px-4 sm:px-5 lg:px-6 pt-4 sm:pt-5 lg:pt-6 pb-2 sm:pb-3 bg-white rounded-t-xl sm:rounded-t-2xl flex items-start justify-between gap-1 mb-2 sm:mb-3">
-        <h3 className="text-base sm:text-lg font-semibold text-slate-900 line-clamp-2">
-          {product.name}
-        </h3>
+        <Link href={`/products/${product.id}`}>
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900 line-clamp-2">
+            {product.name}
+          </h3>
+        </Link>
         <span className="text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-medium whitespace-nowrap shrink-0">
           {PRODUCT_CATEGORIES.find((c) => c.value === (product.category as string))?.label}
         </span>
@@ -63,6 +62,6 @@ export function ProductCard({ product, basket, addToBasket, removeFromBasket }: 
           UI_LABELS.ACTIONS.ADD_TO_ENQUIRY
         )}
       </button>
-    </Link>
+    </div>
   );
 }
