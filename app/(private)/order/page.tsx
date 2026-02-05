@@ -1,7 +1,7 @@
 "use client";
 
 import { swrFetcher } from "@/lib/client/api/axios";
-import { UI_LABELS } from "@/lib/constants";
+import { PRIVATE_NAV, UI_LABELS } from "@/lib/constants";
 import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { GetServerListRes } from "@/types/api.payload.types";
 import { OrderWithDetails } from "@/types/order";
@@ -73,7 +73,7 @@ function StatusBadge({ status, type }: { status: string; type: "order" | "paymen
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-semibold rounded-md border ${config.bgColor} ${config.color}`}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-semibold rounded-md border whitespace-nowrap ${config.bgColor} ${config.color}`}
     >
       <span className="w-1.5 h-1.5 rounded-full bg-current opacity-60" />
       {config.label}
@@ -101,9 +101,8 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
 
   return (
     <div
-      onClick={() => router.push(`/order/${order.id}`)}
       className={`
-        relative overflow-hidden rounded-lg cursor-pointer
+        relative overflow-hidden rounded-lg
         bg-linear-to-br from-white/95 via-slate-50/85 to-slate-100/75
         backdrop-blur-sm
         border border-slate-200/60
@@ -160,14 +159,18 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
 
             <button
               onClick={handleDownloadInvoice}
-              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors cursor-pointer"
               title={UI_LABELS.ORDERS.DOWNLOAD_INVOICE}
             >
               <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">{UI_LABELS.ORDERS.INVOICE}</span>
+              <span className="inline">{UI_LABELS.ORDERS.INVOICE}</span>
             </button>
-
-            <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
+            <Link
+              href={PRIVATE_NAV.ORDER_DETAIL(order.id)}
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors"
+            >
+              <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
+            </Link>
           </div>
         </div>
       </div>
@@ -292,9 +295,9 @@ export default function OrdersPage() {
         ) : orders.length === 0 ? (
           <EmptyOrdersState />
         ) : (
-          <div className="space-y-3">
+          <div className="flex flex-col gap-y-3">
             {orders.map((order) => (
-              <OrderCard key={order.id} order={order} />
+              <OrderCard order={order} />
             ))}
           </div>
         )}
