@@ -3,6 +3,7 @@
 import { Turnstile } from "@/components/turnstile";
 import { useContactForm } from "@/hooks/use-contact-form";
 import { CONTACT_INFO, MARKETING_COPY, UI_LABELS } from "@/lib/constants";
+import { generateINCI } from "@/lib/productUtils";
 import { useProductStore } from "@/store/productStore";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
 import { useMemo } from "react";
@@ -212,7 +213,7 @@ export default function ContactPage() {
                             </span>
                           </div>
                           <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 truncate">
-                            INCI: {product.inci}
+                            INCI: {generateINCI(product)}
                           </p>
                         </div>
                         <button

@@ -7,7 +7,7 @@ import {
   sendEmail,
   verifyTurnstile,
 } from "@/lib/schema/email";
-import type { Product } from "@/store/productStore";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,7 +15,9 @@ import { useForm } from "react-hook-form";
 /**
  * Custom hook for managing contact form with Turnstile verification
  */
-export function useContactForm(products: Product[] = []) {
+export function useContactForm(
+  products: ProductWithVariantsImagesReviews[] = [],
+) {
   const [submitError, setSubmitError] = useState<string>("");
 
   const {

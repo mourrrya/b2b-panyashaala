@@ -4,9 +4,10 @@ import {
   EMAIL_DEFAULTS,
   ERROR_MESSAGES,
 } from "@/lib/constants";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
-import type { Product } from "../../store/productStore";
+import { generateINCI } from "../productUtils";
 
 if (
   typeof window !== "undefined" &&
@@ -61,7 +62,7 @@ export async function verifyTurnstile(token: string): Promise<boolean> {
 
 export const sendEmail = async (
   data: ContactFormData,
-  products: Product[] = [],
+  products: ProductWithVariantsImagesReviews[] = [],
 ): Promise<boolean> => {
   try {
     if (
@@ -78,7 +79,7 @@ export const sendEmail = async (
         ? products
             .map(
               (product) =>
-                `- ${product.name} (${product.category}) - INCI: ${product.inci}`,
+                `- ${product.name} (${product.category}) - INCI: ${generateINCI(product)}`,
             )
             .join("\n")
         : EMAIL_DEFAULTS.NO_PRODUCTS_ENQUIRED;

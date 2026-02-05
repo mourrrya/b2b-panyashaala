@@ -20,7 +20,7 @@ export async function getProducts(filters: ProductFiltersQuery) {
         { description: { contains: filters.search, mode: "insensitive" } },
       ];
     }
-    return serializeProductData(
+    return (
       await prisma.product.findMany({
         where: {
           isDeleted: false,
@@ -40,8 +40,8 @@ export async function getProducts(filters: ProductFiltersQuery) {
           },
         },
         orderBy: { createdAt: "desc" },
-      }),
-    );
+      })
+    ).map(serializeProductData);
   } catch (error) {
     logger.error({ error }, "Error getting products");
     throw new ErrorUnknown("Error getting products");

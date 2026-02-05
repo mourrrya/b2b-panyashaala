@@ -1,7 +1,8 @@
 "use client";
 
 import { UI_LABELS } from "@/lib/constants";
-import type { Product } from "@/store/productStore";
+import { generateINCI } from "@/lib/productUtils";
+import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import { Package, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
@@ -9,7 +10,7 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 
 interface BasketDrawerProps {
-  basketProducts: Product[];
+  basketProducts: ProductWithVariantsImagesReviews[];
   basketLength: number;
   removeFromBasket: (productId: number | string) => void;
   setBasketDrawerOpen: Dispatch<SetStateAction<boolean>>;
@@ -76,7 +77,7 @@ export function Basket({
                         .join(" ")}
                     </p>
                     <p className="text-xs text-slate-500 italic font-mono">
-                      {product.inci}
+                      {generateINCI(product)}
                     </p>
                   </div>
                 </div>
