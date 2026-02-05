@@ -1,3 +1,0 @@
-@echo off
-pnpm typecheck
-if %errorlevel% neq 0 exit /b %errorlevel%
