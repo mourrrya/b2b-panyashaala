@@ -1,3 +1,0 @@
-// Test file - now with correct types
-const x: number = 42; // Fixed: number assigned to number
-console.log(x);
