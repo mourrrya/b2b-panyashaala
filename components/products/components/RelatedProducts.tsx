@@ -1,5 +1,5 @@
 import { generateINCI } from "@/lib/productUtils";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import Link from "next/link";
 
 interface RelatedProductsProps {

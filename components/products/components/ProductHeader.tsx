@@ -1,4 +1,4 @@
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 
 interface ProductHeaderProps {
   product: ProductWithVariantsImagesReviews;

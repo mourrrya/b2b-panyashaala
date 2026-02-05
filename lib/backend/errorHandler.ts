@@ -1,17 +1,12 @@
 import { ERROR_MESSAGES, HTTP_STATUS } from "@/lib/constants";
+import { ErrorServerRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
-
-export interface ErrorResponse {
-  success: false;
-  message: string;
-  details?: any; // For validation errors
-}
 
 export class ErrorApp extends Error {
   constructor(
     public message: string,
     public statusCode: number = HTTP_STATUS.BAD_REQUEST,
-    public details?: any,
+    public errors?: any,
   ) {
     super(message);
   }
@@ -71,11 +66,11 @@ export class ErrorUnknown extends ErrorApp {
   }
 }
 
-export function handleError(error: unknown): NextResponse<ErrorResponse> {
+export function handleError(error: unknown): NextResponse<ErrorServerRes> {
   if (error instanceof ErrorApp) {
-    const errorRes: any = { message: error.message };
-    if (!!error.details) {
-      errorRes.details = error.details;
+    const errorRes: ErrorServerRes = { message: error.message, success: false };
+    if (!!error.errors) {
+      errorRes.errors = error.errors;
     }
     return NextResponse.json(errorRes, { status: error.statusCode });
   }

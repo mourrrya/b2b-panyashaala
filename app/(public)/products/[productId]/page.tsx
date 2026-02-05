@@ -18,7 +18,7 @@ import {
   createProductSchema,
   JsonLd,
 } from "@/lib/seo";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 
 import type { Metadata } from "next";
 

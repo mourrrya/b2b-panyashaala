@@ -1,18 +1,15 @@
 import { handleError } from "@/lib/backend/errorHandler";
 import { validateQueryParams } from "@/lib/backend/validation";
 import { ProductFiltersQuerySchema } from "@/lib/schema/schema";
-import type {
-  ErrorResponse,
-  ProductWithVariantsImagesReviews,
-  SuccessRes,
-} from "@/types/api.payload.types";
+import type { ErrorServerRes, SuccessRes } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { NextRequest, NextResponse } from "next/server";
 import { getProducts } from "../services/productServices";
 
 async function getProductsController(
   request: NextRequest,
 ): Promise<
-  NextResponse<SuccessRes<ProductWithVariantsImagesReviews[]> | ErrorResponse>
+  NextResponse<SuccessRes<ProductWithVariantsImagesReviews[]> | ErrorServerRes>
 > {
   try {
     const { searchParams } = new URL(request.url);

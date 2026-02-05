@@ -5,7 +5,6 @@ import {
   STORE_CONFIG,
 } from "@/lib/constants";
 import { PUBLIC_ROUTES } from "@/lib/constants/routes";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import type {
   DbProduct,
   Image,
@@ -13,6 +12,7 @@ import type {
   Review,
   Variant,
 } from "@/types/product";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import Fuse from "fuse.js";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";

@@ -6,7 +6,7 @@ import {
   SOCIAL_LINKS,
   VERIFICATION_TOKENS as VERIFICATION_TOKENS_CONST,
 } from "@/lib/constants";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { Metadata } from "next";
 import React, { type ReactElement } from "react";
 import { generateApplications, generateINCI } from "./productUtils";

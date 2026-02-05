@@ -1,16 +1,16 @@
 import { protect, ProtectedRequest } from "@/lib/auth/protect";
-import { ErrorResponse, handleError } from "@/lib/backend/errorHandler";
+import { handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { validateRequestBody } from "@/lib/backend/validation";
 import { UpdateProfileReqSchema } from "@/lib/schema/schemas";
 import { Customer } from "@/prisma/generated/prisma/client";
-import type { SuccessRes } from "@/types/api.payload.types";
+import type { ErrorServerRes, SuccessRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
 import { getOrCreateProfile, updateProfile } from "../services/profileServices";
 
 async function getProfileHandler(
   request: ProtectedRequest,
-): Promise<NextResponse<SuccessRes<Customer> | ErrorResponse>> {
+): Promise<NextResponse<SuccessRes<Customer> | ErrorServerRes>> {
   try {
     const { user } = request.auth;
     const profile = await getOrCreateProfile(user.id, user);
@@ -23,7 +23,7 @@ async function getProfileHandler(
 
 async function updateProfileHandler(
   request: ProtectedRequest,
-): Promise<NextResponse<SuccessRes<Customer> | ErrorResponse>> {
+): Promise<NextResponse<SuccessRes<Customer> | ErrorServerRes>> {
   try {
     const validation = await validateRequestBody(
       request,

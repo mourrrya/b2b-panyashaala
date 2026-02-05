@@ -1,5 +1,5 @@
 import { generateApplications, generateINCI } from "@/lib/productUtils";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 
 interface ProductSpecificationsProps {
   product: ProductWithVariantsImagesReviews;

@@ -55,3 +55,19 @@ export interface DbProduct extends Omit<Product, "id"> {
   id: string; // Database products use UUID strings
   variants: Variant[];
 }
+
+export type VariantWithReviewImg = Variant & {
+  images: Image[];
+  reviews: Review[];
+};
+
+// Product and Variant types
+export type ProductWithVariantsImagesReviews = Product & {
+  variants: VariantWithReviewImg[];
+};
+
+export type VariantWithProductImgReview = Variant & {
+  product: Product;
+  images: Image[];
+  reviews: Review[];
+};

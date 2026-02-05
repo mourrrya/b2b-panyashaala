@@ -2,7 +2,7 @@
 
 import { UI_LABELS } from "@/lib/constants";
 import { generateINCI } from "@/lib/productUtils";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { Package, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";

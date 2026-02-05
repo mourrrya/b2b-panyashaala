@@ -2,7 +2,7 @@
 // Keep these pure and free of framework-specific logic so they can be used
 // in both server and client code without circular dependencies.
 
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 
 export const generateINCI = (
   product: ProductWithVariantsImagesReviews,
@@ -30,9 +30,7 @@ export const generateApplications = (
 };
 
 // Serialize Prisma Decimal objects to plain numbers for client compatibility
-export const serializeProductData = (
-  data: ProductWithVariantsImagesReviews,
-): any => {
+export const serializeProductData = (data: any): any => {
   if (!data) return data;
   const serialized = JSON.parse(
     JSON.stringify(data, (key, value) => {

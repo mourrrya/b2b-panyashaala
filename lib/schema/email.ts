@@ -4,7 +4,7 @@ import {
   EMAIL_DEFAULTS,
   ERROR_MESSAGES,
 } from "@/lib/constants";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
 import { generateINCI } from "../productUtils";

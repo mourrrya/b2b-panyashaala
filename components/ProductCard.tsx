@@ -1,6 +1,6 @@
 import { PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
 import { generateApplications, generateINCI } from "@/lib/productUtils";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { Check } from "lucide-react";
 import Link from "next/link";
 

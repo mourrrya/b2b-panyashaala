@@ -1,19 +1,15 @@
 import { protect, ProtectedRequest } from "@/lib/auth/protect";
-import {
-  ErrorNotFound,
-  ErrorResponse,
-  handleError,
-} from "@/lib/backend/errorHandler";
+import { ErrorNotFound, handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
 import { ERROR_MESSAGES } from "@/lib/constants";
-import type { SuccessRes } from "@/types/api.payload.types";
+import type { ErrorServerRes, GetServerRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
 import { getOrderById, OrderWithDetails } from "../../services/orderServices";
 
 async function getOrderHandler(
   request: ProtectedRequest,
   { params }: { params: Promise<{ id: string }> },
-): Promise<NextResponse<SuccessRes<OrderWithDetails> | ErrorResponse>> {
+): Promise<NextResponse<GetServerRes<OrderWithDetails> | ErrorServerRes>> {
   try {
     const { user } = request.auth;
     const { id } = await params;

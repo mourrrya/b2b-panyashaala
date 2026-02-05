@@ -7,7 +7,7 @@ import {
   sendEmail,
   verifyTurnstile,
 } from "@/lib/schema/email";
-import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
+import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
