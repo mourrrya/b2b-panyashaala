@@ -46,7 +46,6 @@ export function Header() {
             onOpenChange={setMobileMenuOpen}
             pathname={pathname}
             navLinks={[...NAV_LINKS]}
-            user={null}
             isLoading={isLoading}
             onSignOut={async () => {
               await signOut();
