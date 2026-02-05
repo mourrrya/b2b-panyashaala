@@ -18,9 +18,7 @@ export function Footer() {
             <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
               {UI_LABELS.SECTIONS.ABOUT}
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600">
-              {MARKETING_COPY.FOOTER_ABOUT}
-            </p>
+            <p className="text-xs sm:text-sm text-slate-600">{MARKETING_COPY.FOOTER_ABOUT}</p>
           </div>
           <nav>
             <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">

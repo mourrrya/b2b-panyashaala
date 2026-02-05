@@ -15,9 +15,7 @@ import { useForm } from "react-hook-form";
 /**
  * Custom hook for managing contact form with Turnstile verification
  */
-export function useContactForm(
-  products: ProductWithVariantsImagesReviews[] = [],
-) {
+export function useContactForm(products: ProductWithVariantsImagesReviews[] = []) {
   const [submitError, setSubmitError] = useState<string>("");
 
   const {

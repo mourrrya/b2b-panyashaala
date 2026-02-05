@@ -29,9 +29,7 @@ export function Basket({
         <p className="text-center text-slate-600 font-medium mb-2">
           {UI_LABELS.BASKET.EMPTY_TITLE}
         </p>
-        <p className="text-center text-sm text-slate-500 mb-6">
-          {UI_LABELS.BASKET.EMPTY_SUBTITLE}
-        </p>
+        <p className="text-center text-sm text-slate-500 mb-6">{UI_LABELS.BASKET.EMPTY_SUBTITLE}</p>
         <Link href="/products">
           <Button
             className="bg-emerald-800 hover:bg-emerald-700 text-white"
@@ -67,14 +65,9 @@ export function Basket({
                   </button>
 
                   <div className="pr-8">
-                    <h3 className="text-lg font-semibold text-emerald-900 mb-1">
-                      {product.name}
-                    </h3>
+                    <h3 className="text-lg font-semibold text-emerald-900 mb-1">{product.name}</h3>
                     <p className="text-sm capitalize text-slate-600 mb-2">
-                      {product.category
-                        .toLocaleLowerCase()
-                        .split("_")
-                        .join(" ")}
+                      {product.category.toLocaleLowerCase().split("_").join(" ")}
                     </p>
                     <p className="text-xs text-slate-500 italic font-mono">
                       {generateINCI(product)}

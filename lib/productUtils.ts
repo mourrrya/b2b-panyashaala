@@ -4,9 +4,7 @@
 
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 
-export const generateINCI = (
-  product: ProductWithVariantsImagesReviews,
-): string => {
+export const generateINCI = (product: ProductWithVariantsImagesReviews): string => {
   if (!product) return "";
   if (product.botanicalName) {
     return product.botanicalName;
@@ -15,9 +13,7 @@ export const generateINCI = (
   return product.name || "";
 };
 
-export const generateApplications = (
-  product: ProductWithVariantsImagesReviews,
-): string => {
+export const generateApplications = (product: ProductWithVariantsImagesReviews): string => {
   if (!product) return "Various cosmetic applications";
   if (product.variants && product.variants.length > 0) {
     const applications = product.variants
@@ -34,11 +30,7 @@ export const serializeProductData = (data: any): any => {
   if (!data) return data;
   const serialized = JSON.parse(
     JSON.stringify(data, (key, value) => {
-      if (
-        typeof value === "object" &&
-        value !== null &&
-        value.constructor.name === "Decimal"
-      ) {
+      if (typeof value === "object" && value !== null && value.constructor.name === "Decimal") {
         return Number(value);
       }
       return value;

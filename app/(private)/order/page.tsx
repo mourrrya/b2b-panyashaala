@@ -5,22 +5,13 @@ import { UI_LABELS } from "@/lib/constants";
 import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { SuccessRes } from "@/types/api.payload.types";
 import { OrderWithDetails } from "@/types/order";
-import {
-  Calendar,
-  ChevronRight,
-  Download,
-  Package,
-  ShoppingBag,
-} from "lucide-react";
+import { Calendar, ChevronRight, Download, Package, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
 // Status configuration with colors
-const orderStatusConfig: Record<
-  string,
-  { label: string; color: string; bgColor: string }
-> = {
+const orderStatusConfig: Record<string, { label: string; color: string; bgColor: string }> = {
   PENDING: {
     label: UI_LABELS.ORDERS.STATUS.PENDING,
     color: "text-amber-700",
@@ -53,10 +44,7 @@ const orderStatusConfig: Record<
   },
 };
 
-const paymentStatusConfig: Record<
-  string,
-  { label: string; color: string; bgColor: string }
-> = {
+const paymentStatusConfig: Record<string, { label: string; color: string; bgColor: string }> = {
   PENDING: {
     label: UI_LABELS.ORDERS.PAYMENT_STATUS.PENDING,
     color: "text-amber-700",
@@ -79,15 +67,8 @@ const paymentStatusConfig: Record<
   },
 };
 
-function StatusBadge({
-  status,
-  type,
-}: {
-  status: string;
-  type: "order" | "payment";
-}) {
-  const config =
-    type === "order" ? orderStatusConfig[status] : paymentStatusConfig[status];
+function StatusBadge({ status, type }: { status: string; type: "order" | "payment" }) {
+  const config = type === "order" ? orderStatusConfig[status] : paymentStatusConfig[status];
   if (!config) return null;
 
   return (
@@ -149,9 +130,7 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
             </div>
             <div className="flex-1 space-y-4 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="font-bold text-slate-800">
-                  {order.orderNumber}
-                </h3>
+                <h3 className="font-bold text-slate-800">{order.orderNumber}</h3>
                 <div className="flex items-center gap-2">
                   <StatusBadge status={order.status} type="order" />
                   <StatusBadge status={order.paymentStatus} type="payment" />
@@ -176,9 +155,7 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
               <p className="text-xs text-slate-500 uppercase tracking-wide">
                 {UI_LABELS.ORDERS.TOTAL}
               </p>
-              <p className="text-lg font-bold text-slate-800">
-                ₹{order.totalAmount.toFixed(2)}
-              </p>
+              <p className="text-lg font-bold text-slate-800">₹{order.totalAmount.toFixed(2)}</p>
             </div>
 
             <button
@@ -187,9 +164,7 @@ function OrderCard({ order }: { order: OrderWithDetails }) {
               title={UI_LABELS.ORDERS.DOWNLOAD_INVOICE}
             >
               <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">
-                {UI_LABELS.ORDERS.INVOICE}
-              </span>
+              <span className="hidden sm:inline">{UI_LABELS.ORDERS.INVOICE}</span>
             </button>
 
             <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
@@ -287,17 +262,13 @@ export default function OrdersPage() {
                 <h1 className="text-xl font-bold text-slate-800 tracking-tight">
                   {UI_LABELS.ORDERS.MY_ORDERS}
                 </h1>
-                <p className="text-sm text-slate-500">
-                  {UI_LABELS.ORDERS.MY_ORDERS_SUBTITLE}
-                </p>
+                <p className="text-sm text-slate-500">{UI_LABELS.ORDERS.MY_ORDERS_SUBTITLE}</p>
               </div>
             </div>
             {!isLoading && orders.length > 0 && (
               <span className="ml-auto px-2.5 py-1 text-sm font-medium text-slate-600 bg-slate-100 rounded-md">
                 {orders.length}{" "}
-                {orders.length !== 1
-                  ? UI_LABELS.ORDERS.ORDERS_PLURAL
-                  : UI_LABELS.ORDERS.ORDER}
+                {orders.length !== 1 ? UI_LABELS.ORDERS.ORDERS_PLURAL : UI_LABELS.ORDERS.ORDER}
               </span>
             )}
           </div>

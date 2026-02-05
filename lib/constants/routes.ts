@@ -47,8 +47,7 @@ export const PRIVATE_ROUTES = {
 // =============================================================================
 
 export const EXTERNAL_LINKS = {
-  CLOUDFLARE_TURNSTILE:
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+  CLOUDFLARE_TURNSTILE: "https://challenges.cloudflare.com/turnstile/v0/siteverify",
   TURNSTILE_SCRIPT: "https://challenges.cloudflare.com/turnstile/v0/api.js",
 } as const;
 

@@ -11,12 +11,7 @@ interface ProductCardProps {
   removeFromBasket: (id: number | string) => void;
 }
 
-export function ProductCard({
-  product,
-  basket,
-  addToBasket,
-  removeFromBasket,
-}: ProductCardProps) {
+export function ProductCard({ product, basket, addToBasket, removeFromBasket }: ProductCardProps) {
   const isInBasket = basket.includes(product.id);
 
   return (
@@ -29,11 +24,7 @@ export function ProductCard({
           {product.name}
         </h3>
         <span className="text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-medium whitespace-nowrap shrink-0">
-          {
-            PRODUCT_CATEGORIES.find(
-              (c) => c.value === (product.category as string),
-            )?.label
-          }
+          {PRODUCT_CATEGORIES.find((c) => c.value === (product.category as string))?.label}
         </span>
       </div>
       <p className="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 line-clamp-3">
@@ -44,9 +35,7 @@ export function ProductCard({
           <span className="font-medium">INCI:</span> {generateINCI(product)}
         </p>
         <p className="text-[10px] sm:text-xs text-emerald-700 font-medium">
-          <span className="block text-slate-600 font-normal">
-            Applications:
-          </span>
+          <span className="block text-slate-600 font-normal">Applications:</span>
           {generateApplications(product)}
         </p>
       </div>

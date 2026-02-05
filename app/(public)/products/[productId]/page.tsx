@@ -1,7 +1,4 @@
-import {
-  getProductById,
-  getProducts,
-} from "@/app/api/services/productServices";
+import { getProductById, getProducts } from "@/app/api/services/productServices";
 import { BreadcrumbNavigation } from "@/components/BreadcrumbNavigation";
 import {
   ProductDescription,
@@ -12,12 +9,7 @@ import {
 } from "@/components/products/components";
 import { UI_LABELS } from "@/lib/constants";
 import { PAGE_SEO } from "@/lib/constants/seo";
-import {
-  createBreadcrumbSchema,
-  createMetadata,
-  createProductSchema,
-  JsonLd,
-} from "@/lib/seo";
+import { createBreadcrumbSchema, createMetadata, createProductSchema, JsonLd } from "@/lib/seo";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 
 import type { Metadata } from "next";
@@ -36,10 +28,7 @@ export async function generateMetadata({
   try {
     // FIXME : need to fetch product data using swr
     const product = await getProductById(productId.toString());
-    const categoryLabel = product.category
-      .toLocaleLowerCase()
-      .split("_")
-      .join(" ");
+    const categoryLabel = product.category.toLocaleLowerCase().split("_").join(" ");
     return createMetadata({
       title: `${product.name} | ${categoryLabel}`,
       description: `${product.description} INCI name: ${product.inci}. Common applications: ${product.applications}.`,
@@ -72,9 +61,7 @@ export default async function ProductDetailPage({
   params: Promise<{ productId: string }>;
 }) {
   const { productId } = await params;
-  const productDb: ProductWithVariantsImagesReviews = await getProductById(
-    productId.toString(),
-  );
+  const productDb: ProductWithVariantsImagesReviews = await getProductById(productId.toString());
   const allProductsDb = await getProducts({});
 
   console.log("Fetched product from DB:", productDb);
@@ -101,10 +88,7 @@ export default async function ProductDetailPage({
           <div className="lg:col-span-2">
             <ProductHeader product={productDb} categoryLabel={categoryLabel} />
 
-            <ProductSpecifications
-              product={productDb}
-              categoryLabel={categoryLabel}
-            />
+            <ProductSpecifications product={productDb} categoryLabel={categoryLabel} />
 
             <ProductDescription product={productDb} />
           </div>

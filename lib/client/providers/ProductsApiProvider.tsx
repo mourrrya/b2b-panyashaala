@@ -27,12 +27,8 @@ interface ProductApiContextValue {
   refetch: KeyedMutator<SuccessRes<ProductWithVariantsImagesReviews>>;
 }
 
-const ProductsApiContext = createContext<ProductsApiContextValue | undefined>(
-  undefined,
-);
-const ProductApiContext = createContext<ProductApiContextValue | undefined>(
-  undefined,
-);
+const ProductsApiContext = createContext<ProductsApiContextValue | undefined>(undefined);
+const ProductApiContext = createContext<ProductApiContextValue | undefined>(undefined);
 
 // =============================================================================
 // PRODUCTS PROVIDER (List)
@@ -60,9 +56,7 @@ export function ProductsApiProvider({ children }: ProductsApiProviderProps) {
 
   return (
     <SWRConfig value={SWR_CONFIG}>
-      <ProductsApiContext.Provider value={value}>
-        {children}
-      </ProductsApiContext.Provider>
+      <ProductsApiContext.Provider value={value}>{children}</ProductsApiContext.Provider>
     </SWRConfig>
   );
 }
@@ -76,17 +70,10 @@ interface ProductApiProviderProps {
   productId: string | number;
 }
 
-export function ProductApiProvider({
-  children,
-  productId,
-}: ProductApiProviderProps) {
+export function ProductApiProvider({ children, productId }: ProductApiProviderProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     SuccessRes<ProductWithVariantsImagesReviews>
-  >(
-    productId ? PUBLIC_ROUTES.PRODUCTS.DETAIL(productId) : null,
-    swrFetcher,
-    SWR_CONFIG,
-  );
+  >(productId ? PUBLIC_ROUTES.PRODUCTS.DETAIL(productId) : null, swrFetcher, SWR_CONFIG);
 
   const value = useMemo<ProductApiContextValue>(
     () => ({
@@ -101,9 +88,7 @@ export function ProductApiProvider({
 
   return (
     <SWRConfig value={SWR_CONFIG}>
-      <ProductApiContext.Provider value={value}>
-        {children}
-      </ProductApiContext.Provider>
+      <ProductApiContext.Provider value={value}>{children}</ProductApiContext.Provider>
     </SWRConfig>
   );
 }

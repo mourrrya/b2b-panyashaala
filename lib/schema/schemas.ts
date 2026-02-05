@@ -1,9 +1,4 @@
-import {
-  CertificationType,
-  ExtractionMethod,
-  HazardClass,
-  ProductCategory,
-} from "@prisma/client";
+import { CertificationType, ExtractionMethod, HazardClass, ProductCategory } from "@prisma/client";
 import { z } from "zod";
 
 export const UpdateProfileReqSchema = z.object({

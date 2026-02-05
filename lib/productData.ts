@@ -146,20 +146,16 @@ const inciMappings: Record<string, Record<string, string>> = {
 // Product descriptions mapping
 const descriptionMappings: Record<string, Record<string, string>> = {
   "essential-oil": {
-    default:
-      "Premium therapeutic-grade essential oil for aromatherapy and formulations.",
+    default: "Premium therapeutic-grade essential oil for aromatherapy and formulations.",
   },
   "fixed-oil": {
-    default:
-      "Cold-pressed or solvent-extracted carrier oil for skincare and formulations.",
+    default: "Cold-pressed or solvent-extracted carrier oil for skincare and formulations.",
   },
   extract: {
-    default:
-      "High-potency botanical extract with concentrated active compounds.",
+    default: "High-potency botanical extract with concentrated active compounds.",
   },
   hydrosol: {
-    default:
-      "Aromatic distilled floral water rich in botanical properties and antioxidants.",
+    default: "Aromatic distilled floral water rich in botanical properties and antioxidants.",
   },
 };
 

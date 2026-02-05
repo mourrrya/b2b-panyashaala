@@ -12,9 +12,7 @@ export function NavigationMenu({ pathname }: NavigationMenuProps) {
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
   const navRef = useRef<HTMLDivElement>(null);
 
-  const activeLink = navRef?.current?.querySelector(
-    `a[href="${pathname}"]`,
-  ) as HTMLAnchorElement;
+  const activeLink = navRef?.current?.querySelector(`a[href="${pathname}"]`) as HTMLAnchorElement;
 
   useEffect(() => {
     if (!navRef.current) return;
@@ -36,9 +34,7 @@ export function NavigationMenu({ pathname }: NavigationMenuProps) {
           key={link.href}
           href={link.href}
           className={`pb-0.5 transition-colors relative z-10 ${
-            pathname === link.href
-              ? "text-emerald-800"
-              : "hover:text-emerald-800"
+            pathname === link.href ? "text-emerald-800" : "hover:text-emerald-800"
           }`}
           aria-current={pathname === link.href ? "page" : undefined}
         >

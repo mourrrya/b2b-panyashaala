@@ -78,9 +78,7 @@ export const authConfig: NextAuthConfig = {
               };
             }
             // User exists with password - can't sign up again
-            throw new Error(
-              "An account with this email already exists. Please sign in.",
-            );
+            throw new Error("An account with this email already exists. Please sign in.");
           }
 
           // Create new user
@@ -103,18 +101,14 @@ export const authConfig: NextAuthConfig = {
         } else {
           // SIGN IN FLOW
           if (!existingUser) {
-            throw new Error(
-              "No account found with this email. Please sign up first.",
-            );
+            throw new Error("No account found with this email. Please sign up first.");
           }
 
           // Check if user has no password (OAuth only user)
           if (!existingUser.password) {
             // Check if they have an OAuth account
             if (existingUser.accounts.length > 0) {
-              const providers = existingUser.accounts
-                .map((a) => a.provider)
-                .join(", ");
+              const providers = existingUser.accounts.map((a) => a.provider).join(", ");
               throw new Error(
                 `This account uses ${providers} login. Please sign in with ${providers} or set a password.`,
               );
@@ -123,10 +117,7 @@ export const authConfig: NextAuthConfig = {
           }
 
           // Verify password
-          const isValidPassword = await bcrypt.compare(
-            password,
-            existingUser.password,
-          );
+          const isValidPassword = await bcrypt.compare(password, existingUser.password);
           if (!isValidPassword) {
             throw new Error("Invalid password. Please try again.");
           }
@@ -153,9 +144,7 @@ export const authConfig: NextAuthConfig = {
 
           if (existingUser) {
             // Check if Google account is already linked
-            const hasGoogleAccount = existingUser.accounts.some(
-              (acc) => acc.provider === "google",
-            );
+            const hasGoogleAccount = existingUser.accounts.some((acc) => acc.provider === "google");
 
             if (!hasGoogleAccount) {
               // Link Google account to existing user
@@ -180,8 +169,7 @@ export const authConfig: NextAuthConfig = {
                 where: { id: existingUser.id },
                 data: {
                   fullName: existingUser.fullName || profile?.name,
-                  avatarUrl:
-                    existingUser.avatarUrl || (profile as any)?.picture,
+                  avatarUrl: existingUser.avatarUrl || (profile as any)?.picture,
                   emailVerified: existingUser.emailVerified || new Date(),
                 },
               });

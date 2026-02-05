@@ -31,11 +31,7 @@ export function LoginProfileButton() {
             {user ? (
               <Image
                 src={user?.avatarUrl || ""}
-                alt={
-                  user.fullName ||
-                  user.companyName ||
-                  UI_LABELS.NAV.USER_AVATAR_ALT
-                }
+                alt={user.fullName || user.companyName || UI_LABELS.NAV.USER_AVATAR_ALT}
                 width={16}
                 height={16}
                 className="w-8 h-8 rounded-full object-cover"

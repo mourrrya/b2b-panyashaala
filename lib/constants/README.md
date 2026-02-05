@@ -78,11 +78,7 @@ import { UI_LABELS } from '@/lib/constants';
 #### Routes & API Configuration
 
 ```typescript
-import {
-  PUBLIC_ROUTES,
-  PRIVATE_ROUTES,
-  SWR_CONFIG,
-} from "@/lib/constants/routes";
+import { PUBLIC_ROUTES, PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 
 // API routes for data fetching
 const { data } = useSWR(PUBLIC_ROUTES.PRODUCTS.LIST, swrFetcher, SWR_CONFIG);
@@ -96,19 +92,11 @@ const orderUrl = PRIVATE_ROUTES.ORDERS.DETAIL(orderId);
 #### Validation
 
 ```typescript
-import {
-  VALIDATION_RULES,
-  VALIDATION_MESSAGES,
-} from "@/lib/constants/validation";
+import { VALIDATION_RULES, VALIDATION_MESSAGES } from "@/lib/constants/validation";
 
 // In Zod schema
 const schema = z.object({
-  password: z
-    .string()
-    .min(
-      VALIDATION_RULES.PASSWORD.MIN_LENGTH,
-      VALIDATION_MESSAGES.PASSWORD.MIN,
-    ),
+  password: z.string().min(VALIDATION_RULES.PASSWORD.MIN_LENGTH, VALIDATION_MESSAGES.PASSWORD.MIN),
 });
 ```
 

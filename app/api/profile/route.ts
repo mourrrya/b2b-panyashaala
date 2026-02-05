@@ -25,10 +25,7 @@ async function updateProfileHandler(
   request: ProtectedRequest,
 ): Promise<NextResponse<SuccessRes<Customer> | ErrorServerRes>> {
   try {
-    const validation = await validateRequestBody(
-      request,
-      UpdateProfileReqSchema,
-    );
+    const validation = await validateRequestBody(request, UpdateProfileReqSchema);
     const body = validation.data;
     const { user } = request.auth;
     const profile = await updateProfile(user.id, body);

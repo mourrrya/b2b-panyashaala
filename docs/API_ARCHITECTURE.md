@@ -72,10 +72,7 @@ function ProductList() {
 
 ```tsx
 // app/(public)/products/[id]/page.tsx
-import {
-  ProductApiProvider,
-  useApiProduct,
-} from "@/lib/client/providers/ProductsApiProvider";
+import { ProductApiProvider, useApiProduct } from "@/lib/client/providers/ProductsApiProvider";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   return (

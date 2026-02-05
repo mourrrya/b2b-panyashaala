@@ -24,12 +24,8 @@ export default function QualityPage() {
                 key={idx}
                 className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl border border-slate-100 bg-white/95 gradient-card card-hover"
               >
-                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">
-                  {item.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-2 sm:mt-3">
-                  {item.description}
-                </p>
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-900">{item.title}</h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-2 sm:mt-3">{item.description}</p>
               </div>
             ))}
           </div>
@@ -45,9 +41,7 @@ export default function QualityPage() {
                   className="rounded-xl sm:rounded-2xl border border-slate-100 bg-white/95 overflow-hidden"
                 >
                   <button
-                    onClick={() =>
-                      setOpenAccordion(openAccordion === idx ? null : idx)
-                    }
+                    onClick={() => setOpenAccordion(openAccordion === idx ? null : idx)}
                     className="w-full text-left px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold text-slate-900 flex justify-between items-center hover:bg-slate-50/80 transition-colors"
                   >
                     {faq.question}

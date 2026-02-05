@@ -52,11 +52,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
         await onAvatarUpload(file);
         toast.success(SUCCESS_MESSAGES.FORM.PROFILE_UPDATED);
       } catch (err) {
-        toast.error(
-          err instanceof Error
-            ? err.message
-            : ERROR_MESSAGES.FILE.UPLOAD_FAILED,
-        );
+        toast.error(err instanceof Error ? err.message : ERROR_MESSAGES.FILE.UPLOAD_FAILED);
       } finally {
         setUploadingAvatar(false);
       }
@@ -88,11 +84,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 sm:border-4 border-slate-200 shadow-xl bg-white">
               <Image
                 src={user.avatarUrl || "/placeholder-user.jpg"}
-                alt={
-                  user.fullName ||
-                  user.companyName ||
-                  UI_LABELS.PROFILE.PROFILE_ALT
-                }
+                alt={user.fullName || user.companyName || UI_LABELS.PROFILE.PROFILE_ALT}
                 width={128}
                 height={128}
                 className="w-full h-full object-cover"
@@ -120,9 +112,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
             <div className="flex-1">
               <div className="w-fit sm:text-left">
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1.5 sm:mb-2 text-slate-800 wrap-break-word">
-                  {user.fullName ||
-                    user.companyName ||
-                    UI_LABELS.PROFILE.WELCOME}
+                  {user.fullName || user.companyName || UI_LABELS.PROFILE.WELCOME}
                 </h1>
 
                 {/* Member Since */}

@@ -15,10 +15,7 @@ interface ProductFiltersProps {
   totalProductsCount: number;
 }
 
-export function ProductFilters({
-  filteredProductsCount,
-  totalProductsCount,
-}: ProductFiltersProps) {
+export function ProductFilters({ filteredProductsCount, totalProductsCount }: ProductFiltersProps) {
   const [hasScrolled, setHasScrolled] = useState(false);
 
   const searchTerm = useSearchTerm();
@@ -28,8 +25,7 @@ export function ProductFilters({
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       setHasScrolled(scrollTop > 0);
     };
 

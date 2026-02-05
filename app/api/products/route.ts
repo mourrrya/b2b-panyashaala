@@ -8,15 +8,10 @@ import { getProducts } from "../services/productServices";
 
 async function getProductsController(
   request: NextRequest,
-): Promise<
-  NextResponse<SuccessRes<ProductWithVariantsImagesReviews[]> | ErrorServerRes>
-> {
+): Promise<NextResponse<SuccessRes<ProductWithVariantsImagesReviews[]> | ErrorServerRes>> {
   try {
     const { searchParams } = new URL(request.url);
-    const validation = validateQueryParams(
-      searchParams,
-      ProductFiltersQuerySchema,
-    );
+    const validation = validateQueryParams(searchParams, ProductFiltersQuerySchema);
     const filters = validation.data;
     const products = await getProducts(filters);
     return NextResponse.json({ data: products, success: true });

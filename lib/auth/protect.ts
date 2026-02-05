@@ -22,13 +22,8 @@ type ProtectedHandler<TParams = Record<string, string>> = (
  * Protect an API route with Auth.js authentication
  * Automatically returns 401 if user is not authenticated
  */
-export function protect<TParams = Record<string, string>>(
-  handler: ProtectedHandler<TParams>,
-) {
-  return async (
-    req: NextRequest,
-    context: RouteContext<TParams>,
-  ): Promise<NextResponse> => {
+export function protect<TParams = Record<string, string>>(handler: ProtectedHandler<TParams>) {
+  return async (req: NextRequest, context: RouteContext<TParams>): Promise<NextResponse> => {
     try {
       const session = await auth();
 

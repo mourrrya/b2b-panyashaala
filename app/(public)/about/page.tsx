@@ -1,9 +1,4 @@
-import {
-  APPROACH_STEPS,
-  FEATURE_HIGHLIGHTS,
-  MARKETING_COPY,
-  UI_LABELS,
-} from "@/lib/constants";
+import { APPROACH_STEPS, FEATURE_HIGHLIGHTS, MARKETING_COPY, UI_LABELS } from "@/lib/constants";
 import { PAGE_SEO } from "@/lib/constants/seo";
 import { createBreadcrumbSchema, createMetadata, JsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -63,9 +58,7 @@ export default function AboutPage() {
                         <h4 className="font-semibold text-sm sm:text-base text-slate-900">
                           {item.title}
                         </h4>
-                        <p className="text-xs sm:text-sm text-slate-600">
-                          {item.description}
-                        </p>
+                        <p className="text-xs sm:text-sm text-slate-600">{item.description}</p>
                       </div>
                     </div>
                   </li>
@@ -80,9 +73,7 @@ export default function AboutPage() {
                 key={idx}
                 className="p-4 sm:p-5 lg:p-6 bg-white/95 rounded-xl sm:rounded-2xl border border-slate-100 card-hover"
               >
-                <p className="text-xs sm:text-sm text-slate-500">
-                  {item.label}
-                </p>
+                <p className="text-xs sm:text-sm text-slate-500">{item.label}</p>
                 <p className="text-base sm:text-lg lg:text-xl font-semibold text-slate-900">
                   {item.value}
                 </p>

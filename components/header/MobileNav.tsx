@@ -56,10 +56,7 @@ export function MobileNav({
           />
         </SheetHeader>
 
-        <nav
-          className="flex flex-col py-4"
-          aria-label={UI_LABELS.NAV.MOBILE_NAVIGATION}
-        >
+        <nav className="flex flex-col py-4" aria-label={UI_LABELS.NAV.MOBILE_NAVIGATION}>
           {navLinks.map((link) => (
             <Link
               key={link.href}

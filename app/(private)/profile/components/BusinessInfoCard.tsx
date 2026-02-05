@@ -80,11 +80,7 @@ function BusinessInfoField({
   );
 }
 
-export function BusinessInfoCard({
-  companyName,
-  gstIn,
-  website,
-}: BusinessInfoCardProps) {
+export function BusinessInfoCard({ companyName, gstIn, website }: BusinessInfoCardProps) {
   return (
     <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-slate-200/60">
       {/* Subtle background pattern for depth */}
@@ -127,11 +123,7 @@ export function BusinessInfoCard({
             />
 
             {/* GST IN */}
-            <BusinessInfoField
-              label={UI_LABELS.PROFILE.GST_IN}
-              value={gstIn}
-              icon={FileText}
-            />
+            <BusinessInfoField label={UI_LABELS.PROFILE.GST_IN} value={gstIn} icon={FileText} />
           </div>
 
           <div className="space-y-3 sm:space-y-4">

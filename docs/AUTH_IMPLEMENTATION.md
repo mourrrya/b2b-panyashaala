@@ -97,10 +97,7 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```typescript
 import { protect, ProtectedRequest, RouteContext } from "@/lib/auth/protect";
 
-async function handler(
-  request: ProtectedRequest,
-  context: RouteContext,
-): Promise<NextResponse> {
+async function handler(request: ProtectedRequest, context: RouteContext): Promise<NextResponse> {
   const { user } = request.auth;
   // user is guaranteed to exist
   return NextResponse.json({ userId: user.id });
@@ -129,8 +126,7 @@ async function ServerComponent() {
 import { useAuthStore } from "@/store/auth-store";
 
 function Component() {
-  const { user, isLoading, signInWithCredentials, signInWithGoogle, signOut } =
-    useAuthStore();
+  const { user, isLoading, signInWithCredentials, signInWithGoogle, signOut } = useAuthStore();
 
   // Sign in with credentials
   const handleLogin = async () => {
@@ -158,11 +154,7 @@ function Component() {
 ### Selector Hooks
 
 ```typescript
-import {
-  useUser,
-  useIsAuthenticated,
-  useAuthLoading,
-} from "@/store/auth-store";
+import { useUser, useIsAuthenticated, useAuthLoading } from "@/store/auth-store";
 
 function Component() {
   const user = useUser();

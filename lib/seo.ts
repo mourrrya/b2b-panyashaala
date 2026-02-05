@@ -131,11 +131,7 @@ export function createOrganizationSchema(): Organization {
       email: CONTACT_INFO.EMAIL.SUPPORT,
       telephone: CONTACT_INFO.PHONE_DISPLAY,
     },
-    sameAs: [
-      SOCIAL_LINKS.twitter,
-      SOCIAL_LINKS.linkedin,
-      SOCIAL_LINKS.instagram,
-    ],
+    sameAs: [SOCIAL_LINKS.twitter, SOCIAL_LINKS.linkedin, SOCIAL_LINKS.instagram],
   };
 }
 
@@ -202,9 +198,7 @@ interface ProductSchema {
   };
 }
 
-export function createProductSchema(
-  product: ProductWithVariantsImagesReviews,
-): ProductSchema {
+export function createProductSchema(product: ProductWithVariantsImagesReviews): ProductSchema {
   return {
     "@context": SCHEMA_CONFIG.CONTEXT,
     "@type": SCHEMA_CONFIG.TYPES.PRODUCT,
@@ -239,9 +233,7 @@ interface BreadcrumbSchema {
   }>;
 }
 
-export function createBreadcrumbSchema(
-  items: BreadcrumbItem[],
-): BreadcrumbSchema {
+export function createBreadcrumbSchema(items: BreadcrumbItem[]): BreadcrumbSchema {
   return {
     "@context": SCHEMA_CONFIG.CONTEXT,
     "@type": SCHEMA_CONFIG.TYPES.BREADCRUMB_LIST,

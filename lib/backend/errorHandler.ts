@@ -20,10 +20,7 @@ export class ErrorNotFound extends ErrorApp {
 
 export class ErrorAuth extends ErrorApp {
   constructor(message?: string) {
-    super(
-      message || ERROR_MESSAGES.AUTH.AUTHENTICATION_FAILED,
-      HTTP_STATUS.UNAUTHORIZED,
-    );
+    super(message || ERROR_MESSAGES.AUTH.AUTHENTICATION_FAILED, HTTP_STATUS.UNAUTHORIZED);
   }
 }
 
@@ -51,11 +48,7 @@ export class ErrorValidation extends ErrorApp {
 
 export class ErrorInvalidRequest extends ErrorApp {
   constructor(message?: string, details?: any) {
-    super(
-      message || ERROR_MESSAGES.VALIDATION.INVALID_REQUEST,
-      HTTP_STATUS.BAD_REQUEST,
-      details,
-    );
+    super(message || ERROR_MESSAGES.VALIDATION.INVALID_REQUEST, HTTP_STATUS.BAD_REQUEST, details);
   }
 }
 

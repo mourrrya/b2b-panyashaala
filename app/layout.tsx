@@ -26,8 +26,7 @@ const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default:
-      "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
+    default: "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
     template: "%s | " + SITE_NAME,
   },
   description: SITE_DESCRIPTION,
@@ -120,10 +119,7 @@ export default function RootLayout({
         <JsonLd schema={createOrganizationSchema()} />
         <JsonLd schema={createWebsiteSchema()} />
       </head>
-      <body
-        suppressHydrationWarning
-        className={`${plusJakarta.className} antialiased`}
-      >
+      <body suppressHydrationWarning className={`${plusJakarta.className} antialiased`}>
         <ClientOnly>
           <AuthProvider>
             <Header />

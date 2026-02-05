@@ -9,10 +9,7 @@ interface FormData {
   confirmPassword: string;
 }
 
-export function validateForm(
-  formData: FormData,
-  mode: AuthMode,
-): string | null {
+export function validateForm(formData: FormData, mode: AuthMode): string | null {
   if (!formData.email.trim()) {
     return ERROR_MESSAGES.VALIDATION.EMAIL_REQUIRED;
   }

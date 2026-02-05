@@ -27,22 +27,15 @@ export const PRODUCT_CATEGORIES: Array<{
 ] as const;
 
 export const PRODUCT_CATEGORY_DESCRIPTIONS: Record<ProductCategory, string> = {
-  ESSENTIAL_OIL:
-    "Therapeutic-grade oils for active performance and signature fragrance.",
-  FIXED_OIL:
-    "Stable oils delivering emolliency, conditioning, and skin barrier support.",
+  ESSENTIAL_OIL: "Therapeutic-grade oils for active performance and signature fragrance.",
+  FIXED_OIL: "Stable oils delivering emolliency, conditioning, and skin barrier support.",
   EXTRACT: "Dry, water, and oil-soluble actives for targeted performance.",
-  HYDROSOL:
-    "Gentle waters and distillates for toners, mists, and rinse-off bases.",
+  HYDROSOL: "Gentle waters and distillates for toners, mists, and rinse-off bases.",
   CHEMICALS: "Chemicals for various applications and formulations.",
-  DRY_EXTRACT:
-    "Dry extracts for concentrated active performance in powders and capsules.",
-  FRAGRANCE_OIL:
-    "Fragrance oils for signature scents and aromatic formulations.",
-  POWDER_EXTRACT:
-    "Powdered extracts for stable incorporation of actives in solid formats.",
-  HERBAL_OILS:
-    "Herbal oils infused with botanical actives for enhanced performance.",
+  DRY_EXTRACT: "Dry extracts for concentrated active performance in powders and capsules.",
+  FRAGRANCE_OIL: "Fragrance oils for signature scents and aromatic formulations.",
+  POWDER_EXTRACT: "Powdered extracts for stable incorporation of actives in solid formats.",
+  HERBAL_OILS: "Herbal oils infused with botanical actives for enhanced performance.",
   POWDER: "Powdered ingredients for versatile formulation applications.",
 } as const;
 

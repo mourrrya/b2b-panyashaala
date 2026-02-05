@@ -77,24 +77,16 @@ function SlateGlassCard({
   );
 }
 
-function AddressTypeInfo({
-  title,
-  description,
-  icon: Icon = InfoIcon,
-}: AddressTypeInfoProps) {
+function AddressTypeInfo({ title, description, icon: Icon = InfoIcon }: AddressTypeInfoProps) {
   return (
     <SlateGlassCard className="p-2.5 sm:p-3 px-3 sm:px-4 space-y-1">
       <div className="flex items-center gap-1.5 sm:gap-2">
         <div className="p-1 sm:p-1.5 rounded-md sm:rounded-lg bg-linear-to-br from-slate-100 to-slate-200/80">
           <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600" />
         </div>
-        <h3 className="font-semibold text-sm sm:text-base text-slate-800">
-          {title}
-        </h3>
+        <h3 className="font-semibold text-sm sm:text-base text-slate-800">{title}</h3>
       </div>
-      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-        {description}
-      </p>
+      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{description}</p>
     </SlateGlassCard>
   );
 }
@@ -122,8 +114,7 @@ function AddressSection({
     slate: {
       icon: "text-slate-600",
       border: "border-slate-200/60",
-      background:
-        "bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70",
+      background: "bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70",
       borderColor: "border-slate-200/60",
     },
   };
@@ -176,15 +167,11 @@ function AddressSection({
               )}
               <div className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-slate-700">
                 <p className="font-semibold text-slate-800">{address.street}</p>
-                {address.area && (
-                  <p className="text-slate-500">{address.area}</p>
-                )}
+                {address.area && <p className="text-slate-500">{address.area}</p>}
                 <p className="text-slate-600">
                   {address.city}, {address.state} {address.zipCode}
                 </p>
-                <p className="text-slate-500 text-xs uppercase tracking-wide">
-                  {address.country}
-                </p>
+                <p className="text-slate-500 text-xs uppercase tracking-wide">{address.country}</p>
               </div>
             </div>
           </div>
@@ -199,12 +186,8 @@ interface AddressInfoCardProps {
 }
 
 export function AddressInfoCard({ addresses }: AddressInfoCardProps) {
-  const shippingAddresses = addresses.filter(
-    (addr) => addr.type === AddressType.SHIPPING,
-  );
-  const billingAddresses = addresses.filter(
-    (addr) => addr.type === AddressType.BILLING,
-  );
+  const shippingAddresses = addresses.filter((addr) => addr.type === AddressType.SHIPPING);
+  const billingAddresses = addresses.filter((addr) => addr.type === AddressType.BILLING);
 
   return (
     <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-slate-200/60">

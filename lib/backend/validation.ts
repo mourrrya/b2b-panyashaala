@@ -16,10 +16,7 @@ export async function validateRequestBody<T>(
   const body = await request.json();
   const { success, error, data } = schema.safeParse(body);
   if (!success)
-    throw new ErrorInvalidRequest(
-      ERROR_MESSAGES.VALIDATION.INVALID_REQUEST_BODY,
-      error.issues,
-    );
+    throw new ErrorInvalidRequest(ERROR_MESSAGES.VALIDATION.INVALID_REQUEST_BODY, error.issues);
   return { success: true, data: data };
 }
 
@@ -32,9 +29,6 @@ export function validateQueryParams<T>(
   });
   const { data, error, success } = schema.safeParse(params);
   if (!success)
-    throw new ErrorInvalidRequest(
-      ERROR_MESSAGES.VALIDATION.INVALID_QUERY_PARAMS,
-      error.issues,
-    );
+    throw new ErrorInvalidRequest(ERROR_MESSAGES.VALIDATION.INVALID_QUERY_PARAMS, error.issues);
   return { success: true, data: data };
 }

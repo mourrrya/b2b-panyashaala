@@ -49,24 +49,18 @@ export function ApplicationCard({
       {/* Icon and Title */}
       <div className="flex items-start gap-3 sm:gap-4 mb-2 sm:mb-3">
         {application.icon && (
-          <span className="text-2xl sm:text-3xl lg:text-4xl">
-            {application.icon}
-          </span>
+          <span className="text-2xl sm:text-3xl lg:text-4xl">{application.icon}</span>
         )}
         <div className="flex-1">
           <span className="inline-block bg-emerald-100 text-emerald-700 text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full mb-1.5 sm:mb-2">
             {application.category}
           </span>
-          <h3 className="text-base sm:text-lg font-semibold text-slate-900">
-            {application.title}
-          </h3>
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900">{application.title}</h3>
         </div>
       </div>
 
       {/* Description */}
-      <p className="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4">
-        {application.description}
-      </p>
+      <p className="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4">{application.description}</p>
 
       {/* Expanded View */}
       {isSelected && (

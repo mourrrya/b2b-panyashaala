@@ -19,15 +19,11 @@ export const authConfigEdge: NextAuthConfig = {
 
       // Protected routes that require authentication
       const protectedRoutes = AUTH_CONFIG.PROTECTED_ROUTES;
-      const isProtectedRoute = protectedRoutes.some((route) =>
-        pathname.startsWith(route),
-      );
+      const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
 
       // Auth routes that should redirect if already logged in
       const authRoutes = AUTH_CONFIG.AUTH_ROUTES;
-      const isAuthRoute = authRoutes.some((route) =>
-        pathname.startsWith(route),
-      );
+      const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
       if (isProtectedRoute) {
         if (!isLoggedIn) {

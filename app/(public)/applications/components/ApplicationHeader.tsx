@@ -7,10 +7,7 @@ interface ApplicationHeaderProps {
   onSearchChange: (value: string) => void;
 }
 
-export function ApplicationHeader({
-  searchTerm,
-  onSearchChange,
-}: ApplicationHeaderProps) {
+export function ApplicationHeader({ searchTerm, onSearchChange }: ApplicationHeaderProps) {
   return (
     <div className="mb-8 sm:mb-10 lg:mb-12">
       <p className="text-xs sm:text-sm uppercase tracking-[0.15em] sm:tracking-[0.2em] text-emerald-600 mb-2 sm:mb-3">

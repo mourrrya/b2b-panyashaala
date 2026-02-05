@@ -97,13 +97,7 @@ export const META_KEYWORDS = {
     "MSDS",
     "traceability",
   ],
-  APPLICATIONS: [
-    "cosmetic applications",
-    "personal care",
-    "hair care",
-    "skin care",
-    "formulation",
-  ],
+  APPLICATIONS: ["cosmetic applications", "personal care", "hair care", "skin care", "formulation"],
   CONTACT: ["contact", "enquiry", "B2B partnership", "sourcing team"],
 } as const;
 
@@ -113,8 +107,7 @@ export const META_KEYWORDS = {
 
 export const PAGE_SEO = {
   HOME: {
-    title:
-      "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
+    title: "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
     description:
       "B2B natural cosmetic ingredients supplier offering essential oils, carrier oils, botanical extracts, and hydrosols. Serving formulators, manufacturers, and sourcing teams globally with quality-tested, certified ingredients.",
     canonical: "/",

@@ -6,11 +6,7 @@ import { swrFetcher } from "@/lib/client/api/axios";
 import { CONTACT_INFO, MARKETING_COPY, UI_LABELS } from "@/lib/constants";
 import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { generateINCI } from "@/lib/productUtils";
-import {
-  useBasket,
-  useClearBasket,
-  useRemoveFromBasketOptimistic,
-} from "@/store/productStore";
+import { useBasket, useClearBasket, useRemoveFromBasketOptimistic } from "@/store/productStore";
 import { SuccessRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
@@ -62,9 +58,7 @@ export default function ContactPage() {
             <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 mb-4 sm:mb-6">
               {UI_LABELS.HEADERS.CONTACT_TITLE}
             </h1>
-            <p className="text-sm sm:text-base text-slate-600">
-              {MARKETING_COPY.CONTACT_INTRO}
-            </p>
+            <p className="text-sm sm:text-base text-slate-600">{MARKETING_COPY.CONTACT_INTRO}</p>
           </div>
           <div className="flex gap-6 sm:gap-8 flex-col-reverse sm:flex-row">
             {/* Left Column - Contact Form */}
@@ -79,10 +73,7 @@ export default function ContactPage() {
                   </h2>
                 </div>
 
-                <form
-                  onSubmit={handleSubmit}
-                  className="space-y-3 sm:space-y-4"
-                >
+                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                   <div>
                     <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5 sm:mb-2">
                       {UI_LABELS.FORM.NAME}
@@ -97,9 +88,7 @@ export default function ContactPage() {
                       onInput={() => handleFieldChange("name")}
                     />
                     {errors.name && (
-                      <p className="mt-1 text-xs sm:text-sm text-red-600">
-                        {errors.name.message}
-                      </p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.name.message}</p>
                     )}
                   </div>
 
@@ -117,9 +106,7 @@ export default function ContactPage() {
                       onInput={() => handleFieldChange("email")}
                     />
                     {errors.email && (
-                      <p className="mt-1 text-xs sm:text-sm text-red-600">
-                        {errors.email.message}
-                      </p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.email.message}</p>
                     )}
                   </div>
 
@@ -179,9 +166,7 @@ export default function ContactPage() {
                     disabled={isSubmitting}
                     className="w-full px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-linear-to-r from-emerald-600 to-emerald-700 text-white text-sm sm:text-base font-semibold hover:from-emerald-700 hover:to-emerald-800 disabled:bg-slate-400 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    {isSubmitting
-                      ? UI_LABELS.ACTIONS.SENDING
-                      : UI_LABELS.ACTIONS.SEND_MESSAGE}
+                    {isSubmitting ? UI_LABELS.ACTIONS.SENDING : UI_LABELS.ACTIONS.SEND_MESSAGE}
                   </button>
                 </form>
               </div>
@@ -225,10 +210,7 @@ export default function ContactPage() {
                           </h4>
                           <div className="flex items-center gap-1.5 sm:gap-2 mt-0.5 sm:mt-1">
                             <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-800">
-                              {product.category
-                                .toLocaleLowerCase()
-                                .split("_")
-                                .join(" ")}
+                              {product.category.toLocaleLowerCase().split("_").join(" ")}
                             </span>
                           </div>
                           <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 truncate">

@@ -33,9 +33,7 @@ export function ProductSidebar({ product }: ProductSidebarProps) {
         <div className="bg-linear-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 p-8 shadow-lg">
           <div className="mb-6">
             <p className="text-sm text-slate-600 mb-2">Product ID</p>
-            <p className="text-2xl font-semibold text-slate-900">
-              #{product.id}
-            </p>
+            <p className="text-2xl font-semibold text-slate-900">#{product.id}</p>
           </div>
           <div className="mb-6">
             <p className="text-sm text-slate-600 mb-2">Availability</p>

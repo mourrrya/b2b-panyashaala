@@ -1,18 +1,10 @@
-import {
-  API_CONFIG,
-  CONTACT_INFO,
-  EMAIL_DEFAULTS,
-  ERROR_MESSAGES,
-} from "@/lib/constants";
+import { API_CONFIG, CONTACT_INFO, EMAIL_DEFAULTS, ERROR_MESSAGES } from "@/lib/constants";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
 import { generateINCI } from "../productUtils";
 
-if (
-  typeof window !== "undefined" &&
-  process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-) {
+if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY) {
   emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY);
 }
 
@@ -24,9 +16,7 @@ export const ContactFormDataSchema = z.object({
   email: z.string().email(ERROR_MESSAGES.VALIDATION.INVALID_EMAIL),
   company: z.string().optional(),
   message: z.string().optional(),
-  turnstileToken: z
-    .string()
-    .min(1, ERROR_MESSAGES.VALIDATION.SECURITY_VERIFICATION_REQUIRED),
+  turnstileToken: z.string().min(1, ERROR_MESSAGES.VALIDATION.SECURITY_VERIFICATION_REQUIRED),
 });
 
 export type ContactFormData = z.infer<typeof ContactFormDataSchema>;

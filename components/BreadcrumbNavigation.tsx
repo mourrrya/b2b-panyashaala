@@ -22,9 +22,7 @@ export function BreadcrumbNavigation({ items }: BreadcrumbNavigationProps) {
               >
                 {item.name}
               </Link>
-              {index < items.length - 1 && (
-                <span className="text-slate-400">/</span>
-              )}
+              {index < items.length - 1 && <span className="text-slate-400">/</span>}
             </div>
           ))}
         </nav>

@@ -35,9 +35,7 @@ interface AuthState {
 
 interface AuthActions {
   // Core auth actions
-  signInWithCredentials: (
-    params: SignInCredentialsParams,
-  ) => Promise<AuthResult>;
+  signInWithCredentials: (params: SignInCredentialsParams) => Promise<AuthResult>;
   signInWithGoogle: (callbackUrl?: string) => Promise<void>;
   signOut: () => Promise<void>;
 
@@ -60,12 +58,7 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: false,
       isInitialized: false,
 
-      signInWithCredentials: async ({
-        email,
-        password,
-        isSignUp = false,
-        name,
-      }) => {
+      signInWithCredentials: async ({ email, password, isSignUp = false, name }) => {
         set({ isLoading: true });
         try {
           const { signIn } = await import("next-auth/react");
@@ -115,9 +108,7 @@ export const useAuthStore = create<AuthStore>()(
 
       fetchProfile: async () => {
         try {
-          const response = await apiClient.get<SuccessRes<UserData>>(
-            PRIVATE_ROUTES.PROFILE,
-          );
+          const response = await apiClient.get<SuccessRes<UserData>>(PRIVATE_ROUTES.PROFILE);
           if (response.success && response.data) {
             set({ user: response.data });
           }
@@ -128,10 +119,7 @@ export const useAuthStore = create<AuthStore>()(
 
       updateProfile: async (data) => {
         try {
-          const response = await apiClient.put<SuccessRes<UserData>>(
-            PRIVATE_ROUTES.PROFILE,
-            data,
-          );
+          const response = await apiClient.put<SuccessRes<UserData>>(PRIVATE_ROUTES.PROFILE, data);
 
           if (response.success && response.data) {
             set({ user: response.data });

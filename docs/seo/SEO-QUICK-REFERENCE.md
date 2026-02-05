@@ -304,18 +304,15 @@ export default function NewPage() {
 ## 🚀 Post-Deployment
 
 1. **Submit sitemap to Google Search Console**
-
    - Go to Sitemaps section
    - Enter: https://aukra.co.in/sitemap.xml
    - Wait for "Success" status
 
 2. **Submit sitemap to Bing Webmaster Tools**
-
    - Go to Sitemaps section
    - Submit sitemap URL
 
 3. **Monitor Search Console**
-
    - Check Coverage report for indexing status
    - Fix any errors
    - Monitor Performance for clicks/impressions

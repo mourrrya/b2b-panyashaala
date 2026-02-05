@@ -69,10 +69,7 @@ const orderStatusConfig: Record<
   },
 };
 
-const paymentStatusConfig: Record<
-  string,
-  { label: string; color: string; bgColor: string }
-> = {
+const paymentStatusConfig: Record<string, { label: string; color: string; bgColor: string }> = {
   PENDING: {
     label: UI_LABELS.ORDERS.PAYMENT_STATUS.PENDING,
     color: "text-amber-700",
@@ -104,24 +101,18 @@ function StatusBadge({
   type: "order" | "payment";
   size?: "default" | "large";
 }) {
-  const config =
-    type === "order" ? orderStatusConfig[status] : paymentStatusConfig[status];
+  const config = type === "order" ? orderStatusConfig[status] : paymentStatusConfig[status];
   if (!config) return null;
 
   const Icon = type === "order" ? orderStatusConfig[status]?.icon : null;
 
-  const sizeClasses =
-    size === "large"
-      ? "px-4 py-2 text-sm gap-2"
-      : "px-2.5 py-1 text-xs gap-1.5";
+  const sizeClasses = size === "large" ? "px-4 py-2 text-sm gap-2" : "px-2.5 py-1 text-xs gap-1.5";
 
   return (
     <span
       className={`inline-flex items-center font-semibold rounded-md border ${config.bgColor} ${config.color} ${sizeClasses}`}
     >
-      {Icon && (
-        <Icon className={size === "large" ? "w-4 h-4" : "w-3.5 h-3.5"} />
-      )}
+      {Icon && <Icon className={size === "large" ? "w-4 h-4" : "w-3.5 h-3.5"} />}
       {config.label}
     </span>
   );
@@ -178,33 +169,21 @@ function OrderItemCard({
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
-              <p className="text-xs text-slate-500">
-                {UI_LABELS.ORDERS.BATCH_NO}
-              </p>
-              <p className="font-medium text-slate-700 text-sm">
-                {item.batchNumber}
-              </p>
+              <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.BATCH_NO}</p>
+              <p className="font-medium text-slate-700 text-sm">{item.batchNumber}</p>
             </div>
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
-              <p className="text-xs text-slate-500">
-                {UI_LABELS.ORDERS.HSN_CODE}
-              </p>
-              <p className="font-medium text-slate-700 text-sm">
-                {item.hsnCode}
-              </p>
+              <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.HSN_CODE}</p>
+              <p className="font-medium text-slate-700 text-sm">{item.hsnCode}</p>
             </div>
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
-              <p className="text-xs text-slate-500">
-                {UI_LABELS.ORDERS.NET_CONTENT}
-              </p>
+              <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.NET_CONTENT}</p>
               <p className="font-medium text-slate-700 text-sm">
                 {item.netContent} {item.measurementUnit}
               </p>
             </div>
             <div className="p-2 bg-slate-50/80 rounded-md border border-slate-100">
-              <p className="text-xs text-slate-500">
-                {UI_LABELS.ORDERS.GST_SLAB}
-              </p>
+              <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.GST_SLAB}</p>
               <p className="font-medium text-slate-700 text-sm">
                 {GST_SLAB_PERCENT_MAP[item.gstSlab]}%
               </p>
@@ -225,12 +204,8 @@ function OrderItemCard({
         <div className="lg:w-48 lg:text-right lg:border-l lg:border-slate-200/60 lg:pl-4">
           <div className="flex lg:flex-col items-center lg:items-end gap-4 lg:gap-2">
             <div>
-              <p className="text-xs text-slate-500">
-                {UI_LABELS.ORDERS.UNIT_PRICE}
-              </p>
-              <p className="font-semibold text-slate-800">
-                ₹{item.unitPrice.toFixed(2)}
-              </p>
+              <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.UNIT_PRICE}</p>
+              <p className="font-semibold text-slate-800">₹{item.unitPrice.toFixed(2)}</p>
             </div>
             <div>
               <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.QTY}</p>
@@ -238,15 +213,11 @@ function OrderItemCard({
             </div>
             <div>
               <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.TAX}</p>
-              <p className="font-semibold text-slate-800">
-                ₹{item.taxAmount.toFixed(2)}
-              </p>
+              <p className="font-semibold text-slate-800">₹{item.taxAmount.toFixed(2)}</p>
             </div>
             <div className="lg:pt-2 lg:border-t lg:border-slate-200/60 lg:mt-2">
               <p className="text-xs text-slate-500">{UI_LABELS.ORDERS.TOTAL}</p>
-              <p className="font-bold text-lg text-slate-800">
-                ₹{itemTotal.toFixed(2)}
-              </p>
+              <p className="font-bold text-lg text-slate-800">₹{itemTotal.toFixed(2)}</p>
             </div>
           </div>
         </div>
@@ -271,9 +242,7 @@ function AddressCard({
           <Icon className="w-4 h-4 text-slate-400" />
           <h5 className="font-semibold text-slate-700 text-sm">{title}</h5>
         </div>
-        <p className="text-sm text-slate-400">
-          {UI_LABELS.ORDERS.NOT_PROVIDED}
-        </p>
+        <p className="text-sm text-slate-400">{UI_LABELS.ORDERS.NOT_PROVIDED}</p>
       </div>
     );
   }
@@ -292,9 +261,7 @@ function AddressCard({
         <p>
           {address.city}, {address.state} {address.zipCode}
         </p>
-        <p className="text-slate-500 text-xs uppercase tracking-wide">
-          {address.country}
-        </p>
+        <p className="text-slate-500 text-xs uppercase tracking-wide">{address.country}</p>
       </div>
     </div>
   );
@@ -318,10 +285,7 @@ function LoadingState() {
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
             {[1, 2].map((i) => (
-              <div
-                key={i}
-                className="h-48 bg-slate-100 rounded-lg animate-pulse"
-              />
+              <div key={i} className="h-48 bg-slate-100 rounded-lg animate-pulse" />
             ))}
           </div>
           <div className="space-y-4">
@@ -334,13 +298,7 @@ function LoadingState() {
   );
 }
 
-function ErrorState({
-  message,
-  onRetry,
-}: {
-  message: string;
-  onRetry: () => void;
-}) {
+function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
     <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center p-6">
       <div className="relative overflow-hidden rounded-lg p-8 bg-red-50 border border-red-200 text-center max-w-md">
@@ -373,9 +331,7 @@ export default function OrderDetailPage() {
   const orderId = params.id as string;
 
   // Fetch order using SWR
-  const { data, isLoading, error, mutate } = useSWR<
-    SuccessRes<OrderWithDetails>
-  >(
+  const { data, isLoading, error, mutate } = useSWR<SuccessRes<OrderWithDetails>>(
     orderId ? PRIVATE_ROUTES.ORDERS.DETAIL(orderId) : null,
     swrFetcher,
     SWR_CONFIG,
@@ -410,15 +366,9 @@ export default function OrderDetailPage() {
   };
 
   if (isLoading) return <LoadingState />;
-  if (error)
-    return <ErrorState message={error.message} onRetry={handleRetry} />;
+  if (error) return <ErrorState message={error.message} onRetry={handleRetry} />;
   if (!order)
-    return (
-      <ErrorState
-        message={UI_LABELS.ORDERS.ORDER_NOT_FOUND}
-        onRetry={handleRetry}
-      />
-    );
+    return <ErrorState message={UI_LABELS.ORDERS.ORDER_NOT_FOUND} onRetry={handleRetry} />;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50">
@@ -456,11 +406,7 @@ export default function OrderDetailPage() {
 
             <div className="flex items-center gap-3 sm:ml-auto">
               <StatusBadge status={order.status} type="order" size="large" />
-              <StatusBadge
-                status={order.paymentStatus}
-                type="payment"
-                size="large"
-              />
+              <StatusBadge status={order.paymentStatus} type="payment" size="large" />
             </div>
           </div>
         </div>
@@ -477,9 +423,7 @@ export default function OrderDetailPage() {
                 <div className="p-1.5 rounded-md bg-linear-to-br from-slate-100 to-slate-200/80">
                   <ShoppingBag className="w-4 h-4 text-slate-600" />
                 </div>
-                <h2 className="font-bold text-slate-800">
-                  {UI_LABELS.ORDERS.ORDER_ITEMS}
-                </h2>
+                <h2 className="font-bold text-slate-800">{UI_LABELS.ORDERS.ORDER_ITEMS}</h2>
                 <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
                   {order.orderItems.length}
                 </span>
@@ -489,11 +433,7 @@ export default function OrderDetailPage() {
             {/* Order Items List */}
             <div className="space-y-3">
               {order.orderItems.map((item) => (
-                <OrderItemCard
-                  key={item.id}
-                  item={item}
-                  onDownloadCOA={handleDownloadCOA}
-                />
+                <OrderItemCard key={item.id} item={item} onDownloadCOA={handleDownloadCOA} />
               ))}
             </div>
 
@@ -530,32 +470,22 @@ export default function OrderDetailPage() {
 
               <div className="p-4 space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">
-                    {UI_LABELS.ORDERS.SUBTOTAL}
-                  </span>
-                  <span className="font-medium text-slate-700">
-                    ₹{order.subtotal.toFixed(2)}
-                  </span>
+                  <span className="text-slate-500">{UI_LABELS.ORDERS.SUBTOTAL}</span>
+                  <span className="font-medium text-slate-700">₹{order.subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-500">{UI_LABELS.ORDERS.TAX}</span>
-                  <span className="font-medium text-slate-700">
-                    ₹{order.totalTax.toFixed(2)}
-                  </span>
+                  <span className="font-medium text-slate-700">₹{order.totalTax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-500">
-                    {UI_LABELS.ORDERS.SHIPPING}
-                  </span>
+                  <span className="text-slate-500">{UI_LABELS.ORDERS.SHIPPING}</span>
                   <span className="font-medium text-slate-700">
                     ₹{order.shippingCost.toFixed(2)}
                   </span>
                 </div>
                 {order.discount > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">
-                      {UI_LABELS.ORDERS.DISCOUNT}
-                    </span>
+                    <span className="text-slate-500">{UI_LABELS.ORDERS.DISCOUNT}</span>
                     <span className="font-medium text-emerald-600">
                       -₹{order.discount.toFixed(2)}
                     </span>
@@ -563,9 +493,7 @@ export default function OrderDetailPage() {
                 )}
                 <div className="pt-3 border-t border-slate-200/60">
                   <div className="flex justify-between">
-                    <span className="font-semibold text-slate-800">
-                      {UI_LABELS.ORDERS.TOTAL}
-                    </span>
+                    <span className="font-semibold text-slate-800">{UI_LABELS.ORDERS.TOTAL}</span>
                     <span className="text-xl font-bold text-slate-800">
                       ₹{order.totalAmount.toFixed(2)}
                     </span>
@@ -591,9 +519,7 @@ export default function OrderDetailPage() {
                 <div className="p-1.5 rounded-md bg-linear-to-br from-slate-100 to-slate-200/80">
                   <CreditCard className="w-4 h-4 text-slate-600" />
                 </div>
-                <h5 className="font-semibold text-slate-700">
-                  {UI_LABELS.ORDERS.PAYMENT_METHOD}
-                </h5>
+                <h5 className="font-semibold text-slate-700">{UI_LABELS.ORDERS.PAYMENT_METHOD}</h5>
               </div>
               <p className="text-sm text-slate-600 capitalize">
                 {order.paymentMethod.replace(/_/g, " ")}

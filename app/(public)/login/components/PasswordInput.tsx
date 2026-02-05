@@ -27,10 +27,7 @@ export function PasswordInput({
 }: PasswordInputProps) {
   return (
     <div className="space-y-1.5 md:space-y-2">
-      <label
-        htmlFor={name}
-        className="block text-xs md:text-sm font-semibold text-slate-700"
-      >
+      <label htmlFor={name} className="block text-xs md:text-sm font-semibold text-slate-700">
         {label}
       </label>
       <div className="relative group">

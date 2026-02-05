@@ -1,11 +1,5 @@
 import { FUSE_CONFIG, STORAGE_CONFIG, STORE_CONFIG } from "@/lib/constants";
-import type {
-  DbProduct,
-  Image,
-  Product,
-  Review,
-  Variant,
-} from "@/types/product";
+import type { DbProduct, Image, Product, Review, Variant } from "@/types/product";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import Fuse from "fuse.js";
 import { create } from "zustand";
@@ -170,9 +164,7 @@ export const useProductStore = create<ProductStore>()(
           if (!state.searchTerm) {
             // If no search term, just filter by category
             return products.filter(
-              (product) =>
-                !state.selectedCategory ||
-                product.category === state.selectedCategory,
+              (product) => !state.selectedCategory || product.category === state.selectedCategory,
             );
           }
 
@@ -189,17 +181,14 @@ export const useProductStore = create<ProductStore>()(
           return searchResults
             .filter(
               (result) =>
-                !state.selectedCategory ||
-                result.item.category === state.selectedCategory,
+                !state.selectedCategory || result.item.category === state.selectedCategory,
             )
             .map((result) => result.item);
         },
 
         getBasketProducts: (products: ProductWithVariantsImagesReviews[]) => {
           const state = get();
-          return products.filter((product) =>
-            state.basket.includes(product.id),
-          );
+          return products.filter((product) => state.basket.includes(product.id));
         },
       })),
       {
@@ -220,41 +209,30 @@ export const useProductStore = create<ProductStore>()(
 // Basket state selectors
 export const useBasket = () => useProductStore((s) => s.basket);
 export const useBasketLength = () => useProductStore((s) => s.basket.length);
-export const useBasketPendingOperations = () =>
-  useProductStore((s) => s.basketPendingOperations);
+export const useBasketPendingOperations = () => useProductStore((s) => s.basketPendingOperations);
 
 // Basket action selectors
 export const useAddToBasket = () => useProductStore((s) => s.addToBasket);
-export const useRemoveFromBasket = () =>
-  useProductStore((s) => s.removeFromBasket);
+export const useRemoveFromBasket = () => useProductStore((s) => s.removeFromBasket);
 export const useClearBasket = () => useProductStore((s) => s.clearBasket);
-export const useAddToBasketOptimistic = () =>
-  useProductStore((s) => s.addToBasketOptimistic);
+export const useAddToBasketOptimistic = () => useProductStore((s) => s.addToBasketOptimistic);
 export const useRemoveFromBasketOptimistic = () =>
   useProductStore((s) => s.removeFromBasketOptimistic);
 
 // Basket drawer selectors
-export const useIsBasketDrawerOpen = () =>
-  useProductStore((s) => s.isBasketDrawerOpen);
-export const useSetBasketDrawerOpen = () =>
-  useProductStore((s) => s.setBasketDrawerOpen);
+export const useIsBasketDrawerOpen = () => useProductStore((s) => s.isBasketDrawerOpen);
+export const useSetBasketDrawerOpen = () => useProductStore((s) => s.setBasketDrawerOpen);
 
 // Filter state selectors
 export const useSearchTerm = () => useProductStore((s) => s.searchTerm);
-export const useSelectedCategory = () =>
-  useProductStore((s) => s.selectedCategory);
-export const useSelectedApplication = () =>
-  useProductStore((s) => s.selectedApplication);
+export const useSelectedCategory = () => useProductStore((s) => s.selectedCategory);
+export const useSelectedApplication = () => useProductStore((s) => s.selectedApplication);
 
 // Filter action selectors
 export const useSetSearchTerm = () => useProductStore((s) => s.setSearchTerm);
-export const useSetSelectedCategory = () =>
-  useProductStore((s) => s.setSelectedCategory);
-export const useSetSelectedApplication = () =>
-  useProductStore((s) => s.setSelectedApplication);
+export const useSetSelectedCategory = () => useProductStore((s) => s.setSelectedCategory);
+export const useSetSelectedApplication = () => useProductStore((s) => s.setSelectedApplication);
 
 // Product query selectors
-export const useGetFilteredProducts = () =>
-  useProductStore((s) => s.getFilteredProducts);
-export const useGetBasketProducts = () =>
-  useProductStore((s) => s.getBasketProducts);
+export const useGetFilteredProducts = () => useProductStore((s) => s.getFilteredProducts);
+export const useGetBasketProducts = () => useProductStore((s) => s.getBasketProducts);

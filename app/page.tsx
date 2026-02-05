@@ -57,9 +57,7 @@ export default function Home() {
               <dd>{BUSINESS_INFO.TARGET_CUSTOMERS}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slate-900">
-                {UI_LABELS.SECTIONS.SUPPLY_FOCUS}
-              </dt>
+              <dt className="font-semibold text-slate-900">{UI_LABELS.SECTIONS.SUPPLY_FOCUS}</dt>
               <dd>{BUSINESS_INFO.SUPPLY_FOCUS}</dd>
             </div>
           </dl>
@@ -81,9 +79,7 @@ export default function Home() {
                   key={idx}
                   className="p-3 sm:p-4 rounded-lg sm:rounded-xl border border-slate-100"
                 >
-                  <p className="text-slate-500 text-xs sm:text-sm">
-                    {feature.label}
-                  </p>
+                  <p className="text-slate-500 text-xs sm:text-sm">{feature.label}</p>
                   <p className="text-sm sm:text-base lg:text-lg font-semibold text-slate-900">
                     {feature.value}
                   </p>
@@ -151,10 +147,7 @@ export default function Home() {
               </h2>
               <div className="flex flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm text-slate-600">
                 {BUSINESS_INFO.INDUSTRIES.map((industry, idx) => (
-                  <span
-                    key={idx}
-                    className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-slate-100"
-                  >
+                  <span key={idx} className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-slate-100">
                     {industry}
                   </span>
                 ))}

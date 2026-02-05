@@ -10,13 +10,7 @@ import { ShoppingBag } from "lucide-react";
 import { useMemo, useState } from "react";
 import useSWR from "swr";
 import { Basket } from "../BasketDrawer";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 
 export function BasketButton() {
   const [basketDrawerOpen, setBasketDrawerOpen] = useState(false);
@@ -57,10 +51,7 @@ export function BasketButton() {
           </span>
         </button>
       </SheetTrigger>
-      <SheetContent
-        side="right"
-        className="max-w-85 w-[calc(100%-80px)] min-w-50 p-0"
-      >
+      <SheetContent side="right" className="max-w-85 w-[calc(100%-80px)] min-w-50 p-0">
         <SheetHeader className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100">
           <SheetTitle className="text-lg font-semibold text-emerald-900">
             {UI_LABELS.BASKET.ENQUIRY_BASKET} ({basket.length})

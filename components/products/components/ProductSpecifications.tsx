@@ -6,15 +6,10 @@ interface ProductSpecificationsProps {
   categoryLabel: string;
 }
 
-export function ProductSpecifications({
-  product,
-  categoryLabel,
-}: ProductSpecificationsProps) {
+export function ProductSpecifications({ product, categoryLabel }: ProductSpecificationsProps) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-lg mb-8">
-      <h2 className="text-xl font-semibold text-slate-900 mb-6">
-        Specifications
-      </h2>
+      <h2 className="text-xl font-semibold text-slate-900 mb-6">Specifications</h2>
       <dl className="space-y-6">
         <div>
           <dt className="font-semibold text-slate-900 mb-2">INCI Name</dt>

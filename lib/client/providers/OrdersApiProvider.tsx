@@ -27,12 +27,8 @@ interface OrderApiContextValue {
   refetch: KeyedMutator<SuccessRes<Order>>;
 }
 
-const OrdersApiContext = createContext<OrdersApiContextValue | undefined>(
-  undefined,
-);
-const OrderApiContext = createContext<OrderApiContextValue | undefined>(
-  undefined,
-);
+const OrdersApiContext = createContext<OrdersApiContextValue | undefined>(undefined);
+const OrderApiContext = createContext<OrderApiContextValue | undefined>(undefined);
 
 // =============================================================================
 // ORDERS PROVIDER (List)
@@ -43,9 +39,11 @@ interface OrdersApiProviderProps {
 }
 
 export function OrdersApiProvider({ children }: OrdersApiProviderProps) {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<
-    SuccessRes<Order[]>
-  >(PRIVATE_ROUTES.ORDERS.LIST, swrFetcher, SWR_CONFIG);
+  const { data, error, isLoading, isValidating, mutate } = useSWR<SuccessRes<Order[]>>(
+    PRIVATE_ROUTES.ORDERS.LIST,
+    swrFetcher,
+    SWR_CONFIG,
+  );
 
   const value = useMemo<OrdersApiContextValue>(
     () => ({
@@ -60,9 +58,7 @@ export function OrdersApiProvider({ children }: OrdersApiProviderProps) {
 
   return (
     <SWRConfig value={SWR_CONFIG}>
-      <OrdersApiContext.Provider value={value}>
-        {children}
-      </OrdersApiContext.Provider>
+      <OrdersApiContext.Provider value={value}>{children}</OrdersApiContext.Provider>
     </SWRConfig>
   );
 }
@@ -77,9 +73,7 @@ interface OrderApiProviderProps {
 }
 
 export function OrderApiProvider({ children, orderId }: OrderApiProviderProps) {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<
-    SuccessRes<Order>
-  >(
+  const { data, error, isLoading, isValidating, mutate } = useSWR<SuccessRes<Order>>(
     orderId ? PRIVATE_ROUTES.ORDERS.DETAIL(orderId) : null,
     swrFetcher,
     SWR_CONFIG,
@@ -98,9 +92,7 @@ export function OrderApiProvider({ children, orderId }: OrderApiProviderProps) {
 
   return (
     <SWRConfig value={SWR_CONFIG}>
-      <OrderApiContext.Provider value={value}>
-        {children}
-      </OrderApiContext.Provider>
+      <OrderApiContext.Provider value={value}>{children}</OrderApiContext.Provider>
     </SWRConfig>
   );
 }

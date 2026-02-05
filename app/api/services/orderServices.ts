@@ -7,9 +7,7 @@ import { OrderWithDetails } from "@/types/order";
 export type { OrderWithDetails };
 
 // Helper to transform order items
-function transformOrderItem(
-  item: OrderItem & { variant?: { id: string; variantName: string } },
-) {
+function transformOrderItem(item: OrderItem & { variant?: { id: string; variantName: string } }) {
   return {
     id: item.id,
     productName: item.productName,
@@ -28,9 +26,7 @@ function transformOrderItem(
   };
 }
 
-export async function getCustomerOrders(
-  customerId: string,
-): Promise<OrderWithDetails[]> {
+export async function getCustomerOrders(customerId: string): Promise<OrderWithDetails[]> {
   logger.info({ customerId }, "Fetching customer orders");
   try {
     const orders = await prisma.order.findMany({
@@ -166,9 +162,7 @@ export async function getOrderById(
   }
 }
 
-export async function getCustomerOrderCount(
-  customerId: string,
-): Promise<number> {
+export async function getCustomerOrderCount(customerId: string): Promise<number> {
   logger.info({ customerId }, "Getting customer order count");
   try {
     return await prisma.order.count({

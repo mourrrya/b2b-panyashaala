@@ -74,12 +74,7 @@ function PersonalInfoField({
   );
 }
 
-export function PersonalInfoCard({
-  fullName,
-  email,
-  phone,
-  accountType,
-}: PersonalInfoCardProps) {
+export function PersonalInfoCard({ fullName, email, phone, accountType }: PersonalInfoCardProps) {
   return (
     <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-slate-200/60">
       {/* Subtle background pattern for depth */}
@@ -115,27 +110,15 @@ export function PersonalInfoCard({
         <div className="grid gap-4 sm:gap-5 md:gap-6 md:grid-cols-2">
           <div className="space-y-3 sm:space-y-4">
             {/* Full Name */}
-            <PersonalInfoField
-              label={UI_LABELS.PROFILE.FULL_NAME}
-              value={fullName}
-              icon={User}
-            />
+            <PersonalInfoField label={UI_LABELS.PROFILE.FULL_NAME} value={fullName} icon={User} />
 
             {/* Email */}
-            <PersonalInfoField
-              label={UI_LABELS.PROFILE.EMAIL_ADDRESS}
-              value={email}
-              icon={Mail}
-            />
+            <PersonalInfoField label={UI_LABELS.PROFILE.EMAIL_ADDRESS} value={email} icon={Mail} />
           </div>
 
           <div className="space-y-3 sm:space-y-4">
             {/* Phone */}
-            <PersonalInfoField
-              label={UI_LABELS.PROFILE.PHONE_NUMBER}
-              value={phone}
-              icon={Phone}
-            />
+            <PersonalInfoField label={UI_LABELS.PROFILE.PHONE_NUMBER} value={phone} icon={Phone} />
 
             {/* Account Type */}
             <PersonalInfoField

@@ -88,12 +88,7 @@ export function Turnstile({
   }, [testMode]);
 
   useEffect(() => {
-    if (
-      isLoaded &&
-      containerRef.current &&
-      window.turnstile &&
-      !widgetId.current
-    ) {
+    if (isLoaded && containerRef.current && window.turnstile && !widgetId.current) {
       const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
       if (!siteKey || siteKey === TURNSTILE_CONFIG.PLACEHOLDER_KEY) {
@@ -125,8 +120,7 @@ export function Turnstile({
           },
         }) as string | null;
       } catch (err) {
-        const errorMsg =
-          err instanceof Error ? err.message : ERROR_MESSAGES.UNKNOWN;
+        const errorMsg = err instanceof Error ? err.message : ERROR_MESSAGES.UNKNOWN;
         setError(`${ERROR_MESSAGES.TURNSTILE.INIT_FAILED}: ${errorMsg}`);
         console.error("Turnstile initialization error:", err);
       }
@@ -162,8 +156,7 @@ export function Turnstile({
 
   // Show different UI based on configuration
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  const isTestMode =
-    testMode || !siteKey || siteKey === TURNSTILE_CONFIG.PLACEHOLDER_KEY;
+  const isTestMode = testMode || !siteKey || siteKey === TURNSTILE_CONFIG.PLACEHOLDER_KEY;
 
   if (error) {
     return (
@@ -202,9 +195,7 @@ export function Turnstile({
               UI_LABELS.TURNSTILE.TEST_MODE_BYPASSED
             )}
           </div>
-          <div className="mt-2 text-green-600 text-xs">
-            {UI_LABELS.TURNSTILE.MOCK_COMPLETE}
-          </div>
+          <div className="mt-2 text-green-600 text-xs">{UI_LABELS.TURNSTILE.MOCK_COMPLETE}</div>
         </div>
       </div>
     );
@@ -216,9 +207,7 @@ export function Turnstile({
       {!isLoaded && (
         <div className="flex items-center justify-center p-4 bg-muted rounded">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary mr-2" />
-          <span className="text-sm text-muted-foreground">
-            {UI_LABELS.TURNSTILE.LOADING}
-          </span>
+          <span className="text-sm text-muted-foreground">{UI_LABELS.TURNSTILE.LOADING}</span>
         </div>
       )}
     </div>

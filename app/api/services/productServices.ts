@@ -8,10 +8,7 @@ import { Prisma, ProductCategory } from "@prisma/client";
 export async function getProducts(filters: ProductFiltersQuery) {
   const where: Prisma.ProductWhereInput = {};
   try {
-    if (
-      filters.category &&
-      Object.values(ProductCategory).includes(filters.category)
-    ) {
+    if (filters.category && Object.values(ProductCategory).includes(filters.category)) {
       where.category = filters.category;
     }
     if (filters.search) {

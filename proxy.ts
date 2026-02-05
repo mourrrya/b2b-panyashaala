@@ -21,9 +21,7 @@ export async function proxy(request: NextRequest) {
   const isLoggedIn = !!token;
 
   // Check if user is trying to access protected routes
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route),
-  );
+  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
 
   // Check if user is trying to access auth routes (login, etc.)
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
@@ -37,8 +35,7 @@ export async function proxy(request: NextRequest) {
 
   // Redirect authenticated users from auth routes to home
   if (isAuthRoute && isLoggedIn) {
-    const redirectTo =
-      request.nextUrl.searchParams.get("redirect") || PUBLIC_NAV.HOME;
+    const redirectTo = request.nextUrl.searchParams.get("redirect") || PUBLIC_NAV.HOME;
     return NextResponse.redirect(new URL(redirectTo, request.url));
   }
 

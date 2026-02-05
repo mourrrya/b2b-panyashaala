@@ -99,10 +99,7 @@ function AuthContent() {
               <div className="p-4 sm:p-5 md:p-6 lg:p-8 space-y-3 sm:space-y-4 md:space-y-6">
                 <FormHeader mode={mode} />
                 {error && <ErrorMessage error={error} />}
-                <GoogleSignInButton
-                  isLoading={isLoading}
-                  onClick={handleGoogleSignIn}
-                />
+                <GoogleSignInButton isLoading={isLoading} onClick={handleGoogleSignIn} />
                 <FormDivider />
                 <AuthForm
                   mode={mode}
