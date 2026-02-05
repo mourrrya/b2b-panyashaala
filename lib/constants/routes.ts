@@ -1,3 +1,5 @@
+import { SWRConfiguration } from "swr";
+
 /**
  * Routes Constants
  * ================
@@ -11,36 +13,33 @@
 export const PUBLIC_ROUTES = {
   // Auth
   AUTH: {
-    SESSION: "/api/auth/session",
-    SIGN_IN: "/api/auth/signin",
-    SIGN_OUT: "/api/auth/signout",
+    SESSION: "/auth/session",
+    SIGN_IN: "/auth/signin",
+    SIGN_OUT: "/auth/signout",
   },
-
-  // Profile
-  PROFILE: "/api/profile",
 
   // Products
   PRODUCTS: {
-    LIST: "/api/products",
-    DETAIL: (id: string | number) => `/api/products/${id}`,
-  },
-
-  // Orders
-  ORDERS: {
-    LIST: "/api/orders",
-    DETAIL: (id: string) => `/api/orders/${id}`,
+    LIST: "/products",
+    DETAIL: (id: string | number) => `/products/${id}`,
   },
 
   // Services
-  SERVICES: "/api/services",
+  SERVICES: "/services",
 
   // Turnstile verification
-  VERIFY_TURNSTILE: "/api/verify-turnstile",
+  VERIFY_TURNSTILE: "/verify-turnstile",
 } as const;
 
 export const PRIVATE_ROUTES = {
-  PROFILE: "/api/profile",
-  ORDERS: "/api/orders",
+  // Orders
+  ORDERS: {
+    LIST: "/orders",
+    DETAIL: (id: string) => `/orders/${id}`,
+  },
+
+  // Profile
+  PROFILE: "/profile",
 } as const;
 
 // =============================================================================
@@ -78,3 +77,17 @@ export const CATEGORY_ROUTES = {
   EXTRACTS: "/products?category=extract",
   HYDROSOLS: "/products?category=hydrosol",
 } as const;
+
+// =============================================================================
+// SWR GLOBAL CONFIGURATION
+// =============================================================================
+
+export const SWR_CONFIG: SWRConfiguration = {
+  revalidateOnFocus: false,
+  revalidateOnReconnect: true,
+  revalidateIfStale: true,
+  dedupingInterval: 2000,
+  errorRetryCount: 3,
+  errorRetryInterval: 5000,
+  shouldRetryOnError: true,
+};

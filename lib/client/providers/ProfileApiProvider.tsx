@@ -1,5 +1,6 @@
 "use client";
 
+import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { Address, Customer } from "@/prisma/generated/prisma/browser";
 import { SuccessRes } from "@/types/api.payload.types";
 import {
@@ -11,7 +12,6 @@ import {
 } from "react";
 import useSWR, { KeyedMutator, SWRConfig } from "swr";
 import { apiClient, swrFetcher } from "../api/axios";
-import { apiKeys, swrConfig } from "../api/swr-config";
 
 // =============================================================================
 // TYPES
@@ -47,12 +47,12 @@ interface ProfileApiProviderProps {
 export function ProfileApiProvider({ children }: ProfileApiProviderProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     SuccessRes<ProfileData>
-  >(apiKeys.profile.me(), swrFetcher, swrConfig);
+  >(PRIVATE_ROUTES.PROFILE, swrFetcher, SWR_CONFIG);
 
   const updateProfile = useCallback(
     async (updateData: Partial<Customer>) => {
       const result = await apiClient.patch<SuccessRes<ProfileData>>(
-        apiKeys.profile.me(),
+        PRIVATE_ROUTES.PROFILE,
         updateData,
       );
       await mutate();
@@ -75,7 +75,7 @@ export function ProfileApiProvider({ children }: ProfileApiProviderProps) {
   );
 
   return (
-    <SWRConfig value={swrConfig}>
+    <SWRConfig value={SWR_CONFIG}>
       <ProfileApiContext.Provider value={value}>
         {children}
       </ProfileApiContext.Provider>

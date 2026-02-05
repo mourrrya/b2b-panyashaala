@@ -1,8 +1,8 @@
 "use client";
 
 import { swrFetcher } from "@/lib/client/api/axios";
-import { apiKeys, swrConfig } from "@/lib/client/api/swr-config";
 import { UI_LABELS } from "@/lib/constants";
+import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { SuccessRes } from "@/types/api.payload.types";
 import { OrderWithDetails } from "@/types/order";
 import {
@@ -261,9 +261,9 @@ function LoadingState() {
 export default function OrdersPage() {
   // Fetch orders using SWR
   const { data, isLoading, error } = useSWR<SuccessRes<OrderWithDetails[]>>(
-    apiKeys.orders.list(),
+    PRIVATE_ROUTES.ORDERS.LIST,
     swrFetcher,
-    swrConfig,
+    SWR_CONFIG,
   );
 
   const orders = data?.data ?? [];

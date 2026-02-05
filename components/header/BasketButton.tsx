@@ -1,8 +1,8 @@
 "use client";
 
 import { swrFetcher } from "@/lib/client/api/axios";
-import { apiKeys, swrConfig } from "@/lib/client/api/swr-config";
 import { UI_LABELS } from "@/lib/constants";
+import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { useProductStore } from "@/store/productStore";
 import { SuccessRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
@@ -24,9 +24,9 @@ export function BasketButton() {
 
   // Fetch products using SWR (deduplicated with ProductsProvider)
   const { data } = useSWR<SuccessRes<ProductWithVariantsImagesReviews[]>>(
-    apiKeys.products.list(),
+    PUBLIC_ROUTES.PRODUCTS.LIST,
     swrFetcher,
-    swrConfig,
+    SWR_CONFIG,
   );
 
   const basketProducts = useMemo(

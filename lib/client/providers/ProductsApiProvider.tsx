@@ -1,11 +1,11 @@
 "use client";
 
+import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { SuccessRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { createContext, ReactNode, useContext, useMemo } from "react";
 import useSWR, { KeyedMutator, SWRConfig } from "swr";
 import { swrFetcher } from "../api/axios";
-import { apiKeys, swrConfig } from "../api/swr-config";
 
 // =============================================================================
 // CONTEXT TYPES
@@ -45,7 +45,7 @@ interface ProductsApiProviderProps {
 export function ProductsApiProvider({ children }: ProductsApiProviderProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     SuccessRes<ProductWithVariantsImagesReviews[]>
-  >(apiKeys.products.list(), swrFetcher, swrConfig);
+  >(PUBLIC_ROUTES.PRODUCTS.LIST, swrFetcher, SWR_CONFIG);
 
   const value = useMemo<ProductsApiContextValue>(
     () => ({
@@ -59,7 +59,7 @@ export function ProductsApiProvider({ children }: ProductsApiProviderProps) {
   );
 
   return (
-    <SWRConfig value={swrConfig}>
+    <SWRConfig value={SWR_CONFIG}>
       <ProductsApiContext.Provider value={value}>
         {children}
       </ProductsApiContext.Provider>
@@ -83,9 +83,9 @@ export function ProductApiProvider({
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     SuccessRes<ProductWithVariantsImagesReviews>
   >(
-    productId ? apiKeys.products.detail(productId) : null,
+    productId ? PUBLIC_ROUTES.PRODUCTS.DETAIL(productId) : null,
     swrFetcher,
-    swrConfig,
+    SWR_CONFIG,
   );
 
   const value = useMemo<ProductApiContextValue>(
@@ -100,7 +100,7 @@ export function ProductApiProvider({
   );
 
   return (
-    <SWRConfig value={swrConfig}>
+    <SWRConfig value={SWR_CONFIG}>
       <ProductApiContext.Provider value={value}>
         {children}
       </ProductApiContext.Provider>

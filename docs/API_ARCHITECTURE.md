@@ -1,6 +1,6 @@
 # API Architecture
 
-A lightweight API layer using **Axios** + **SWR** + **React Context ApiProviders**, with page-specific data fetching.
+A lightweight API layer using **Axios** + **SWR** + **React Context Providers**, with page-specific data fetching. Routes and SWR config centralized in `lib/constants/routes.ts`.
 
 ## Overview
 
@@ -8,13 +8,13 @@ A lightweight API layer using **Axios** + **SWR** + **React Context ApiProviders
 ┌─────────────────────────────────────────────────────────────────┐
 │                      Page Components                             │
 ├─────────────────────────────────────────────────────────────────┤
-│    useApiProducts() / useApiProduct() / useApiProfile() / useApiOrders()     │
+│    useApiProducts() / useApiProfile() / useApiOrders()           │
 ├─────────────────────────────────────────────────────────────────┤
-│  ProductsApiProvider / ProfileApiProvider / OrdersApiProvider (per-page)  │
+│  ProductsProvider / ProfileProvider / OrdersProvider (per-page)  │
 ├─────────────────────────────────────────────────────────────────┤
-│                    SWR (caching + revalidation)                  │
+│                    SWR (caching + deduplication)                 │
 ├─────────────────────────────────────────────────────────────────┤
-│                      Axios Client (api)                          │
+│                      Axios Client (apiClient)                    │
 ├─────────────────────────────────────────────────────────────────┤
 │                       /api/* Routes                              │
 └─────────────────────────────────────────────────────────────────┘
@@ -25,12 +25,14 @@ A lightweight API layer using **Axios** + **SWR** + **React Context ApiProviders
 ```
 lib/client/
 ├── api/
-│   ├── axios.ts        # Axios instance + interceptors + swrFetcher
-│   └── swr-config.ts   # SWR config + API key factories
+│   └── axios.ts              # Axios instance + interceptors + swrFetcher
 └── providers/
     ├── ProductsApiProvider.tsx  # Products context + useApiProducts hook
     ├── ProfileApiProvider.tsx   # Profile context + useApiProfile hook
     └── OrdersApiProvider.tsx    # Orders context + useApiOrders hook
+
+lib/constants/
+└── routes.ts                 # PUBLIC_ROUTES, PRIVATE_ROUTES, SWR_CONFIG
 ```
 
 ## Usage
@@ -99,15 +101,15 @@ async function createOrder(data: OrderData) {
 }
 ```
 
-## Available ApiProviders & Hooks
+## Available Providers & Hooks
 
-| ApiProvider           | Hook               | Use Case              |
-| --------------------- | ------------------ | --------------------- |
-| `ProductsApiProvider` | `useApiProducts()` | Product list pages    |
-| `ProductApiProvider`  | `useApiProduct()`  | Single product detail |
-| `ProfileApiProvider`  | `useApiProfile()`  | User profile pages    |
-| `OrdersApiProvider`   | `useApiOrders()`   | Order history         |
-| `OrderApiProvider`    | `useApiOrder()`    | Single order detail   |
+| Provider              | Hook             | Use Case              |
+| --------------------- | ---------------- | --------------------- |
+| `ProductsApiProvider` | `useApiProducts` | Product list pages    |
+| `ProductApiProvider`  | `useApiProduct`  | Single product detail |
+| `ProfileApiProvider`  | `useApiProfile`  | User profile pages    |
+| `OrdersApiProvider`   | `useApiOrders`   | Order history         |
+| `OrderApiProvider`    | `useApiOrder`    | Single order detail   |
 
 ## Key Principles
 
@@ -118,16 +120,22 @@ async function createOrder(data: OrderData) {
 | **Derived state in Zustand**     | Filters, search, basket in store                       |
 | **Type-safe**                    | Uses `SuccessRes<T>` from `types/api.payload.types.ts` |
 
-## API Keys
+## API Keys & Routes
+
+All routes and SWR configuration centralized in `lib/constants/routes.ts`:
 
 ```ts
-import { apiKeys } from "@/lib/client/api/swr-config";
+// Public API routes
+PUBLIC_ROUTES.PRODUCTS.LIST; // "/products"
+PUBLIC_ROUTES.PRODUCTS.DETAIL(id); // "/products/{id}"
 
-apiKeys.products.list(); // "/products"
-apiKeys.products.detail(id); // "/products/{id}"
-apiKeys.profile.me(); // "/profile"
-apiKeys.orders.list(); // "/orders"
-apiKeys.orders.detail(id); // "/orders/{id}"
+// Private API routes
+PRIVATE_ROUTES.PROFILE; // "/profile"
+PRIVATE_ROUTES.ORDERS.LIST; // "/orders"
+PRIVATE_ROUTES.ORDERS.DETAIL(id); // "/orders/{id}"
+
+// SWR configuration
+SWR_CONFIG; // Global SWR config
 ```
 
 ## Store Integration (Derived State)
@@ -157,15 +165,15 @@ function ProductList() {
 
 ## Direct SWR Usage (Global Components)
 
-For components outside providers (e.g., Header's BasketButton), use SWR directly. SWR automatically deduplicates requests:
+For components outside providers (e.g., Header's BasketButton), use SWR directly with route constants. SWR automatically deduplicates requests:
 
 ```tsx
 import { swrFetcher } from "@/lib/client/api/axios";
-import { apiKeys, swrConfig } from "@/lib/client/api/swr-config";
+import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import useSWR from "swr";
 
 function BasketButton() {
-  const { data } = useSWR(apiKeys.products.list(), swrFetcher, swrConfig);
+  const { data } = useSWR(PUBLIC_ROUTES.PRODUCTS.LIST, swrFetcher, SWR_CONFIG);
   const products = data?.data ?? [];
   // ...
 }

@@ -75,19 +75,22 @@ import { UI_LABELS } from '@/lib/constants';
 <input placeholder={UI_LABELS.PLACEHOLDERS.SEARCH_PRODUCTS} />
 ```
 
-#### Routes
+#### Routes & API Configuration
 
 ```typescript
-import { PUBLIC_ROUTES, API_ROUTES, PRIVATE_ROUTES } from '@/lib/constants/routes';
+import {
+  PUBLIC_ROUTES,
+  PRIVATE_ROUTES,
+  SWR_CONFIG,
+} from "@/lib/constants/routes";
 
-// Static routes
-<Link href={PUBLIC_ROUTES.PRODUCTS}>Products</Link>
+// API routes for data fetching
+const { data } = useSWR(PUBLIC_ROUTES.PRODUCTS.LIST, swrFetcher, SWR_CONFIG);
+const response = await apiClient.get(PRIVATE_ROUTES.PROFILE);
 
-// Dynamic routes
-<Link href={PUBLIC_ROUTES.PRODUCT_DETAIL(productId)}>View Product</Link>
-
-// API routes
-const response = await fetch(API_ROUTES.PRODUCTS.LIST);
+// Dynamic route builder
+const detailUrl = PUBLIC_ROUTES.PRODUCTS.DETAIL(productId);
+const orderUrl = PRIVATE_ROUTES.ORDERS.DETAIL(orderId);
 ```
 
 #### Validation
@@ -144,13 +147,14 @@ The main constants file containing:
 
 ### `routes.ts`
 
-Route-related constants:
+Route and API configuration constants:
 
-- **PRIVATE_ROUTES**: Routes that require authentication
-- **PUBLIC_ROUTES**: API endpoint paths
-- **EXTERNAL_LINKS**: External service URLs
-- **ROUTE_CONFIG**: Route protection and configuration settings
+- **PUBLIC_ROUTES**: Public API endpoints (`/products`, `/services`, etc.)
+- **PRIVATE_ROUTES**: Protected API endpoints (`/profile`, `/orders`)
+- **SWR_CONFIG**: Global SWR configuration (deduplication, retry, revalidation)
+- **EXTERNAL_LINKS**: Third-party service URLs
 - **CATEGORY_ROUTES**: Product category filter routes
+- **ROUTE_CONFIG**: Route protection settings
 
 ### `navigation.ts`
 

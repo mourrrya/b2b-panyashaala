@@ -1,11 +1,11 @@
 "use client";
 
+import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { Order } from "@/prisma/generated/prisma/browser";
 import { SuccessRes } from "@/types/api.payload.types";
 import { createContext, ReactNode, useContext, useMemo } from "react";
 import useSWR, { KeyedMutator, SWRConfig } from "swr";
 import { swrFetcher } from "../api/axios";
-import { apiKeys, swrConfig } from "../api/swr-config";
 
 // =============================================================================
 // CONTEXT TYPES
@@ -45,7 +45,7 @@ interface OrdersApiProviderProps {
 export function OrdersApiProvider({ children }: OrdersApiProviderProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     SuccessRes<Order[]>
-  >(apiKeys.orders.list(), swrFetcher, swrConfig);
+  >(PRIVATE_ROUTES.ORDERS.LIST, swrFetcher, SWR_CONFIG);
 
   const value = useMemo<OrdersApiContextValue>(
     () => ({
@@ -59,7 +59,7 @@ export function OrdersApiProvider({ children }: OrdersApiProviderProps) {
   );
 
   return (
-    <SWRConfig value={swrConfig}>
+    <SWRConfig value={SWR_CONFIG}>
       <OrdersApiContext.Provider value={value}>
         {children}
       </OrdersApiContext.Provider>
@@ -73,13 +73,17 @@ export function OrdersApiProvider({ children }: OrdersApiProviderProps) {
 
 interface OrderApiProviderProps {
   children: ReactNode;
-  orderId: string | number;
+  orderId: string;
 }
 
 export function OrderApiProvider({ children, orderId }: OrderApiProviderProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     SuccessRes<Order>
-  >(orderId ? apiKeys.orders.detail(orderId) : null, swrFetcher, swrConfig);
+  >(
+    orderId ? PRIVATE_ROUTES.ORDERS.DETAIL(orderId) : null,
+    swrFetcher,
+    SWR_CONFIG,
+  );
 
   const value = useMemo<OrderApiContextValue>(
     () => ({
@@ -93,7 +97,7 @@ export function OrderApiProvider({ children, orderId }: OrderApiProviderProps) {
   );
 
   return (
-    <SWRConfig value={swrConfig}>
+    <SWRConfig value={SWR_CONFIG}>
       <OrderApiContext.Provider value={value}>
         {children}
       </OrderApiContext.Provider>

@@ -1,8 +1,8 @@
 "use client";
 
 import { apiClient } from "@/lib/client/api/axios";
-import { apiKeys } from "@/lib/client/api/swr-config";
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { PRIVATE_ROUTES } from "@/lib/constants/routes";
 import { Address, Customer } from "@/prisma/generated/prisma/browser";
 import { SuccessRes } from "@/types/api.payload.types";
 import { create } from "zustand";
@@ -116,7 +116,7 @@ export const useAuthStore = create<AuthStore>()(
       fetchProfile: async () => {
         try {
           const response = await apiClient.get<SuccessRes<UserData>>(
-            apiKeys.profile.me(),
+            PRIVATE_ROUTES.PROFILE,
           );
           if (response.success && response.data) {
             set({ user: response.data });
@@ -129,7 +129,7 @@ export const useAuthStore = create<AuthStore>()(
       updateProfile: async (data) => {
         try {
           const response = await apiClient.put<SuccessRes<UserData>>(
-            apiKeys.profile.me(),
+            PRIVATE_ROUTES.PROFILE,
             data,
           );
 
