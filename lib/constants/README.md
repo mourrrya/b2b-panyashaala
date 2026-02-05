@@ -6,12 +6,22 @@ This directory contains all centralized constants, configuration values, and har
 
 ```
 lib/constants/
-├── index.ts          # Main constants file (site config, messages, UI labels)
-├── barrel.ts         # Barrel export for convenient imports
+├── index.ts          # Barrel re-export of all constants
+├── barrel.ts         # Complete barrel export (includes utilities)
+├── config.ts         # Site configuration, contact info, social media
+├── navigation.ts     # Navigation links (header and footer)
+├── products.ts       # Product categories and descriptions
+├── auth.ts           # Authentication, API, and Turnstile config
+├── messages.ts       # Error and success messages
+├── ui-labels.ts      # All UI labels and text content
+├── marketing.ts      # Marketing copy and feature highlights
+├── content.ts        # Page content (about, quality, FAQ)
+├── metadata.ts       # SEO keywords, page metadata, schema config
+├── http.ts           # HTTP status codes
 ├── routes.ts         # Route definitions and URL helpers
-├── errors.ts         # Error messages and error handling utilities
+├── errors.ts         # Error handling utilities
 ├── validation.ts     # Validation rules and form validation helpers
-├── seo.ts            # SEO-related configuration and metadata
+├── seo.ts            # SEO configuration and metadata
 ├── applications.ts   # Application category enums and types
 └── README.md         # This file
 ```
@@ -25,6 +35,9 @@ lib/constants/
 import { SITE_CONFIG, ERROR_MESSAGES, NAV_LINKS } from "@/lib/constants";
 
 // Or import from specific files for better tree-shaking
+import { AUTH_CONFIG, API_CONFIG } from "@/lib/constants/auth";
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/lib/constants/messages";
+import { UI_LABELS } from "@/lib/constants/ui-labels";
 import { PUBLIC_ROUTES, API_ROUTES } from "@/lib/constants/routes";
 import { VALIDATION_RULES } from "@/lib/constants/validation";
 import { PAGE_SEO } from "@/lib/constants/seo";

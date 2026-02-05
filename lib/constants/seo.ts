@@ -4,10 +4,7 @@
  * All SEO-related configuration and metadata.
  */
 
-import { SITE_CONFIG, SOCIAL_HANDLES, VERIFICATION_TOKENS } from "./index";
-
-// Re-export site config for SEO usage
-export { SITE_CONFIG, SOCIAL_HANDLES, VERIFICATION_TOKENS };
+import { SITE_CONFIG } from "./config";
 
 // =============================================================================
 // SEO DEFAULTS
