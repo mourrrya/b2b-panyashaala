@@ -4,21 +4,28 @@ import { ProductCard } from "@/components/ProductCard";
 import { ProductFilters } from "@/components/ProductFilters";
 import { useApiProducts } from "@/lib/client/providers/ProductsApiProvider";
 import { UI_LABELS } from "@/lib/constants";
-import { useProductStore } from "@/store/productStore";
+import {
+  useAddToBasketOptimistic,
+  useBasket,
+  useGetFilteredProducts,
+  useRemoveFromBasketOptimistic,
+  useSearchTerm,
+  useSelectedCategory,
+  useSetSearchTerm,
+  useSetSelectedCategory,
+} from "@/store/productStore";
 import { useMemo } from "react";
 
 export function ProductsClient() {
   const { products, isLoading } = useApiProducts();
-  const {
-    basket,
-    searchTerm,
-    selectedCategory,
-    setSearchTerm,
-    setSelectedCategory,
-    addToBasketOptimistic,
-    removeFromBasketOptimistic,
-    getFilteredProducts,
-  } = useProductStore();
+  const basket = useBasket();
+  const searchTerm = useSearchTerm();
+  const selectedCategory = useSelectedCategory();
+  const setSearchTerm = useSetSearchTerm();
+  const setSelectedCategory = useSetSelectedCategory();
+  const addToBasketOptimistic = useAddToBasketOptimistic();
+  const removeFromBasketOptimistic = useRemoveFromBasketOptimistic();
+  const getFilteredProducts = useGetFilteredProducts();
 
   const filteredProducts = useMemo(
     () => getFilteredProducts(products),
@@ -37,10 +44,6 @@ export function ProductsClient() {
     <main className="bg-texture min-h-screen">
       <section className="bg-white/95">
         <ProductFilters
-          searchTerm={searchTerm}
-          selectedCategory={selectedCategory}
-          setSearchTerm={setSearchTerm}
-          setSelectedCategory={setSelectedCategory}
           filteredProductsCount={filteredProducts.length}
           totalProductsCount={products.length}
         />

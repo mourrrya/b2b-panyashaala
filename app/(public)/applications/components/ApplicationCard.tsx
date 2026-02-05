@@ -1,7 +1,7 @@
 "use client";
 
 import { UI_LABELS } from "@/lib/constants";
-import { useProductStore } from "@/store/productStore";
+import { useSetSearchTerm } from "@/store/productStore";
 import { useRouter } from "next/navigation";
 import { Application } from "../data/applications";
 
@@ -19,7 +19,7 @@ export function ApplicationCard({
   onToggle,
 }: ApplicationCardProps) {
   const router = useRouter();
-  const { setSearchTerm } = useProductStore();
+  const setSearchTerm = useSetSearchTerm();
 
   const handleClick = () => {
     onToggle(isSelected ? null : index);

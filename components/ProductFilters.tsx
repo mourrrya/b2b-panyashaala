@@ -1,27 +1,30 @@
 "use client";
 
 import { PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
+import {
+  useSearchTerm,
+  useSelectedCategory,
+  useSetSearchTerm,
+  useSetSelectedCategory,
+} from "@/store/productStore";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface ProductFiltersProps {
-  searchTerm: string;
-  selectedCategory: string | null;
-  setSearchTerm: (term: string) => void;
-  setSelectedCategory: (category: string | null) => void;
   filteredProductsCount: number;
   totalProductsCount: number;
 }
 
 export function ProductFilters({
-  searchTerm,
-  selectedCategory,
-  setSearchTerm,
-  setSelectedCategory,
   filteredProductsCount,
   totalProductsCount,
 }: ProductFiltersProps) {
   const [hasScrolled, setHasScrolled] = useState(false);
+
+  const searchTerm = useSearchTerm();
+  const selectedCategory = useSelectedCategory();
+  const setSearchTerm = useSetSearchTerm();
+  const setSelectedCategory = useSetSelectedCategory();
 
   useEffect(() => {
     const handleScroll = () => {

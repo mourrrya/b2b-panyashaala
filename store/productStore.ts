@@ -9,7 +9,8 @@ import type {
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import Fuse from "fuse.js";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
 // Re-export for backward compatibility
 export type { DbProduct, Image, Product, Review, Variant };
@@ -49,165 +50,211 @@ export interface ProductStoreActions {
   ) => ProductWithVariantsImagesReviews[];
 }
 
-export const useProductStore = create<
-  ProductStoreState & ProductStoreActions
->()(
-  persist(
-    (set, get) => ({
-      basket: [], // Will be hydrated from localStorage by persist middleware
-      searchTerm: "",
-      selectedCategory: null,
-      selectedApplication: null,
-      isBasketDrawerOpen: false,
-      basketPendingOperations: new Set(),
+type ProductStore = ProductStoreState & ProductStoreActions;
 
-      addToBasket: (productId) => {
-        set((state) => {
-          const newBasket = state.basket.includes(productId)
-            ? state.basket
-            : [...state.basket, productId];
-          return { basket: newBasket };
-        });
-      },
+export const useProductStore = create<ProductStore>()(
+  devtools(
+    persist(
+      immer((set, get) => ({
+        basket: [], // Will be hydrated from localStorage by persist middleware
+        searchTerm: "",
+        selectedCategory: null,
+        selectedApplication: null,
+        isBasketDrawerOpen: false,
+        basketPendingOperations: new Set(),
 
-      removeFromBasket: (productId) => {
-        set((state) => {
-          const newBasket = state.basket.filter((id) => id !== productId);
-          return { basket: newBasket };
-        });
-      },
+        addToBasket: (productId) => {
+          set((state) => {
+            if (!state.basket.includes(productId)) {
+              state.basket.push(productId);
+            }
+          });
+        },
 
-      clearBasket: () => {
-        set({ basket: [] });
-      },
+        removeFromBasket: (productId) => {
+          set((state) => {
+            state.basket = state.basket.filter((id) => id !== productId);
+          });
+        },
 
-      setSearchTerm: (term) => set({ searchTerm: term }),
+        clearBasket: () => {
+          set((state) => {
+            state.basket = [];
+          });
+        },
 
-      setSelectedCategory: (category) => set({ selectedCategory: category }),
+        setSearchTerm: (term) => {
+          set((state) => {
+            state.searchTerm = term;
+          });
+        },
 
-      setSelectedApplication: (appId) => set({ selectedApplication: appId }),
+        setSelectedCategory: (category) => {
+          set((state) => {
+            state.selectedCategory = category;
+          });
+        },
 
-      setBasketDrawerOpen: (isOpen) => set({ isBasketDrawerOpen: isOpen }),
+        setSelectedApplication: (appId) => {
+          set((state) => {
+            state.selectedApplication = appId;
+          });
+        },
 
-      addToBasketOptimistic: async (productId) => {
-        // Optimistically add to basket
-        set((state) => {
-          state.basketPendingOperations.add(productId);
-          const newBasket = state.basket.includes(productId)
-            ? state.basket
-            : [...state.basket, productId];
-          return {
-            basket: newBasket,
-            basketPendingOperations: new Set(state.basketPendingOperations),
-          };
-        });
+        setBasketDrawerOpen: (isOpen) => {
+          set((state) => {
+            state.isBasketDrawerOpen = isOpen;
+          });
+        },
 
-        try {
-          // Simulate API call (replace with actual API call when needed)
-          await new Promise((resolve) =>
-            setTimeout(resolve, STORE_CONFIG.OPTIMISTIC_UPDATE_DELAY),
+        addToBasketOptimistic: async (productId) => {
+          // Optimistically add to basket
+          set((state) => {
+            state.basketPendingOperations.add(productId);
+            if (!state.basket.includes(productId)) {
+              state.basket.push(productId);
+            }
+          });
+
+          try {
+            // Simulate API call (replace with actual API call when needed)
+            await new Promise((resolve) =>
+              setTimeout(resolve, STORE_CONFIG.OPTIMISTIC_UPDATE_DELAY),
+            );
+
+            // On success, remove from pending
+            set((state) => {
+              state.basketPendingOperations.delete(productId);
+            });
+          } catch (error) {
+            // On failure, rollback the optimistic update
+            set((state) => {
+              state.basketPendingOperations.delete(productId);
+              state.basket = state.basket.filter((id) => id !== productId);
+            });
+          }
+        },
+
+        removeFromBasketOptimistic: async (productId) => {
+          // Store the original basket for potential rollback
+          const originalBasket = get().basket;
+
+          // Optimistically remove from basket
+          set((state) => {
+            state.basketPendingOperations.add(productId);
+            state.basket = state.basket.filter((id) => id !== productId);
+          });
+
+          try {
+            // Simulate API call (replace with actual API call when needed)
+            await new Promise((resolve) =>
+              setTimeout(resolve, STORE_CONFIG.OPTIMISTIC_UPDATE_DELAY),
+            );
+
+            // On success, remove from pending
+            set((state) => {
+              state.basketPendingOperations.delete(productId);
+            });
+          } catch (error) {
+            // On failure, rollback the optimistic update
+            set((state) => {
+              state.basketPendingOperations.delete(productId);
+              state.basket = originalBasket;
+            });
+          }
+        },
+
+        getFilteredProducts: (products: ProductWithVariantsImagesReviews[]) => {
+          const state = get();
+
+          if (!state.searchTerm) {
+            // If no search term, just filter by category
+            return products.filter(
+              (product) =>
+                !state.selectedCategory ||
+                product.category === state.selectedCategory,
+            );
+          }
+
+          // Configure Fuse for fuzzy search
+          const fuse = new Fuse(products, {
+            keys: [...FUSE_CONFIG.SEARCH_KEYS],
+            threshold: FUSE_CONFIG.SEARCH_THRESHOLD,
+            includeScore: FUSE_CONFIG.INCLUDE_SCORE,
+          });
+
+          const searchResults = fuse.search(state.searchTerm);
+
+          // Filter results by category if selected
+          return searchResults
+            .filter(
+              (result) =>
+                !state.selectedCategory ||
+                result.item.category === state.selectedCategory,
+            )
+            .map((result) => result.item);
+        },
+
+        getBasketProducts: (products: ProductWithVariantsImagesReviews[]) => {
+          const state = get();
+          return products.filter((product) =>
+            state.basket.includes(product.id),
           );
-
-          // On success, remove from pending
-          set((state) => {
-            const newPending = new Set(state.basketPendingOperations);
-            newPending.delete(productId);
-            return { basketPendingOperations: newPending };
-          });
-        } catch (error) {
-          // On failure, rollback the optimistic update
-          set((state) => {
-            const newPending = new Set(state.basketPendingOperations);
-            newPending.delete(productId);
-            const newBasket = state.basket.filter((id) => id !== productId);
-            return {
-              basket: newBasket,
-              basketPendingOperations: newPending,
-            };
-          });
-        }
+        },
+      })),
+      {
+        name: STORAGE_CONFIG.BASKET_KEY,
+        partialize: (state) => ({
+          basket: state.basket,
+        }),
       },
-
-      removeFromBasketOptimistic: async (productId) => {
-        // Store the original basket for potential rollback
-        const originalBasket = get().basket;
-
-        // Optimistically remove from basket
-        set((state) => {
-          state.basketPendingOperations.add(productId);
-          const newBasket = state.basket.filter((id) => id !== productId);
-          return {
-            basket: newBasket,
-            basketPendingOperations: new Set(state.basketPendingOperations),
-          };
-        });
-
-        try {
-          // Simulate API call (replace with actual API call when needed)
-          await new Promise((resolve) =>
-            setTimeout(resolve, STORE_CONFIG.OPTIMISTIC_UPDATE_DELAY),
-          );
-
-          // On success, remove from pending
-          set((state) => {
-            const newPending = new Set(state.basketPendingOperations);
-            newPending.delete(productId);
-            return { basketPendingOperations: newPending };
-          });
-        } catch (error) {
-          // On failure, rollback the optimistic update
-          set((state) => {
-            const newPending = new Set(state.basketPendingOperations);
-            newPending.delete(productId);
-            return {
-              basket: originalBasket,
-              basketPendingOperations: newPending,
-            };
-          });
-        }
-      },
-
-      getFilteredProducts: (products: ProductWithVariantsImagesReviews[]) => {
-        const state = get();
-
-        if (!state.searchTerm) {
-          // If no search term, just filter by category
-          return products.filter(
-            (product) =>
-              !state.selectedCategory ||
-              product.category === state.selectedCategory,
-          );
-        }
-
-        // Configure Fuse for fuzzy search
-        const fuse = new Fuse(products, {
-          keys: [...FUSE_CONFIG.SEARCH_KEYS],
-          threshold: FUSE_CONFIG.SEARCH_THRESHOLD,
-          includeScore: FUSE_CONFIG.INCLUDE_SCORE,
-        });
-
-        const searchResults = fuse.search(state.searchTerm);
-
-        // Filter results by category if selected
-        return searchResults
-          .filter(
-            (result) =>
-              !state.selectedCategory ||
-              result.item.category === state.selectedCategory,
-          )
-          .map((result) => result.item);
-      },
-
-      getBasketProducts: (products: ProductWithVariantsImagesReviews[]) => {
-        const state = get();
-        return products.filter((product) => state.basket.includes(product.id));
-      },
-    }),
-    {
-      name: STORAGE_CONFIG.BASKET_KEY,
-      partialize: (state) => ({
-        basket: state.basket,
-      }),
-    },
+    ),
+    { name: "product-store" },
   ),
 );
+
+// ============================================================================
+// Selectors & Convenience Hooks
+// ============================================================================
+
+// Basket state selectors
+export const useBasket = () => useProductStore((s) => s.basket);
+export const useBasketLength = () => useProductStore((s) => s.basket.length);
+export const useBasketPendingOperations = () =>
+  useProductStore((s) => s.basketPendingOperations);
+
+// Basket action selectors
+export const useAddToBasket = () => useProductStore((s) => s.addToBasket);
+export const useRemoveFromBasket = () =>
+  useProductStore((s) => s.removeFromBasket);
+export const useClearBasket = () => useProductStore((s) => s.clearBasket);
+export const useAddToBasketOptimistic = () =>
+  useProductStore((s) => s.addToBasketOptimistic);
+export const useRemoveFromBasketOptimistic = () =>
+  useProductStore((s) => s.removeFromBasketOptimistic);
+
+// Basket drawer selectors
+export const useIsBasketDrawerOpen = () =>
+  useProductStore((s) => s.isBasketDrawerOpen);
+export const useSetBasketDrawerOpen = () =>
+  useProductStore((s) => s.setBasketDrawerOpen);
+
+// Filter state selectors
+export const useSearchTerm = () => useProductStore((s) => s.searchTerm);
+export const useSelectedCategory = () =>
+  useProductStore((s) => s.selectedCategory);
+export const useSelectedApplication = () =>
+  useProductStore((s) => s.selectedApplication);
+
+// Filter action selectors
+export const useSetSearchTerm = () => useProductStore((s) => s.setSearchTerm);
+export const useSetSelectedCategory = () =>
+  useProductStore((s) => s.setSelectedCategory);
+export const useSetSelectedApplication = () =>
+  useProductStore((s) => s.setSelectedApplication);
+
+// Product query selectors
+export const useGetFilteredProducts = () =>
+  useProductStore((s) => s.getFilteredProducts);
+export const useGetBasketProducts = () =>
+  useProductStore((s) => s.getBasketProducts);
