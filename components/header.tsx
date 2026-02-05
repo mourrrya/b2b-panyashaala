@@ -1,7 +1,7 @@
 "use client";
 
 import { SITE_CONFIG, UI_LABELS } from "@/lib/constants";
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from "@/store/authStore";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

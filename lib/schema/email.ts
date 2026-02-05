@@ -6,7 +6,7 @@ import {
 } from "@/lib/constants";
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
-import type { Product } from "../../store/store";
+import type { Product } from "../../store/productStore";
 
 if (
   typeof window !== "undefined" &&

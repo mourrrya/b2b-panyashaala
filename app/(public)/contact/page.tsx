@@ -3,7 +3,7 @@
 import { Turnstile } from "@/components/turnstile";
 import { useContactForm } from "@/hooks/use-contact-form";
 import { CONTACT_INFO, MARKETING_COPY, UI_LABELS } from "@/lib/constants";
-import { useProductStore } from "@/store/store";
+import { useProductStore } from "@/store/productStore";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 

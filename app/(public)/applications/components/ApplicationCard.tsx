@@ -1,7 +1,7 @@
 "use client";
 
 import { UI_LABELS } from "@/lib/constants";
-import { useProductStore } from "@/store/store";
+import { useProductStore } from "@/store/productStore";
 import { useRouter } from "next/navigation";
 import { Application } from "../data/applications";
 

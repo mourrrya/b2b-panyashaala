@@ -1,7 +1,7 @@
 "use client";
 
 import { UI_LABELS } from "@/lib/constants";
-import type { Product } from "@/store/store";
+import type { Product } from "@/store/productStore";
 import { Package, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";

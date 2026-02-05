@@ -1,5 +1,5 @@
 "use client";
-import { useProductStore } from "@/store/store";
+import { useProductStore } from "@/store/productStore";
 import { ProductWithVariantsImagesReviews } from "@/types/api.payload.types";
 import { Check } from "lucide-react";
 import Link from "next/link";

@@ -1,7 +1,7 @@
 "use client";
 
 import { ERROR_MESSAGES } from "@/lib/constants";
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from "@/store/authStore";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";

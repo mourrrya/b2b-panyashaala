@@ -2,7 +2,7 @@
 
 import { UI_LABELS } from "@/lib/constants";
 import { CustomerType } from "@/prisma/generated/prisma/browser";
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from "@/store/authStore";
 import { useEffect, useState } from "react";
 import { AddressInfoCard } from "./components/AddressInfoCard";
 import { BusinessInfoCard } from "./components/BusinessInfoCard";

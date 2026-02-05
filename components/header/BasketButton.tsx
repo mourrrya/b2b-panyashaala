@@ -1,7 +1,7 @@
 "use client";
 
 import { UI_LABELS } from "@/lib/constants";
-import { useProductStore } from "@/store/store";
+import { useProductStore } from "@/store/productStore";
 import { ShoppingBag } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Basket } from "../BasketDrawer";

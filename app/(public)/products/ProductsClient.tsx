@@ -3,7 +3,7 @@
 import { ProductCard } from "@/components/ProductCard";
 import { ProductFilters } from "@/components/ProductFilters";
 import { UI_LABELS } from "@/lib/constants";
-import { useProductStore } from "@/store/store";
+import { useProductStore } from "@/store/productStore";
 
 export function ProductsClient() {
   const {

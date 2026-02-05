@@ -7,7 +7,7 @@ import {
   sendEmail,
   verifyTurnstile,
 } from "@/lib/schema/email";
-import type { Product } from "@/store/store";
+import type { Product } from "@/store/productStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";

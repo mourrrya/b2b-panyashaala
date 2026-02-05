@@ -1,5 +1,5 @@
 import { ProductCategory } from "@/prisma/generated/prisma/enums";
-import type { Product } from "../store/store";
+import type { Product } from "../store/productStore";
 
 // INCI name mappings for common products
 const inciMappings: Record<string, Record<string, string>> = {
