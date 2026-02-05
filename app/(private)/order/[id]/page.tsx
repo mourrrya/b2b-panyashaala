@@ -1,6 +1,11 @@
 "use client";
 
-import { API_CONFIG, ERROR_MESSAGES, UI_LABELS } from "@/lib/constants";
+import {
+  API_CONFIG,
+  ERROR_MESSAGES,
+  PRIVATE_NAV,
+  UI_LABELS,
+} from "@/lib/constants";
 import { GST_SLAB_PERCENT_MAP } from "@/lib/utils";
 import { OrderItemDetails, OrderWithDetails } from "@/types/order";
 import {
@@ -348,7 +353,7 @@ function ErrorState({
         <p className="text-red-600 mb-6">{message}</p>
         <div className="flex gap-3 justify-center">
           <Link
-            href="/order"
+            href={PRIVATE_NAV.ORDERS}
             className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
           >
             {UI_LABELS.ORDERS.BACK_TO_ORDERS}
@@ -446,7 +451,7 @@ export default function OrderDetailPage() {
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex items-center gap-4 flex-1">
               <Link
-                href="/order"
+                href={PRIVATE_NAV.ORDERS}
                 className="p-2 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-800 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />

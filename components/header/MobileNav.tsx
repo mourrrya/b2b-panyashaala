@@ -1,6 +1,6 @@
 "use client";
 
-import { SITE_CONFIG, UI_LABELS } from "@/lib/constants";
+import { PRIVATE_NAV, SITE_CONFIG, UI_LABELS } from "@/lib/constants";
 import { LogIn, LogOut, Package, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -81,7 +81,7 @@ export function MobileNav({
             {user ? (
               <div className="space-y-2">
                 <Link
-                  href="/profile"
+                  href={PRIVATE_NAV.PROFILE}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-emerald-800 hover:bg-emerald-50/50 transition-colors"
                   onClick={closeMenu}
                 >
@@ -89,7 +89,7 @@ export function MobileNav({
                   {UI_LABELS.NAV.MY_PROFILE}
                 </Link>
                 <Link
-                  href="/order"
+                  href={PRIVATE_NAV.ORDERS}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-emerald-800 hover:bg-emerald-50/50 transition-colors"
                   onClick={closeMenu}
                 >

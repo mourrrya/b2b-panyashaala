@@ -5,36 +5,10 @@
  */
 
 // =============================================================================
-// PUBLIC ROUTES
-// =============================================================================
-
-export const PUBLIC_ROUTES = {
-  HOME: "/",
-  PRODUCTS: "/products",
-  PRODUCT_DETAIL: (id: string | number) => `/products/${id}`,
-  ABOUT: "/about",
-  APPLICATIONS: "/applications",
-  QUALITY: "/quality",
-  CONTACT: "/contact",
-  LOGIN: "/login",
-  SITEMAP: "/sitemap.xml",
-} as const;
-
-// =============================================================================
-// PRIVATE ROUTES (require authentication)
-// =============================================================================
-
-export const PRIVATE_ROUTES = {
-  PROFILE: "/profile",
-  ORDERS: "/order",
-  ORDER_DETAIL: (id: string) => `/order/${id}`,
-} as const;
-
-// =============================================================================
 // API ROUTES
 // =============================================================================
 
-export const API_ROUTES = {
+export const PUBLIC_ROUTES = {
   // Auth
   AUTH: {
     SESSION: "/api/auth/session",
@@ -62,6 +36,11 @@ export const API_ROUTES = {
 
   // Turnstile verification
   VERIFY_TURNSTILE: "/api/verify-turnstile",
+} as const;
+
+export const PRIVATE_ROUTES = {
+  PROFILE: "/api/profile",
+  ORDERS: "/api/orders",
 } as const;
 
 // =============================================================================
@@ -99,21 +78,3 @@ export const CATEGORY_ROUTES = {
   EXTRACTS: "/products?category=extract",
   HYDROSOLS: "/products?category=hydrosol",
 } as const;
-
-// =============================================================================
-// BREADCRUMB DEFINITIONS
-// =============================================================================
-
-export const BREADCRUMBS = {
-  HOME: { name: "Home", path: "/" },
-  PRODUCTS: { name: "Products", path: "/products" },
-  ABOUT: { name: "About", path: "/about" },
-  APPLICATIONS: { name: "Applications", path: "/applications" },
-  QUALITY: { name: "Quality", path: "/quality" },
-  CONTACT: { name: "Contact", path: "/contact" },
-} as const;
-
-export type BreadcrumbItem = {
-  name: string;
-  path: string;
-};

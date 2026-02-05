@@ -3,6 +3,7 @@
 import {
   AUTH_CONFIG,
   ERROR_MESSAGES,
+  PRIVATE_NAV,
   SUCCESS_MESSAGES,
   UI_LABELS,
 } from "@/lib/constants";
@@ -138,13 +139,13 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
             {/* Orders Stats Card */}
             <div
               className="relative overflow-hidden rounded-lg sm:rounded-xl bg-linear-to-br from-white/90 via-slate-50/80 to-slate-100/70 backdrop-blur-sm border border-slate-200/60 shadow-[0_2px_12px_-3px_rgba(51,65,85,0.08)] px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 before:absolute before:inset-0 before:bg-linear-to-tr before:from-emerald-50/20 before:via-transparent before:to-white/30 before:pointer-events-none transition-all duration-300 ease-out hover:shadow-[0_8px_24px_-6px_rgba(51,65,85,0.15)] hover:-translate-y-0.5 cursor-pointer group"
-              onClick={() => router.push("/order")}
+              onClick={() => router.push(PRIVATE_NAV.ORDERS)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  router.push("/order");
+                  router.push(PRIVATE_NAV.ORDERS);
                 }
               }}
             >

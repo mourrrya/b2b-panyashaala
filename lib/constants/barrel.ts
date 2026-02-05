@@ -7,7 +7,7 @@
  * import { SITE_CONFIG, ERROR_MESSAGES } from '@/lib/constants';
  *
  * Or import from specific files:
- * import { PUBLIC_ROUTES } from '@/lib/constants/routes';
+ * import { CLIENT_ROUTES } from '@/lib/constants/navigation';
  * import { VALIDATION_RULES } from '@/lib/constants/validation';
  */
 

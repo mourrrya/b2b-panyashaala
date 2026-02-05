@@ -106,7 +106,7 @@ export default function Home() {
                 {PRODUCT_CATEGORIES[0].label}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
-                {PRODUCT_CATEGORY_DESCRIPTIONS["essential-oil"]}
+                {PRODUCT_CATEGORY_DESCRIPTIONS.ESSENTIAL_OIL}
               </p>
             </div>
             <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-teal-50 border border-emerald-100 card-hover">
@@ -114,7 +114,7 @@ export default function Home() {
                 {PRODUCT_CATEGORIES[1].label}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
-                {PRODUCT_CATEGORY_DESCRIPTIONS["fixed-oil"]}
+                {PRODUCT_CATEGORY_DESCRIPTIONS.FIXED_OIL}
               </p>
             </div>
             <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-lime-50 border border-emerald-100 card-hover">
@@ -122,7 +122,7 @@ export default function Home() {
                 {PRODUCT_CATEGORIES[2].label}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
-                {PRODUCT_CATEGORY_DESCRIPTIONS["extract"]}
+                {PRODUCT_CATEGORY_DESCRIPTIONS.EXTRACT}
               </p>
             </div>
             <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-yellow-50 border border-emerald-100 card-hover">
@@ -130,7 +130,7 @@ export default function Home() {
                 {PRODUCT_CATEGORIES[3].label}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
-                {PRODUCT_CATEGORY_DESCRIPTIONS["hydrosol"]}
+                {PRODUCT_CATEGORY_DESCRIPTIONS.HYDROSOL}
               </p>
             </div>
           </div>

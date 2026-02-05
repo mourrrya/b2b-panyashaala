@@ -1,6 +1,6 @@
 "use client";
 
-import { UI_LABELS } from "@/lib/constants";
+import { PRIVATE_NAV, UI_LABELS } from "@/lib/constants";
 import { useAuthStore } from "@/store/auth-store";
 import { ChevronDown, LogIn, LogOut, Package, User } from "lucide-react";
 import Image from "next/image";
@@ -52,11 +52,11 @@ export function LoginProfileButton() {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem onClick={() => router.push("/profile")}>
+          <DropdownMenuItem onClick={() => router.push(PRIVATE_NAV.PROFILE)}>
             <User className="w-4 h-4 mr-2" />
             {UI_LABELS.NAV.MY_PROFILE}
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/order")}>
+          <DropdownMenuItem onClick={() => router.push(PRIVATE_NAV.ORDERS)}>
             <Package className="w-4 h-4 mr-2" />
             {UI_LABELS.NAV.MY_ORDERS}
           </DropdownMenuItem>

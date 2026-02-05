@@ -35,10 +35,11 @@ lib/constants/
 import { SITE_CONFIG, ERROR_MESSAGES, NAV_LINKS } from "@/lib/constants";
 
 // Or import from specific files for better tree-shaking
+import { NAVIGATE } from "@/lib/constants/navigation";
 import { AUTH_CONFIG, API_CONFIG } from "@/lib/constants/auth";
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/lib/constants/messages";
 import { UI_LABELS } from "@/lib/constants/ui-labels";
-import { PUBLIC_ROUTES, API_ROUTES } from "@/lib/constants/routes";
+import { API_ROUTES } from "@/lib/constants/routes";
 import { VALIDATION_RULES } from "@/lib/constants/validation";
 import { PAGE_SEO } from "@/lib/constants/seo";
 ```
@@ -146,9 +147,20 @@ The main constants file containing:
 
 Route-related constants:
 
-- **PUBLIC_ROUTES**: All public page routes
-- **PRIVATE_ROUTES**: Protected routes requiring authentication
-- **API_ROUTES**: Backend API endpoints
+- **PRIVATE_ROUTES**: Routes that require authentication
+- **PUBLIC_ROUTES**: API endpoint paths
+- **EXTERNAL_LINKS**: External service URLs
+- **ROUTE_CONFIG**: Route protection and configuration settings
+- **CATEGORY_ROUTES**: Product category filter routes
+
+### `navigation.ts`
+
+Navigation-related constants:
+
+- **PUBLIC_NAV**: Client-side page routes (home, products, about, etc.)
+- **PRIVATE_NAV**: Client-side page routes (profile, orders, etc.)
+- **NAV_LINKS**: Main navigation menu items
+- **FOOTER_LINKS**: Footer navigation links
 - **EXTERNAL_LINKS**: Third-party URLs
 - **BREADCRUMBS**: Breadcrumb definitions
 
