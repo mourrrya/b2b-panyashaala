@@ -1,10 +1,4 @@
-export interface SuccessRes<T> {
-  data?: T;
-  success: boolean;
-}
-
-// lib/types/api.ts
-export interface GetListServerRes<T> {
+export interface GetServerListRes<T> {
   success: boolean;
   data?: T;
   message?: string;

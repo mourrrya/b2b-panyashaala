@@ -1,11 +1,11 @@
 "use client";
 
-import { useAuthStore } from "@/store/authStore";
+import { useInitializeAuth } from "@/store/authStore";
 import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 
 function AuthInitializer({ children }: { children: React.ReactNode }) {
-  const { initialize } = useAuthStore();
+  const initialize = useInitializeAuth();
 
   useEffect(() => {
     initialize();

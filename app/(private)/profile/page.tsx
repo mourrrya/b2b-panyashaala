@@ -1,24 +1,17 @@
 ﻿"use client";
 
+import { ProfileApiProvider, useApiProfile } from "@/lib/client/providers/ProfileApiProvider";
 import { UI_LABELS } from "@/lib/constants";
 import { CustomerType } from "@/prisma/generated/prisma/browser";
-import { useAuthStore } from "@/store/authStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AddressInfoCard } from "./components/AddressInfoCard";
 import { BusinessInfoCard } from "./components/BusinessInfoCard";
 import { PersonalInfoCard } from "./components/PersonalInfoCard";
 import { ProfileHeader } from "./components/ProfileHeader";
 
-export default function ProfilePage() {
-  const { user, fetchProfile, updateProfile } = useAuthStore();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!user) {
-      fetchProfile();
-    }
-    setIsLoading(false);
-  }, [user, fetchProfile]);
+function ProfileContent() {
+  const { profile, isLoading, updateProfile } = useApiProfile();
+  const [isLocalLoading, setIsLocalLoading] = useState(false);
 
   const handleAvatarUpload = async (file: File) => {
     return new Promise<void>((resolve, reject) => {
@@ -44,7 +37,7 @@ export default function ProfilePage() {
     });
   };
 
-  if (isLoading || !user) {
+  if (isLoading || !profile) {
     return (
       <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center">
         <div className="text-center">
@@ -58,32 +51,40 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50">
       {/* Profile Header with Member Since */}
-      <ProfileHeader user={user} onAvatarUpload={handleAvatarUpload} />
+      <ProfileHeader user={profile} onAvatarUpload={handleAvatarUpload} />
 
       {/* Profile Details */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <div className="grid gap-4 sm:gap-6 md:gap-8">
           {/* Personal Information */}
           <PersonalInfoCard
-            fullName={user.fullName}
-            email={user.email}
-            phone={user.phone}
-            accountType={user.type}
+            fullName={profile.fullName}
+            email={profile.email}
+            phone={profile.phone}
+            accountType={profile.type}
           />
 
           {/* Business Information - Only for business accounts */}
-          {user.type === CustomerType.BUSINESS && (
+          {profile.type === CustomerType.BUSINESS && (
             <BusinessInfoCard
-              companyName={user.companyName}
-              gstIn={user.gstIn}
-              website={user.website}
+              companyName={profile.companyName}
+              gstIn={profile.gstIn}
+              website={profile.website}
             />
           )}
 
           {/* Address Information */}
-          <AddressInfoCard addresses={user.addresses || []} />
+          <AddressInfoCard addresses={profile.addresses || []} />
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <ProfileApiProvider>
+      <ProfileContent />
+    </ProfileApiProvider>
   );
 }

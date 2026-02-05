@@ -1,7 +1,7 @@
 "use client";
 
 import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
-import { SuccessRes } from "@/types/api.payload.types";
+import { GetServerListRes, GetServerRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { createContext, ReactNode, useContext, useMemo } from "react";
 import useSWR, { KeyedMutator, SWRConfig } from "swr";
@@ -16,7 +16,7 @@ interface ProductsApiContextValue {
   isLoading: boolean;
   isValidating: boolean;
   error: Error | undefined;
-  refetch: KeyedMutator<SuccessRes<ProductWithVariantsImagesReviews[]>>;
+  refetch: KeyedMutator<GetServerListRes<ProductWithVariantsImagesReviews[]>>;
 }
 
 interface ProductApiContextValue {
@@ -24,7 +24,7 @@ interface ProductApiContextValue {
   isLoading: boolean;
   isValidating: boolean;
   error: Error | undefined;
-  refetch: KeyedMutator<SuccessRes<ProductWithVariantsImagesReviews>>;
+  refetch: KeyedMutator<GetServerRes<ProductWithVariantsImagesReviews>>;
 }
 
 const ProductsApiContext = createContext<ProductsApiContextValue | undefined>(undefined);
@@ -40,7 +40,7 @@ interface ProductsApiProviderProps {
 
 export function ProductsApiProvider({ children }: ProductsApiProviderProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
-    SuccessRes<ProductWithVariantsImagesReviews[]>
+    GetServerListRes<ProductWithVariantsImagesReviews[]>
   >(PUBLIC_ROUTES.PRODUCTS.LIST, swrFetcher, SWR_CONFIG);
 
   const value = useMemo<ProductsApiContextValue>(
@@ -72,7 +72,7 @@ interface ProductApiProviderProps {
 
 export function ProductApiProvider({ children, productId }: ProductApiProviderProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
-    SuccessRes<ProductWithVariantsImagesReviews>
+    GetServerRes<ProductWithVariantsImagesReviews>
   >(productId ? PUBLIC_ROUTES.PRODUCTS.DETAIL(productId) : null, swrFetcher, SWR_CONFIG);
 
   const value = useMemo<ProductApiContextValue>(

@@ -1,8 +1,9 @@
 "use client";
 
 import { PRIVATE_NAV, UI_LABELS } from "@/lib/constants";
-import { useAuthStore } from "@/store/authStore";
+import { useAuthLoading, useSignOut } from "@/store/authStore";
 import { ChevronDown, LogIn, LogOut, Package, User } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -17,9 +18,11 @@ import {
 export function LoginProfileButton() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, signOut, isLoading } = useAuthStore();
+  const { data: session } = useSession();
+  const isLoading = useAuthLoading();
+  const signOut = useSignOut();
 
-  if (user) {
+  if (session?.user) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -28,10 +31,10 @@ export function LoginProfileButton() {
             title={UI_LABELS.NAV.ACCOUNT_MENU}
             aria-label={UI_LABELS.NAV.ACCOUNT_MENU}
           >
-            {user ? (
+            {session?.user ? (
               <Image
-                src={user?.avatarUrl || ""}
-                alt={user.fullName || user.companyName || UI_LABELS.NAV.USER_AVATAR_ALT}
+                src={session.user.image || ""}
+                alt={session.user.name || UI_LABELS.NAV.USER_AVATAR_ALT}
                 width={16}
                 height={16}
                 className="w-8 h-8 rounded-full object-cover"
@@ -42,7 +45,7 @@ export function LoginProfileButton() {
               </div>
             )}
             <span className="hidden sm:inline text-xs sm:text-sm font-medium">
-              {user.fullName || user.companyName || UI_LABELS.NAV.ACCOUNT}
+              {session.user.name || UI_LABELS.NAV.ACCOUNT}
             </span>
             <ChevronDown className="w-4 h-4" />
           </button>

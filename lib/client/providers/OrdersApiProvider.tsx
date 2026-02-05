@@ -2,7 +2,7 @@
 
 import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { Order } from "@/prisma/generated/prisma/browser";
-import { SuccessRes } from "@/types/api.payload.types";
+import { GetServerListRes, GetServerRes } from "@/types/api.payload.types";
 import { createContext, ReactNode, useContext, useMemo } from "react";
 import useSWR, { KeyedMutator, SWRConfig } from "swr";
 import { swrFetcher } from "../api/axios";
@@ -16,7 +16,7 @@ interface OrdersApiContextValue {
   isLoading: boolean;
   isValidating: boolean;
   error: Error | undefined;
-  refetch: KeyedMutator<SuccessRes<Order[]>>;
+  refetch: KeyedMutator<GetServerListRes<Order[]>>;
 }
 
 interface OrderApiContextValue {
@@ -24,7 +24,7 @@ interface OrderApiContextValue {
   isLoading: boolean;
   isValidating: boolean;
   error: Error | undefined;
-  refetch: KeyedMutator<SuccessRes<Order>>;
+  refetch: KeyedMutator<GetServerRes<Order>>;
 }
 
 const OrdersApiContext = createContext<OrdersApiContextValue | undefined>(undefined);
@@ -39,7 +39,7 @@ interface OrdersApiProviderProps {
 }
 
 export function OrdersApiProvider({ children }: OrdersApiProviderProps) {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<SuccessRes<Order[]>>(
+  const { data, error, isLoading, isValidating, mutate } = useSWR<GetServerListRes<Order[]>>(
     PRIVATE_ROUTES.ORDERS.LIST,
     swrFetcher,
     SWR_CONFIG,
@@ -73,7 +73,7 @@ interface OrderApiProviderProps {
 }
 
 export function OrderApiProvider({ children, orderId }: OrderApiProviderProps) {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<SuccessRes<Order>>(
+  const { data, error, isLoading, isValidating, mutate } = useSWR<GetServerRes<Order>>(
     orderId ? PRIVATE_ROUTES.ORDERS.DETAIL(orderId) : null,
     swrFetcher,
     SWR_CONFIG,

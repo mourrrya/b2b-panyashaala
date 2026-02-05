@@ -4,7 +4,7 @@ import { swrFetcher } from "@/lib/client/api/axios";
 import { UI_LABELS } from "@/lib/constants";
 import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { useBasket, useRemoveFromBasketOptimistic } from "@/store/productStore";
-import { SuccessRes } from "@/types/api.payload.types";
+import { GetServerListRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { ShoppingBag } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -18,7 +18,7 @@ export function BasketButton() {
   const removeFromBasketOptimistic = useRemoveFromBasketOptimistic();
 
   // Fetch products using SWR (deduplicated with ProductsProvider)
-  const { data } = useSWR<SuccessRes<ProductWithVariantsImagesReviews[]>>(
+  const { data } = useSWR<GetServerListRes<ProductWithVariantsImagesReviews[]>>(
     PUBLIC_ROUTES.PRODUCTS.LIST,
     swrFetcher,
     SWR_CONFIG,

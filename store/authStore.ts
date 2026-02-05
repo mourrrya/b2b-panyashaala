@@ -1,15 +1,13 @@
 "use client";
 
-import { apiClient } from "@/lib/client/api/axios";
 import { ERROR_MESSAGES } from "@/lib/constants";
-import { PRIVATE_ROUTES } from "@/lib/constants/routes";
-import { Address, Customer } from "@/prisma/generated/prisma/browser";
-import { SuccessRes } from "@/types/api.payload.types";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
+import { devtools, persist } from "zustand/middleware";
 
-// Types for auth actions
+// =============================================================================
+// TYPES
+// =============================================================================
+
 interface SignInCredentialsParams {
   email: string;
   password: string;
@@ -22,13 +20,7 @@ interface AuthResult {
   error?: string;
 }
 
-type UserData = Customer & {
-  _count?: { orders: number };
-  addresses: Address[];
-};
-
 interface AuthState {
-  user: UserData | null;
   isLoading: boolean;
   isInitialized: boolean;
 }
@@ -39,131 +31,117 @@ interface AuthActions {
   signInWithGoogle: (callbackUrl?: string) => Promise<void>;
   signOut: () => Promise<void>;
 
-  // Profile management
-  fetchProfile: () => Promise<void>;
-  updateProfile: (data: Partial<Customer>) => Promise<AuthResult>;
-
   // State management
   initialize: () => Promise<void>;
-  setUser: (user: UserData | null) => void;
   setLoading: (loading: boolean) => void;
 }
 
 type AuthStore = AuthState & AuthActions;
 
+// =============================================================================
+// STORE
+// =============================================================================
+
 export const useAuthStore = create<AuthStore>()(
   devtools(
-    immer((set, get) => ({
-      user: null,
-      isLoading: false,
-      isInitialized: false,
+    persist(
+      (set, get) => ({
+        // State
+        isLoading: false,
+        isInitialized: false,
 
-      signInWithCredentials: async ({ email, password, isSignUp = false, name }) => {
-        set({ isLoading: true });
-        try {
-          const { signIn } = await import("next-auth/react");
+        // Actions
+        signInWithCredentials: async ({
+          email,
+          password,
+          isSignUp = false,
+          name,
+        }: SignInCredentialsParams) => {
+          set({ isLoading: true });
 
-          const result = await signIn("credentials", {
-            email,
-            password,
-            name: name || "",
-            isSignUp: isSignUp ? "true" : "false",
-            redirect: false,
-          });
+          try {
+            const { signIn } = await import("next-auth/react");
 
-          if (result?.error) {
+            const result = await signIn("credentials", {
+              email,
+              password,
+              name: name || "",
+              isSignUp: isSignUp ? "true" : "false",
+              redirect: false,
+            });
+
+            if (result?.error) {
+              set({ isLoading: false });
+              return { success: false, error: result.error };
+            }
+
             set({ isLoading: false });
-            return { success: false, error: result.error };
-          }
-
-          // Fetch profile after successful sign in
-          await get().fetchProfile();
-          set({ isLoading: false });
-          return { success: true };
-        } catch (error: any) {
-          set({ isLoading: false });
-          return {
-            success: false,
-            error: error?.message || ERROR_MESSAGES.UNEXPECTED,
-          };
-        }
-      },
-
-      signInWithGoogle: async (callbackUrl = "/") => {
-        const { signIn } = await import("next-auth/react");
-        await signIn("google", { callbackUrl });
-      },
-
-      signOut: async () => {
-        set({ isLoading: true });
-        try {
-          const { signOut: authSignOut } = await import("next-auth/react");
-          await authSignOut({ redirect: false });
-          set({ user: null, isLoading: false });
-        } catch (error) {
-          console.error("Sign out error:", error);
-          set({ isLoading: false });
-        }
-      },
-
-      fetchProfile: async () => {
-        try {
-          const response = await apiClient.get<SuccessRes<UserData>>(PRIVATE_ROUTES.PROFILE);
-          if (response.success && response.data) {
-            set({ user: response.data });
-          }
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-        }
-      },
-
-      updateProfile: async (data) => {
-        try {
-          const response = await apiClient.put<SuccessRes<UserData>>(PRIVATE_ROUTES.PROFILE, data);
-
-          if (response.success && response.data) {
-            set({ user: response.data });
             return { success: true };
+          } catch (error: any) {
+            set({ isLoading: false });
+            return {
+              success: false,
+              error: error?.message || ERROR_MESSAGES.UNEXPECTED,
+            };
           }
+        },
 
-          return {
-            success: false,
-            error: ERROR_MESSAGES.PROFILE.UPDATE_FAILED,
-          };
-        } catch (error: any) {
-          return {
-            success: false,
-            error: error?.message || ERROR_MESSAGES.PROFILE.UPDATE_FAILED,
-          };
-        }
-      },
+        signInWithGoogle: async (callbackUrl = "/") => {
+          const { signIn } = await import("next-auth/react");
+          await signIn("google", { callbackUrl });
+        },
 
-      initialize: async () => {
-        if (get().isInitialized) return;
+        signOut: async () => {
+          set({ isLoading: true });
 
-        set({ isLoading: true });
-        try {
-          const { getSession } = await import("next-auth/react");
-          const session = await getSession();
-
-          if (session?.user) {
-            await get().fetchProfile();
+          try {
+            const { signOut: authSignOut } = await import("next-auth/react");
+            await authSignOut({ redirect: false });
+            set({ isLoading: false });
+          } catch (error) {
+            console.error("Sign out error:", error);
+            set({ isLoading: false });
           }
-        } catch (error) {
-          console.error("Auth initialization error:", error);
-        } finally {
-          set({ isLoading: false, isInitialized: true });
-        }
-      },
+        },
 
-      setUser: (user) => set({ user }),
-      setLoading: (loading) => set({ isLoading: loading }),
-    })),
+        initialize: async () => {
+          if (get().isInitialized) return;
+
+          set({ isLoading: true });
+
+          try {
+            const { getSession } = await import("next-auth/react");
+            await getSession();
+          } catch (error) {
+            console.error("Auth initialization error:", error);
+          } finally {
+            set({ isLoading: false, isInitialized: true });
+          }
+        },
+
+        setLoading: (loading: boolean) => {
+          set({ isLoading: loading });
+        },
+      }),
+      {
+        name: "auth-store",
+        // Only persist initialization flag, not loading state
+        partialize: (state) => ({
+          isInitialized: state.isInitialized,
+        }),
+      },
+    ),
     { name: "auth-store" },
   ),
 );
 
-// Selector hooks for common use cases
-export const useUser = () => useAuthStore((state) => state.user);
-export const useIsAuthenticated = () => useAuthStore((state) => !!state.user);
+// =============================================================================
+// SELECTOR HOOKS - Granular subscriptions (follow STORE_ARCHITECTURE pattern)
+// =============================================================================
+
 export const useAuthLoading = () => useAuthStore((state) => state.isLoading);
+export const useAuthInitialized = () => useAuthStore((state) => state.isInitialized);
+export const useSignInWithCredentials = () => useAuthStore((state) => state.signInWithCredentials);
+export const useSignInWithGoogle = () => useAuthStore((state) => state.signInWithGoogle);
+export const useSignOut = () => useAuthStore((state) => state.signOut);
+export const useInitializeAuth = () => useAuthStore((state) => state.initialize);

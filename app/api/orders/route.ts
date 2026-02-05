@@ -1,13 +1,13 @@
 import { protect, ProtectedRequest } from "@/lib/auth/protect";
 import { handleError } from "@/lib/backend/errorHandler";
 import { logger } from "@/lib/backend/logger";
-import type { ErrorServerRes, GetListServerRes } from "@/types/api.payload.types";
+import type { ErrorServerRes, GetServerListRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
 import { getCustomerOrders, OrderWithDetails } from "../services/orderServices";
 
 async function getOrdersHandler(
   request: ProtectedRequest,
-): Promise<NextResponse<GetListServerRes<OrderWithDetails[]> | ErrorServerRes>> {
+): Promise<NextResponse<GetServerListRes<OrderWithDetails[]> | ErrorServerRes>> {
   try {
     const { user } = request.auth;
     const orders = await getCustomerOrders(user.id);

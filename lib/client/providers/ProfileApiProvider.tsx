@@ -2,7 +2,7 @@
 
 import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { Address, Customer } from "@/prisma/generated/prisma/browser";
-import { SuccessRes } from "@/types/api.payload.types";
+import { GetServerRes } from "@/types/api.payload.types";
 import { createContext, ReactNode, useCallback, useContext, useMemo } from "react";
 import useSWR, { KeyedMutator, SWRConfig } from "swr";
 import { apiClient, swrFetcher } from "../api/axios";
@@ -21,8 +21,8 @@ interface ProfileApiContextValue {
   isLoading: boolean;
   isValidating: boolean;
   error: Error | undefined;
-  refetch: KeyedMutator<SuccessRes<ProfileData>>;
-  updateProfile: (data: Partial<Customer>) => Promise<SuccessRes<ProfileData>>;
+  refetch: KeyedMutator<GetServerRes<ProfileData>>;
+  updateProfile: (data: Partial<Customer>) => Promise<GetServerRes<ProfileData>>;
   isUpdating: boolean;
 }
 
@@ -37,7 +37,7 @@ interface ProfileApiProviderProps {
 }
 
 export function ProfileApiProvider({ children }: ProfileApiProviderProps) {
-  const { data, error, isLoading, isValidating, mutate } = useSWR<SuccessRes<ProfileData>>(
+  const { data, error, isLoading, isValidating, mutate } = useSWR<GetServerRes<ProfileData>>(
     PRIVATE_ROUTES.PROFILE,
     swrFetcher,
     SWR_CONFIG,
@@ -45,7 +45,7 @@ export function ProfileApiProvider({ children }: ProfileApiProviderProps) {
 
   const updateProfile = useCallback(
     async (updateData: Partial<Customer>) => {
-      const result = await apiClient.patch<SuccessRes<ProfileData>>(
+      const result = await apiClient.patch<GetServerRes<ProfileData>>(
         PRIVATE_ROUTES.PROFILE,
         updateData,
       );

@@ -2,6 +2,7 @@
 
 import { PRIVATE_NAV, SITE_CONFIG, UI_LABELS } from "@/lib/constants";
 import { LogIn, LogOut, Package, User } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet";
@@ -16,7 +17,6 @@ interface MobileNavProps {
   onOpenChange: (open: boolean) => void;
   pathname: string;
   navLinks: NavLink[];
-  user: { fullName?: string | null; companyName?: string | null } | null;
   isLoading: boolean;
   onSignOut: () => Promise<void>;
   trigger: React.ReactNode;
@@ -27,11 +27,11 @@ export function MobileNav({
   onOpenChange,
   pathname,
   navLinks,
-  user,
   isLoading,
   onSignOut,
   trigger,
 }: MobileNavProps) {
+  const { data: session } = useSession();
   const closeMenu = () => onOpenChange(false);
 
   const handleSignOut = async () => {
@@ -75,7 +75,7 @@ export function MobileNav({
 
           {/* User Actions */}
           <div className="mt-4 px-6 pt-4 border-t border-emerald-100/50">
-            {user ? (
+            {session?.user ? (
               <div className="space-y-2">
                 <Link
                   href={PRIVATE_NAV.PROFILE}

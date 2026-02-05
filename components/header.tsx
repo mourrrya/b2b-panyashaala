@@ -1,7 +1,7 @@
 "use client";
 
 import { SITE_CONFIG, UI_LABELS } from "@/lib/constants";
-import { useAuthStore } from "@/store/authStore";
+import { useAuthLoading, useSignOut } from "@/store/authStore";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +16,8 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, signOut, isLoading } = useAuthStore();
+  const isLoading = useAuthLoading();
+  const signOut = useSignOut();
 
   return (
     <header className="bg-white/90 backdrop-blur border-b border-slate-100 sticky top-0 z-50">
@@ -45,7 +46,7 @@ export function Header() {
             onOpenChange={setMobileMenuOpen}
             pathname={pathname}
             navLinks={[...NAV_LINKS]}
-            user={user}
+            user={null}
             isLoading={isLoading}
             onSignOut={async () => {
               await signOut();

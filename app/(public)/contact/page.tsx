@@ -7,7 +7,7 @@ import { CONTACT_INFO, MARKETING_COPY, UI_LABELS } from "@/lib/constants";
 import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { generateINCI } from "@/lib/productUtils";
 import { useBasket, useClearBasket, useRemoveFromBasketOptimistic } from "@/store/productStore";
-import { SuccessRes } from "@/types/api.payload.types";
+import { GetServerListRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
 import { useMemo } from "react";
@@ -19,7 +19,7 @@ export default function ContactPage() {
   const clearBasket = useClearBasket();
 
   // Fetch products using SWR
-  const { data } = useSWR<SuccessRes<ProductWithVariantsImagesReviews[]>>(
+  const { data } = useSWR<GetServerListRes<ProductWithVariantsImagesReviews[]>>(
     PUBLIC_ROUTES.PRODUCTS.LIST,
     swrFetcher,
     SWR_CONFIG,

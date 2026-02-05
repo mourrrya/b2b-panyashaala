@@ -4,7 +4,7 @@ import { swrFetcher } from "@/lib/client/api/axios";
 import { PRIVATE_NAV, UI_LABELS } from "@/lib/constants";
 import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { GST_SLAB_PERCENT_MAP } from "@/lib/utils";
-import { SuccessRes } from "@/types/api.payload.types";
+import { GetServerRes } from "@/types/api.payload.types";
 import { OrderItemDetails, OrderWithDetails } from "@/types/order";
 import {
   ArrowLeft,
@@ -331,7 +331,7 @@ export default function OrderDetailPage() {
   const orderId = params.id as string;
 
   // Fetch order using SWR
-  const { data, isLoading, error, mutate } = useSWR<SuccessRes<OrderWithDetails>>(
+  const { data, isLoading, error, mutate } = useSWR<GetServerRes<OrderWithDetails>>(
     orderId ? PRIVATE_ROUTES.ORDERS.DETAIL(orderId) : null,
     swrFetcher,
     SWR_CONFIG,

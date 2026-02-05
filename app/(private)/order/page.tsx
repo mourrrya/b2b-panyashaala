@@ -3,7 +3,7 @@
 import { swrFetcher } from "@/lib/client/api/axios";
 import { UI_LABELS } from "@/lib/constants";
 import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
-import { SuccessRes } from "@/types/api.payload.types";
+import { GetServerListRes } from "@/types/api.payload.types";
 import { OrderWithDetails } from "@/types/order";
 import { Calendar, ChevronRight, Download, Package, ShoppingBag } from "lucide-react";
 import Link from "next/link";
@@ -235,7 +235,7 @@ function LoadingState() {
 
 export default function OrdersPage() {
   // Fetch orders using SWR
-  const { data, isLoading, error } = useSWR<SuccessRes<OrderWithDetails[]>>(
+  const { data, isLoading, error } = useSWR<GetServerListRes<OrderWithDetails[]>>(
     PRIVATE_ROUTES.ORDERS.LIST,
     swrFetcher,
     SWR_CONFIG,

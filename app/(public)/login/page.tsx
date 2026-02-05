@@ -1,7 +1,7 @@
 "use client";
 
 import { ERROR_MESSAGES } from "@/lib/constants";
-import { useAuthStore } from "@/store/authStore";
+import { useAuthLoading, useSignInWithCredentials, useSignInWithGoogle } from "@/store/authStore";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -26,7 +26,9 @@ function AuthContent() {
   const redirectUrl = searchParams.get("redirect") || "/";
   const errorFromUrl = searchParams.get("error");
 
-  const { signInWithCredentials, signInWithGoogle, isLoading } = useAuthStore();
+  const signInWithCredentials = useSignInWithCredentials();
+  const signInWithGoogle = useSignInWithGoogle();
+  const isLoading = useAuthLoading();
 
   const [mode, setMode] = useState<AuthMode>("signin");
   const [showPassword, setShowPassword] = useState(false);
