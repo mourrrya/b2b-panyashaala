@@ -17,7 +17,8 @@
     "db:status": "npx prisma migrate status",
     "db:migrate": "npx prisma migrate dev --create-only",
     "db:migrate:deploy": "npx prisma migrate deploy && pnpm sync-prisma",
-    "sync-prisma": "powershell -Command \"robocopy prisma 'Z:\\\\Aukra\\\\bhandaar\\\\prisma' /E /PURGE; robocopy prisma 'Z:\\\\Aukra\\\\panyashaala\\\\prisma' /E /PURGE; Write-Host 'Sync completed successfully'\""
+    "sync-prisma": "powershell -Command \"robocopy prisma 'Z:\\\\Aukra\\\\bhandaar\\\\prisma' /E /PURGE; robocopy prisma 'Z:\\\\Aukra\\\\panyashaala\\\\prisma' /E /PURGE; Write-Host 'Sync completed successfully'\"",
+    "prepare": "husky"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
@@ -64,6 +65,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "baseline-browser-mapping": "^2.9.19",
+    "husky": "^9.1.7",
     "postcss": "^8.5",
     "shadcn": "^3.8.2",
     "tailwindcss": "^4.1.18",
