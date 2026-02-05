@@ -52,7 +52,7 @@ export const useProductStore = create<ProductStore>()(
       immer((set, get) => ({
         basket: [], // Will be hydrated from localStorage by persist middleware
         searchTerm: "",
-        selectedCategory: null,
+        // selectedCategory: null,
         selectedApplication: null,
         isBasketDrawerOpen: false,
         basketPendingOperations: new Set(),
