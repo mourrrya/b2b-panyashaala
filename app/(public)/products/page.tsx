@@ -1,4 +1,3 @@
-import { ProductsApiProvider } from "@/lib/client/providers/ProductsApiProvider";
 import { UI_LABELS } from "@/lib/constants";
 import { PAGE_SEO } from "@/lib/constants/seo";
 import { createBreadcrumbSchema, createMetadata, JsonLd } from "@/lib/seo";
@@ -21,9 +20,7 @@ export default function ProductsPage() {
   return (
     <>
       <JsonLd schema={createBreadcrumbSchema(breadcrumbItems)} />
-      <ProductsApiProvider>
-        <ProductsClient />
-      </ProductsApiProvider>
+      <ProductsClient />
     </>
   );
 }

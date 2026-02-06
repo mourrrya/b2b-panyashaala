@@ -66,3 +66,18 @@ export const STORAGE_CONFIG = {
 export const STORE_CONFIG = {
   OPTIMISTIC_UPDATE_DELAY: 100,
 } as const;
+
+// =============================================================================
+// PAGINATION CONFIGURATION
+// =============================================================================
+
+export const PAGINATION_CONFIG = {
+  /** Number of products to load per page */
+  PRODUCTS_PER_PAGE: 12,
+  /** Debounce delay (ms) for search input before triggering API call */
+  SEARCH_DEBOUNCE_MS: 400,
+  /** Intersection observer threshold for infinite scroll trigger */
+  SCROLL_THRESHOLD: 0.1,
+  /** Distance from the bottom (in pixels) to trigger next page load */
+  SCROLL_ROOT_MARGIN: "200px",
+} as const;

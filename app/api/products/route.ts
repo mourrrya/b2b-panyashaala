@@ -13,8 +13,12 @@ async function getProductsController(
     const { searchParams } = new URL(request.url);
     const validation = validateQueryParams(searchParams, ProductFiltersQuerySchema);
     const filters = validation.data;
-    const products = await getProducts(filters);
-    return NextResponse.json({ data: products, success: true });
+    const result = await getProducts(filters);
+    return NextResponse.json({
+      data: result.products,
+      success: true,
+      pagination: result.pagination,
+    });
   } catch (error) {
     return handleError(error);
   }

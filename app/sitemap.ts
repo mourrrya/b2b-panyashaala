@@ -1,6 +1,5 @@
 import { getProducts } from "@/app/api/services/productServices";
 import { SITE_URL } from "@/lib/seo";
-import type { Product } from "@/types/product";
 import type { MetadataRoute } from "next";
 
 export const revalidate = 86400; // Revalidate once per day (24 hours)
@@ -46,9 +45,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic product routes
-  const products: Product[] = await getProducts({});
-  const productRoutes: MetadataRoute.Sitemap = products.map((product: Product) => ({
+  // Dynamic product routes - fetch all for sitemap
+  const result = await getProducts({ limit: 1000 });
+  const productRoutes: MetadataRoute.Sitemap = result.products.map((product) => ({
     url: `${SITE_URL}/products/${product.id}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,

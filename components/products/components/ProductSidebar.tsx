@@ -1,9 +1,5 @@
 "use client";
-import {
-  useAddToBasketOptimistic,
-  useBasket,
-  useRemoveFromBasketOptimistic,
-} from "@/store/productStore";
+import { useAddToBasket, useBasket, useRemoveFromBasket } from "@/store/productStore";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -14,15 +10,15 @@ interface ProductSidebarProps {
 
 export function ProductSidebar({ product }: ProductSidebarProps) {
   const basket = useBasket();
-  const addToBasketOptimistic = useAddToBasketOptimistic();
-  const removeFromBasketOptimistic = useRemoveFromBasketOptimistic();
+  const addToBasket = useAddToBasket();
+  const removeFromBasket = useRemoveFromBasket();
   const isInBasket = basket.includes(product.id);
 
   const handleEnquiryToggle = () => {
     if (isInBasket) {
-      removeFromBasketOptimistic(product.id);
+      removeFromBasket(product.id);
     } else {
-      addToBasketOptimistic(product.id);
+      addToBasket(product.id);
     }
   };
 

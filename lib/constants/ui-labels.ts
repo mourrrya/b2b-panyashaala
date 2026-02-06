@@ -221,8 +221,7 @@ export const UI_LABELS = {
     EMAIL: "Email",
     PHONE: "Phone",
     RESPONSE_TIME: "Response Time",
-    RESPONSE_MESSAGE:
-      "We typically respond to inquiries within 24 business hours.",
+    RESPONSE_MESSAGE: "We typically respond to inquiries within 24 business hours.",
   },
 
   // Breadcrumb labels
@@ -267,8 +266,7 @@ export const UI_LABELS = {
     SUBTITLE:
       "Explore our curated ingredient combinations designed for specific applications and product categories",
     CTA_TITLE: "Need personalized ingredient recommendations?",
-    CTA_SUBTITLE:
-      "Our sourcing specialists are ready to help you create the perfect formulation",
+    CTA_SUBTITLE: "Our sourcing specialists are ready to help you create the perfect formulation",
     CALL_LABEL: "Call",
     SEND_ENQUIRY: "Send Enquiry",
     NO_RESULTS: "No applications found matching your search.",

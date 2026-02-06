@@ -3,11 +3,11 @@
 import { swrFetcher } from "@/lib/client/api/axios";
 import { UI_LABELS } from "@/lib/constants";
 import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
-import { useBasket, useRemoveFromBasketOptimistic } from "@/store/productStore";
+import { useBasket, useRemoveFromBasket, useRemoveMultipleFromBasket } from "@/store/productStore";
 import { GetServerListRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { ShoppingBag } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { Basket } from "../BasketDrawer";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
@@ -15,22 +15,45 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../u
 export function BasketButton() {
   const [basketDrawerOpen, setBasketDrawerOpen] = useState(false);
   const basket = useBasket();
-  const removeFromBasketOptimistic = useRemoveFromBasketOptimistic();
+  const removeFromBasket = useRemoveFromBasket();
+  const removeMultipleFromBasket = useRemoveMultipleFromBasket();
 
-  // Fetch products using SWR (deduplicated with ProductsProvider)
-  const { data } = useSWR<GetServerListRes<ProductWithVariantsImagesReviews[]>>(
-    PUBLIC_ROUTES.PRODUCTS.LIST,
-    swrFetcher,
-    SWR_CONFIG,
-  );
+  // Only fetch when the drawer is open AND there are basket items
+  const basketIdsKey =
+    basketDrawerOpen && basket.length > 0
+      ? PUBLIC_ROUTES.PRODUCTS.PAGINATED({
+          ids: basket.map(String),
+          limit: 100,
+        })
+      : null;
 
-  const basketProducts = useMemo(
-    () => (data?.data ?? []).filter((product) => basket.includes(product.id)),
-    [data?.data, basket],
-  );
+  const { data, isLoading: isLoadingBasket } = useSWR<
+    GetServerListRes<ProductWithVariantsImagesReviews[]>
+  >(basketIdsKey, swrFetcher, {
+    ...SWR_CONFIG,
+    revalidateOnFocus: false,
+  });
+
+  // Validate basket against server response — remove unavailable products
+  useEffect(() => {
+    if (!data?.data || !basketDrawerOpen) return;
+
+    const returnedIds = new Set(data.data.map((p) => String(p.id)));
+    const unavailableIds = basket.filter((id) => !returnedIds.has(String(id)));
+
+    if (unavailableIds.length > 0) {
+      removeMultipleFromBasket(unavailableIds);
+    }
+  }, [data, basketDrawerOpen, basket, removeMultipleFromBasket]);
+
+  const basketProducts = useMemo(() => data?.data ?? [], [data?.data]);
+
+  const handleOpenChange = useCallback((open: boolean) => {
+    setBasketDrawerOpen(open);
+  }, []);
 
   return (
-    <Sheet open={basketDrawerOpen} onOpenChange={setBasketDrawerOpen}>
+    <Sheet open={basketDrawerOpen} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
         <button
           className="relative cursor-pointer inline-flex items-center gap-1.5 sm:gap-2 text-emerald-800 hover:text-emerald-700 transition-colors group focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
@@ -60,8 +83,9 @@ export function BasketButton() {
         <Basket
           basketProducts={basketProducts}
           basketLength={basket.length}
-          removeFromBasket={removeFromBasketOptimistic}
+          removeFromBasket={removeFromBasket}
           setBasketDrawerOpen={setBasketDrawerOpen}
+          isLoading={isLoadingBasket && basket.length > 0}
         />
       </SheetContent>
     </Sheet>

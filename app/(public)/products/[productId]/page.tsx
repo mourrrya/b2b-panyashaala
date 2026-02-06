@@ -62,7 +62,7 @@ export default async function ProductDetailPage({
 }) {
   const { productId } = await params;
   const productDb: ProductWithVariantsImagesReviews = await getProductById(productId.toString());
-  const allProductsDb = await getProducts({});
+  const allProductsResult = await getProducts({});
 
   console.log("Fetched product from DB:", productDb);
 
@@ -98,7 +98,7 @@ export default async function ProductDetailPage({
       </section>
 
       <RelatedProducts
-        products={allProductsDb}
+        products={allProductsResult.products}
         currentProduct={productDb}
         categoryLabel={categoryLabel}
       />

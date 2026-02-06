@@ -1,9 +1,11 @@
 "use client";
 
-import { PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
+import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
+import { PAGINATION_CONFIG, PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
 import {
   useSearchTerm,
   useSelectedCategory,
+  useSetDebouncedSearchTerm,
   useSetSearchTerm,
   useSetSelectedCategory,
 } from "@/store/productStore";
@@ -21,7 +23,18 @@ export function ProductFilters({ filteredProductsCount, totalProductsCount }: Pr
   const searchTerm = useSearchTerm();
   const selectedCategory = useSelectedCategory();
   const setSearchTerm = useSetSearchTerm();
+  const setDebouncedSearchTerm = useSetDebouncedSearchTerm();
   const setSelectedCategory = useSetSelectedCategory();
+
+  // Debounced setter for the API-facing search term
+  const debouncedSetSearch = useDebouncedCallback((value: string) => {
+    setDebouncedSearchTerm(value);
+  }, PAGINATION_CONFIG.SEARCH_DEBOUNCE_MS);
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value); // Instant UI update
+    debouncedSetSearch(value); // Debounced API trigger
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,7 +59,7 @@ export function ProductFilters({ filteredProductsCount, totalProductsCount }: Pr
               type="text"
               placeholder={UI_LABELS.PLACEHOLDERS.SEARCH_PRODUCTS}
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-9 sm:pl-10 border border-slate-200 rounded-lg text-sm sm:text-base text-slate-900 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
             />
             <Search className="absolute left-2.5 sm:left-3 top-3 sm:top-3.5 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />

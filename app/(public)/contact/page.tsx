@@ -6,7 +6,7 @@ import { swrFetcher } from "@/lib/client/api/axios";
 import { CONTACT_INFO, MARKETING_COPY, UI_LABELS } from "@/lib/constants";
 import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { generateINCI } from "@/lib/productUtils";
-import { useBasket, useClearBasket, useRemoveFromBasketOptimistic } from "@/store/productStore";
+import { useBasket, useClearBasket, useRemoveFromBasket } from "@/store/productStore";
 import { GetServerListRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
@@ -15,21 +15,25 @@ import useSWR from "swr";
 
 export default function ContactPage() {
   const basket = useBasket();
-  const removeFromBasketOptimistic = useRemoveFromBasketOptimistic();
+  const removeFromBasket = useRemoveFromBasket();
   const clearBasket = useClearBasket();
 
-  // Fetch products using SWR
+  // Fetch only basket products using SWR with product IDs
+  const basketKey =
+    basket.length > 0
+      ? PUBLIC_ROUTES.PRODUCTS.PAGINATED({
+          ids: basket.map(String),
+          limit: 100,
+        })
+      : null;
+
   const { data } = useSWR<GetServerListRes<ProductWithVariantsImagesReviews[]>>(
-    PUBLIC_ROUTES.PRODUCTS.LIST,
+    basketKey,
     swrFetcher,
     SWR_CONFIG,
   );
 
-  const products = data?.data ?? [];
-
-  const basketProducts = useMemo(() => {
-    return products.filter((product) => basket.includes(product.id));
-  }, [products, basket]);
+  const basketProducts = useMemo(() => data?.data ?? [], [data?.data]);
 
   const basketLength = basket.length;
 
@@ -218,7 +222,7 @@ export default function ContactPage() {
                           </p>
                         </div>
                         <button
-                          onClick={() => removeFromBasketOptimistic(product.id)}
+                          onClick={() => removeFromBasket(product.id)}
                           className="shrink-0 p-1 rounded-md hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors"
                           title={UI_LABELS.BASKET.REMOVE_FROM_ENQUIRY}
                         >

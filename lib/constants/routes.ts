@@ -22,6 +22,25 @@ export const PUBLIC_ROUTES = {
   PRODUCTS: {
     LIST: "/products",
     DETAIL: (id: string | number) => `/products/${id}`,
+    PAGINATED: (params?: {
+      page?: number;
+      limit?: number;
+      search?: string;
+      category?: string;
+      usage?: string;
+      ids?: string[];
+    }) => {
+      if (!params) return "/products";
+      const query = new URLSearchParams();
+      if (params.page) query.set("page", String(params.page));
+      if (params.limit) query.set("limit", String(params.limit));
+      if (params.search) query.set("search", params.search);
+      if (params.category) query.set("category", params.category);
+      if (params.usage) query.set("usage", params.usage);
+      if (params.ids?.length) query.set("ids", params.ids.join(","));
+      const qs = query.toString();
+      return qs ? `/products?${qs}` : "/products";
+    },
   },
 
   // Services
