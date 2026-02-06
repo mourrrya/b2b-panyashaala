@@ -19,7 +19,7 @@ export const AUTH_CONFIG = {
   },
 
   /** Protected routes that require authentication */
-  PROTECTED_ROUTES: ["/profile"],
+  PROTECTED_ROUTES: ["/profile", "/orders"],
 
   /** Auth routes that redirect if already logged in */
   AUTH_ROUTES: ["/login"],
