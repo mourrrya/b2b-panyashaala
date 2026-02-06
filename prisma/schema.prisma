@@ -10,23 +10,23 @@ datasource db {
 model Product {
   id                 String              @id @default(uuid())
   name               String
-  purityType         ProductPurityType
+  purityType         ProductPurityType   @map("purity_type")
   category           ProductCategory
   description        String?
-  botanicalName      String?
-  extractionMethod   ExtractionMethod?
-  chemicalFormula    String?
-  casNumber          String?
-  hazardClass        HazardClass?
+  botanicalName      String?             @map("botanical_name")
+  extractionMethod   ExtractionMethod?   @map("extraction_method")
+  chemicalFormula    String?             @map("chemical_formula")
+  casNumber          String?             @map("cas_number")
+  hazardClass        HazardClass?        @map("hazard_class")
   supplier           String
   certifications     CertificationType[]
-  storageConditions  String?
-  gstSlab            GstSlab
-  HSNCode            String
-  standardLabResults Json?
-  isDeleted          Boolean             @default(false)
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
+  storageConditions  String?             @map("storage_conditions")
+  gstSlab            GstSlab             @map("gst_slab")
+  hsnCode            String              @map("hsn_code")
+  standardLabResults Json?               @map("standard_lab_results")
+  isDeleted          Boolean             @default(false) @map("is_deleted")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
   variants           Variant[]
 
   @@unique([name, purityType])
@@ -35,22 +35,22 @@ model Product {
 
 model Variant {
   id                    String                 @id @default(uuid())
-  productId             String
-  variantName           String                 @unique
+  productId             String                 @map("product_id")
+  variantName           String                 @unique @map("variant_name")
   description           String?
-  netContent            Decimal                @db.Decimal(10, 2)
-  measurementUnit       MeasurementUnit
+  netContent            Decimal                @map("net_content") @db.Decimal(10, 2)
+  measurementUnit       MeasurementUnit        @map("measurement_unit")
   concentration         Decimal?               @db.Decimal(5, 2)
   packaging             PackagingType?
-  retailPrice           Decimal                @db.Decimal(10, 2)
-  wholesalePrice        Decimal                @db.Decimal(10, 2)
-  costPrice             Decimal                @db.Decimal(10, 2)
-  quantityAvailable     Int                    @default(0)
-  minStockLevel         Int?
-  shelfLife             Int?
-  isDeleted             Boolean                @default(false)
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
+  retailPrice           Decimal                @map("retail_price") @db.Decimal(10, 2)
+  wholesalePrice        Decimal                @map("wholesale_price") @db.Decimal(10, 2)
+  costPrice             Decimal                @map("cost_price") @db.Decimal(10, 2)
+  quantityAvailable     Int                    @default(0) @map("quantity_available")
+  minStockLevel         Int?                   @map("min_stock_level")
+  shelfLife             Int?                   @map("shelf_life")
+  isDeleted             Boolean                @default(false) @map("is_deleted")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
   benefits              String[]
   ingredients           String[]
   usage                 String
@@ -67,20 +67,20 @@ model Variant {
 
 model Batch {
   id                    String                 @id @default(uuid())
-  batchNumber           String                 @unique
-  variantId             String
+  batchNumber           String                 @unique @map("batch_number")
+  variantId             String                 @map("variant_id")
   purchaseOrderId       String?                @map("purchase_order_id")
   quantity              Int
-  costPrice             Decimal                @db.Decimal(10, 2)
-  manufactureDate       DateTime
-  expiryDate            DateTime
-  analysisDate          DateTime?
-  labResults            Json?
+  costPrice             Decimal                @map("cost_price") @db.Decimal(10, 2)
+  manufactureDate       DateTime               @map("manufacture_date")
+  expiryDate            DateTime               @map("expiry_date")
+  analysisDate          DateTime?              @map("analysis_date")
+  labResults            Json?                  @map("lab_results")
   status                BatchStatus            @default(QUARANTINE)
   notes                 String?
-  isDeleted             Boolean                @default(false)
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
+  isDeleted             Boolean                @default(false) @map("is_deleted")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
   variant               Variant                @relation(fields: [variantId], references: [id], onDelete: Cascade)
   purchaseOrder         PurchaseOrder?         @relation(fields: [purchaseOrderId], references: [id], onDelete: SetNull)
   inventoryTransactions InventoryTransaction[]
@@ -122,11 +122,11 @@ model InventoryTransaction {
 
 model Review {
   id         String   @id @default(uuid())
-  variantId  String
+  variantId  String   @map("variant_id")
   customerId String   @map("customer_id")
   rating     Int
   comment    String?
-  createdAt  DateTime @default(now())
+  createdAt  DateTime @default(now()) @map("created_at")
   variant    Variant  @relation(fields: [variantId], references: [id])
   customer   Customer @relation(fields: [customerId], references: [id])
 
@@ -138,10 +138,10 @@ model Image {
   url       String
   alt       String?
   order     Int      @default(0)
-  variantId String
-  createdAt DateTime @default(now())
-  isDeleted Boolean  @default(false)
-  updatedAt DateTime @default(now()) @updatedAt
+  variantId String   @map("variant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
   variant   Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@map("images")
@@ -184,13 +184,13 @@ model CustomerAccount {
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
+  refreshToken      String? @map("refresh_token") @db.Text
+  accessToken       String? @map("access_token") @db.Text
+  expiresAt         Int?    @map("expires_at")
+  tokenType         String? @map("token_type")
   scope             String?
-  id_token          String? @db.Text
-  session_state     String?
+  idToken           String? @map("id_token") @db.Text
+  sessionState      String? @map("session_state")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -250,7 +250,7 @@ model OrderItem {
   netContent      Decimal         @map("net_content") @db.Decimal(10, 2)
   measurementUnit MeasurementUnit @map("measurement_unit")
   productCategory ProductCategory @map("product_category")
-  unitPrice       Decimal         @db.Decimal(10, 2)
+  unitPrice       Decimal         @map("unit_price") @db.Decimal(10, 2)
   gstSlab         GstSlab         @map("gst_slab")
   hsnCode         String          @map("hsn_code")
   batchNumber     String          @map("batch_number")
