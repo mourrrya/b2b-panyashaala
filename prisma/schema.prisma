@@ -14,6 +14,7 @@ model Product {
   category           ProductCategory
   description        String?
   botanicalName      String?             @map("botanical_name")
+  inciName           String?             @map("inci_name")
   extractionMethod   ExtractionMethod?   @map("extraction_method")
   chemicalFormula    String?             @map("chemical_formula")
   casNumber          String?             @map("cas_number")

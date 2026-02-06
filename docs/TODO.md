@@ -1,9 +1,3 @@
-**Product Page Issues**
-
-- Add pagination
-- Add infinite pagination
-- Add Skeleton loader
-- Update Basket logic
-- Update client to server side filtering and searching
+**Fix Prisma Deploy on Production vercel before merge to master**
 
 **URL upload for Profile image**
