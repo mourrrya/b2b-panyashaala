@@ -30,4 +30,4 @@ export interface Application {
 /**
  * Re-export constants that may be needed elsewhere
  */
-export { PRODUCT_CATEGORIES, PRODUCT_CATEGORY_DESCRIPTIONS } from "./index";
+export { PRODUCT_CATEGORY_DESCRIPTIONS, PRODUCT_CATEGORY_LABELS } from "./index";

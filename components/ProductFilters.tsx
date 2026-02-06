@@ -1,7 +1,9 @@
 "use client";
 
-import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
-import { PAGINATION_CONFIG, PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
+import { CategorySkeletonLoader } from "@/components/SkeletonLoader";
+import { debounce } from "@/lib/client/debounce";
+import { useApiCategories } from "@/lib/client/providers/CategoriesApiProvider";
+import { PAGINATION_CONFIG, PRODUCT_CATEGORY_LABELS, UI_LABELS } from "@/lib/constants";
 import {
   useSearchTerm,
   useSelectedCategory,
@@ -26,8 +28,10 @@ export function ProductFilters({ filteredProductsCount, totalProductsCount }: Pr
   const setDebouncedSearchTerm = useSetDebouncedSearchTerm();
   const setSelectedCategory = useSetSelectedCategory();
 
+  const { categories, isLoading: categoriesLoading } = useApiCategories();
+
   // Debounced setter for the API-facing search term
-  const debouncedSetSearch = useDebouncedCallback((value: string) => {
+  const debouncedSetSearch = debounce((value: string) => {
     setDebouncedSearchTerm(value);
   }, PAGINATION_CONFIG.SEARCH_DEBOUNCE_MS);
 
@@ -78,19 +82,24 @@ export function ProductFilters({ filteredProductsCount, totalProductsCount }: Pr
           >
             All Products
           </button>
-          {PRODUCT_CATEGORIES.map((cat) => (
-            <button
-              key={cat.value}
-              onClick={() => setSelectedCategory(cat.value)}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
-                selectedCategory === cat.value
-                  ? "bg-emerald-800 text-white"
-                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+
+          {categoriesLoading ? (
+            <CategorySkeletonLoader count={4} />
+          ) : (
+            categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                  selectedCategory === category
+                    ? "bg-emerald-800 text-white"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                }`}
+              >
+                {PRODUCT_CATEGORY_LABELS[category]}
+              </button>
+            ))
+          )}
         </div>
 
         <p className="text-xs sm:text-sm text-slate-600">

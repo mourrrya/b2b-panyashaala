@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { ProductCardSkeleton, ProductGridSkeleton } from "@/components/ProductCardSkeleton";
 import { ProductFilters } from "@/components/ProductFilters";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
+import { CategoriesApiProvider } from "@/lib/client/providers/CategoriesApiProvider";
 import { ProductsApiProvider, useApiProducts } from "@/lib/client/providers/ProductsApiProvider";
 import { UI_LABELS } from "@/lib/constants";
 import {
@@ -25,9 +26,11 @@ export function ProductsClient() {
   const selectedCategory = useSelectedCategory();
 
   return (
-    <ProductsApiProvider search={debouncedSearch || undefined} category={selectedCategory}>
-      <ProductsClientInner />
-    </ProductsApiProvider>
+    <CategoriesApiProvider>
+      <ProductsApiProvider search={debouncedSearch || undefined} category={selectedCategory}>
+        <ProductsClientInner />
+      </ProductsApiProvider>
+    </CategoriesApiProvider>
   );
 }
 

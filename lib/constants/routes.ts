@@ -43,6 +43,9 @@ export const PUBLIC_ROUTES = {
     },
   },
 
+  // Categories
+  CATEGORIES: "/categories",
+
   // Services
   SERVICES: "/services",
 

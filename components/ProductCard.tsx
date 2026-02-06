@@ -1,4 +1,4 @@
-import { PRODUCT_CATEGORIES, UI_LABELS } from "@/lib/constants";
+import { PRODUCT_CATEGORY_LABELS, UI_LABELS } from "@/lib/constants";
 import { generateApplications, generateINCI } from "@/lib/productUtils";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import { Check } from "lucide-react";
@@ -23,7 +23,7 @@ export function ProductCard({ product, basket, addToBasket, removeFromBasket }: 
           </h3>
         </Link>
         <span className="text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-medium whitespace-nowrap shrink-0">
-          {PRODUCT_CATEGORIES.find((c) => c.value === (product.category as string))?.label}
+          {PRODUCT_CATEGORY_LABELS[product.category]}
         </span>
       </div>
       <p className="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 line-clamp-3">

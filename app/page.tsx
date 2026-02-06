@@ -2,8 +2,8 @@ import {
   BUSINESS_INFO,
   FEATURE_HIGHLIGHTS,
   MARKETING_COPY,
-  PRODUCT_CATEGORIES,
   PRODUCT_CATEGORY_DESCRIPTIONS,
+  PRODUCT_CATEGORY_LABELS,
   UI_LABELS,
 } from "@/lib/constants";
 import { PAGE_SEO } from "@/lib/constants/seo";
@@ -99,7 +99,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8 sm:mb-10">
             <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-emerald-50 border border-emerald-100 card-hover">
               <h3 className="text-base sm:text-lg font-semibold text-emerald-900">
-                {PRODUCT_CATEGORIES[0].label}
+                {PRODUCT_CATEGORY_LABELS.ESSENTIAL_OIL}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
                 {PRODUCT_CATEGORY_DESCRIPTIONS.ESSENTIAL_OIL}
@@ -107,7 +107,7 @@ export default function Home() {
             </div>
             <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-teal-50 border border-emerald-100 card-hover">
               <h3 className="text-base sm:text-lg font-semibold text-emerald-900">
-                {PRODUCT_CATEGORIES[1].label}
+                {PRODUCT_CATEGORY_LABELS.FIXED_OIL}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
                 {PRODUCT_CATEGORY_DESCRIPTIONS.FIXED_OIL}
@@ -115,7 +115,7 @@ export default function Home() {
             </div>
             <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-lime-50 border border-emerald-100 card-hover">
               <h3 className="text-base sm:text-lg font-semibold text-emerald-900">
-                {PRODUCT_CATEGORIES[2].label}
+                {PRODUCT_CATEGORY_LABELS.EXTRACT}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
                 {PRODUCT_CATEGORY_DESCRIPTIONS.EXTRACT}
@@ -123,7 +123,7 @@ export default function Home() {
             </div>
             <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-yellow-50 border border-emerald-100 card-hover">
               <h3 className="text-base sm:text-lg font-semibold text-emerald-900">
-                {PRODUCT_CATEGORIES[3].label}
+                {PRODUCT_CATEGORY_LABELS.HYDROSOL}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2">
                 {PRODUCT_CATEGORY_DESCRIPTIONS.HYDROSOL}
