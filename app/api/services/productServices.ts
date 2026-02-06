@@ -84,7 +84,7 @@ export async function getProducts(filters: ProductFiltersInput): Promise<Paginat
             },
           },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ createdAt: "desc" }, { id: "asc" }],
         skip,
         take: limit,
       }),

@@ -124,6 +124,11 @@ function ProductsClientInner() {
           )}
 
           {/* End of results */}
+          {hasMore && products.length > 0 && (
+            <p className="text-center text-xs text-slate-400 pt-6 pb-2">
+              Showing {products.length} of {totalProducts} products
+            </p>
+          )}
           {!hasMore && products.length > 0 && (
             <p className="text-center text-xs text-slate-400 pt-6 pb-2">
               Showing all {products.length} of {totalProducts} products
