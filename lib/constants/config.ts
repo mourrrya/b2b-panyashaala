@@ -78,3 +78,11 @@ export const VERIFICATION_TOKENS = {
   googleSiteVerification: "YOUR_GOOGLE_VERIFICATION_TOKEN",
   bingMsvalidate: "YOUR_BING_VERIFICATION_TOKEN",
 } as const;
+
+export const IMG_CONFIG = {
+  AVATAR: {
+    ALLOWED_FILE_TYPES: ["image/png", "image/jpeg", "image/jpg", "image/webp"],
+    MAX_FILE_SIZE: 200 * 1024, // 200KB in bytes
+    ACCEPTED_EXTENSIONS: ".png,.jpg,.jpeg,.webp",
+  },
+} as const;

@@ -86,3 +86,10 @@ export const SWR_CONFIG: SWRConfiguration = {
   errorRetryInterval: 5000,
   shouldRetryOnError: true,
 };
+
+export const TURNSTILE_CONFIG = {
+  VERIFY_URL: "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+  TEST_TOKEN_PREFIX: "test-token-",
+  PLACEHOLDER_KEY: "your_turnstile_site_key",
+  PLACEHOLDER_SECRET: "your_turnstile_secret_key",
+} as const;

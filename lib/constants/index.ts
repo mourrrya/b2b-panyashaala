@@ -15,8 +15,8 @@ export * from "./navigation";
 // Product categories and descriptions
 export * from "./products";
 
-// Authentication & API configuration
-export * from "./auth";
+// Authentication & API route configuration
+export * from "./routes";
 
 // Error and success messages
 export * from "./messages";

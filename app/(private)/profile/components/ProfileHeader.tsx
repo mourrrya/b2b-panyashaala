@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  AUTH_CONFIG,
   ERROR_MESSAGES,
+  IMG_CONFIG,
   PRIVATE_NAV,
   SUCCESS_MESSAGES,
   UI_LABELS,
@@ -25,12 +25,12 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
 
   const validateFile = (file: File): string | null => {
     // Check file type
-    if (!AUTH_CONFIG.AVATAR.ALLOWED_FILE_TYPES.includes(file.type as any)) {
+    if (!IMG_CONFIG.AVATAR.ALLOWED_FILE_TYPES.includes(file.type as any)) {
       return ERROR_MESSAGES.FILE.INVALID_TYPE;
     }
 
     // Check file size
-    if (file.size > AUTH_CONFIG.AVATAR.MAX_FILE_SIZE) {
+    if (file.size > IMG_CONFIG.AVATAR.MAX_FILE_SIZE) {
       return `${ERROR_MESSAGES.FILE.SIZE_EXCEEDED} Your file is ${(file.size / 1024).toFixed(2)}KB`;
     }
 
@@ -94,7 +94,7 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
               <Camera className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
               <input
                 type="file"
-                accept={AUTH_CONFIG.AVATAR.ACCEPTED_EXTENSIONS}
+                accept={IMG_CONFIG.AVATAR.ACCEPTED_EXTENSIONS}
                 onChange={handleFileChange}
                 disabled={uploadingAvatar}
                 className="hidden"
