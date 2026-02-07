@@ -2,7 +2,7 @@
 
 import { UI_LABELS } from "@/lib/constants";
 import { useSetSearchTerm } from "@/store/productStore";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@bprogress/next/app";
 import { Application } from "../data/applications";
 
 interface ApplicationCardProps {

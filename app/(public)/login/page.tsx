@@ -2,9 +2,10 @@
 
 import { ERROR_MESSAGES } from "@/lib/constants";
 import { useAuthLoading, useSignInWithCredentials, useSignInWithGoogle } from "@/store/authStore";
+import { useRouter } from "@bprogress/next/app";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { AuthForm } from "./components/AuthForm";
 import { AuthPageLoading } from "./components/AuthPageLoading";

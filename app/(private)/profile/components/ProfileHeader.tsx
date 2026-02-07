@@ -8,9 +8,9 @@ import {
   UI_LABELS,
 } from "@/lib/constants";
 import { Address, Customer } from "@/prisma/generated/prisma/browser";
+import { useRouter } from "@bprogress/next/app";
 import { Camera } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 

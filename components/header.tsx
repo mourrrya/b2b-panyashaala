@@ -2,10 +2,11 @@
 
 import { SITE_CONFIG, UI_LABELS } from "@/lib/constants";
 import { useAuthLoading, useSignOut } from "@/store/authStore";
+import { useRouter } from "@bprogress/next/app";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BasketButton } from "./header/BasketButton";
 import { LoginProfileButton } from "./header/LoginProfileButton";

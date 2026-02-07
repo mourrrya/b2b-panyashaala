@@ -121,11 +121,13 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning className={`${plusJakarta.className} antialiased`}>
         <ClientOnly>
-          <AuthProvider>
-            <Header />
-            <ProgressBar>{children}</ProgressBar>
-          </AuthProvider>
-          <Footer />
+          <ProgressBar>
+            <AuthProvider>
+              <Header />
+              {children}
+            </AuthProvider>
+            <Footer />
+          </ProgressBar>
           <Sonner />
         </ClientOnly>
         <Analytics />

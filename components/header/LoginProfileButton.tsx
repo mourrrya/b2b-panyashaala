@@ -2,11 +2,12 @@
 
 import { PRIVATE_NAV, UI_LABELS } from "@/lib/constants";
 import { useAuthLoading, useSignOut } from "@/store/authStore";
+import { useRouter } from "@bprogress/next/app";
 import { ChevronDown, LogIn, LogOut, Package, User } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
