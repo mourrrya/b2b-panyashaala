@@ -16,14 +16,18 @@ export async function proxy(request: NextRequest) {
     pathname,
     url: request.url,
     method: request.method,
-    env: process.env.AUTH_SECRET,
-    // headers: Object.fromEntries(request.headers.entries()),
+    protocol: request.nextUrl.protocol,
+    cookies: request.cookies.getAll().map((c) => c.name),
   });
 
   // Get the session token
+  // On Vercel (HTTPS), NextAuth v5 uses __Secure- prefixed cookies
+  // We must tell getToken() to look for the correct cookie name
+  const isSecure = request.nextUrl.protocol === "https:";
   const token = await getToken({
     req: request,
     secret: process.env.AUTH_SECRET,
+    secureCookie: isSecure,
   });
 
   const isLoggedIn = !!token;
