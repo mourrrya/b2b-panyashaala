@@ -79,6 +79,10 @@ export const VERIFICATION_TOKENS = {
   bingMsvalidate: "YOUR_BING_VERIFICATION_TOKEN",
 } as const;
 
+// =============================================================================
+// IMAGE UPLOAD CONFIGURATION
+// =============================================================================
+
 export const IMG_CONFIG = {
   AVATAR: {
     ALLOWED_FILE_TYPES: ["image/png", "image/jpeg", "image/jpg", "image/webp"],
