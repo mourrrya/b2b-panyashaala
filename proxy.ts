@@ -16,7 +16,7 @@ export async function proxy(request: NextRequest) {
     pathname,
     url: request.url,
     method: request.method,
-    env: process.env.NODE_ENV,
+    env: process.env.AUTH_SECRET,
     // headers: Object.fromEntries(request.headers.entries()),
   });
 
