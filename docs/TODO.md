@@ -1,5 +1,8 @@
-1. Fix Prisma Deploy on Production vercel before merge to master
-2. Add virtualization in product listing page
-3. URL upload for Profile image
-4. Fix Auth in development environment
-5. Add profile name dynamic according to the user
+Priority
+
+1. URL upload for Profile image
+2. Fix Prisma Deploy on Production vercel before merge to master
+
+Upcoming
+
+3. Add profile name dynamic according to the user
