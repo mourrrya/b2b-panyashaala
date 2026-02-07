@@ -137,23 +137,24 @@ The main constants file containing:
 
 Route and API configuration constants:
 
-- **PUBLIC_ROUTES**: Public API endpoints (`/products`, `/services`, etc.)
+- **PUBLIC_ROUTES**: Public API endpoints (`/products`, `/categories` etc.)
 - **PRIVATE_ROUTES**: Protected API endpoints (`/profile`, `/orders`)
 - **SWR_CONFIG**: Global SWR configuration (deduplication, retry, revalidation)
 - **EXTERNAL_LINKS**: Third-party service URLs
-- **CATEGORY_ROUTES**: Product category filter routes
-- **ROUTE_CONFIG**: Route protection settings
 
 ### `navigation.ts`
 
-Navigation-related constants:
+Navigation-related constants (**single source of truth for all page navigation and page navigation protection**):
 
 - **PUBLIC_NAV**: Client-side page routes (home, products, about, etc.)
-- **PRIVATE_NAV**: Client-side page routes (profile, orders, etc.)
+- **PRIVATE_NAV**: Client-side protected page routes (profile, orders, etc.)
+- **CATEGORY_ROUTES**: Product category filter routes (derived from `PUBLIC_NAV.PRODUCTS`)
 - **NAV_LINKS**: Main navigation menu items
-- **FOOTER_LINKS**: Footer navigation links
-- **EXTERNAL_LINKS**: Third-party URLs
-- **BREADCRUMBS**: Breadcrumb definitions
+- **FOOTER_LINKS**: Footer navigation links (uses `CATEGORY_ROUTES` and `PUBLIC_NAV`)
+- **BREADCRUMBS**: Breadcrumb definitions (uses `PUBLIC_NAV`)
+- **NAVIGATION_CONFIG**: Route protection, auth-only, and robots disallow settings
+  - `AUTH_CONFIG.PROTECTED_PAGES` and `AUTH_CONFIG.AUTH_PAGE` reference this — **do not duplicate**
+  - `API_CONFIG.ROBOTS_DISALLOW` references this — **do not duplicate**
 
 ### `errors.ts`
 

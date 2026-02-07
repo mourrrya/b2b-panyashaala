@@ -18,14 +18,14 @@ export const authConfigEdge: NextAuthConfig = {
       const pathname = nextUrl.pathname;
 
       // Protected routes that require authentication
-      const protectedRoutes = AUTH_CONFIG.PROTECTED_ROUTES;
-      const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
+      const protectedPages = AUTH_CONFIG.PROTECTED_PAGES;
+      const isProtectedPages = protectedPages.some((route) => pathname.startsWith(route));
 
       // Auth routes that should redirect if already logged in
-      const authRoutes = AUTH_CONFIG.AUTH_ROUTES;
-      const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+      const authPages = AUTH_CONFIG.AUTH_PAGE;
+      const isAuthPage = authPages.some((route) => pathname.startsWith(route));
 
-      if (isProtectedRoute) {
+      if (isProtectedPages) {
         if (!isLoggedIn) {
           // Redirect to login with callback URL
           return false;
@@ -33,7 +33,7 @@ export const authConfigEdge: NextAuthConfig = {
         return true;
       }
 
-      if (isAuthRoute && isLoggedIn) {
+      if (isAuthPage && isLoggedIn) {
         // Redirect authenticated users away from auth pages
         return Response.redirect(new URL("/", nextUrl));
       }

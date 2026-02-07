@@ -4,6 +4,8 @@
  * Contains auth config, API endpoints, and security settings.
  */
 
+import { NAVIGATION_CONFIG, PUBLIC_NAV } from "./navigation";
+
 // =============================================================================
 // AUTHENTICATION
 // =============================================================================
@@ -14,15 +16,15 @@ export const AUTH_CONFIG = {
 
   /** Auth pages routes */
   PAGES: {
-    SIGN_IN: "/login",
-    ERROR: "/login",
+    SIGN_IN: PUBLIC_NAV.LOGIN,
+    ERROR: PUBLIC_NAV.LOGIN,
   },
 
-  /** Protected routes that require authentication */
-  PROTECTED_ROUTES: ["/profile", "/orders"],
+  /** Protected routes that require authentication (sourced from NAVIGATION_CONFIG) */
+  PROTECTED_PAGES: NAVIGATION_CONFIG.PROTECTED,
 
-  /** Auth routes that redirect if already logged in */
-  AUTH_ROUTES: ["/login"],
+  /** Auth page that redirect if already logged in (sourced from NAVIGATION_CONFIG) */
+  AUTH_PAGE: NAVIGATION_CONFIG.AUTH_ONLY,
 
   /** Password requirements */
   PASSWORD_MIN_LENGTH: 8,
@@ -33,26 +35,6 @@ export const AUTH_CONFIG = {
     MAX_FILE_SIZE: 200 * 1024, // 200KB in bytes
     ACCEPTED_EXTENSIONS: ".png,.jpg,.jpeg,.webp",
   },
-} as const;
-
-// =============================================================================
-// API CONFIGURATION
-// =============================================================================
-
-export const API_CONFIG = {
-  /** Base URL for API requests */
-  BASE_URL: "/api",
-
-  /** API endpoints */
-  ENDPOINTS: {
-    PROFILE: "/api/profile",
-    PRODUCTS: "/api/products",
-    ORDERS: "/api/orders",
-    VERIFY_TURNSTILE: "/api/verify-turnstile",
-  },
-
-  /** Robots disallowed paths */
-  ROBOTS_DISALLOW: ["/api/", "/admin/", "/_private/"],
 } as const;
 
 // =============================================================================

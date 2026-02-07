@@ -1,7 +1,8 @@
-import { API_CONFIG, CONTACT_INFO, EMAIL_DEFAULTS, ERROR_MESSAGES } from "@/lib/constants";
+import { CONTACT_INFO, EMAIL_DEFAULTS, ERROR_MESSAGES } from "@/lib/constants";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
+import { API_CONFIG, PUBLIC_ROUTES } from "../constants/routes";
 import { generateINCI } from "../productUtils";
 
 if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY) {
@@ -29,7 +30,7 @@ export type ContactFormData = z.infer<typeof ContactFormDataSchema>;
  */
 export async function verifyTurnstile(token: string): Promise<boolean> {
   try {
-    const response = await fetch(API_CONFIG.ENDPOINTS.VERIFY_TURNSTILE, {
+    const response = await fetch(`${API_CONFIG.BASE_URL}${PUBLIC_ROUTES.VERIFY_TURNSTILE}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

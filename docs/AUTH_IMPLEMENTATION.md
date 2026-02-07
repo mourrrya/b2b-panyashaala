@@ -165,12 +165,15 @@ function Component() {
 
 ## Middleware Protection
 
-Routes can be protected at the middleware level:
+Page Navigation protection is configured via `NAVIGATION_CONFIG` in `lib/constants/navigation.ts` (single source of truth). Both `AUTH_CONFIG.PROTECTED_PAGES` and `AUTH_CONFIG.AUTH_PAGE` reference it — never duplicate these lists.
 
 ```typescript
-// middleware.ts
-const protectedRoutes = ["/profile", "/dashboard"];
-const authRoutes = ["/login"];
+// lib/constants/navigation.ts — SINGLE SOURCE OF TRUTH
+export const NAVIGATION_CONFIG = {
+  PROTECTED: [PRIVATE_NAV.PROFILE, PRIVATE_NAV.ORDERS],
+  AUTH_ONLY: [PUBLIC_NAV.LOGIN],
+  ROBOTS_DISALLOW: ["/api/", "/admin/", "/_private/"],
+};
 ```
 
 - **Protected routes**: Require authentication, redirect to login if not authenticated

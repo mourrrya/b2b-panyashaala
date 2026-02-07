@@ -31,6 +31,17 @@ export const PRIVATE_NAV = {
 } as const;
 
 // =============================================================================
+// PRODUCT CATEGORY ROUTES
+// =============================================================================
+
+export const CATEGORY_ROUTES = {
+  ESSENTIAL_OILS: `${PUBLIC_NAV.PRODUCTS}?category=essential-oil`,
+  FIXED_OILS: `${PUBLIC_NAV.PRODUCTS}?category=fixed-oil`,
+  EXTRACTS: `${PUBLIC_NAV.PRODUCTS}?category=extract`,
+  HYDROSOLS: `${PUBLIC_NAV.PRODUCTS}?category=hydrosol`,
+} as const;
+
+// =============================================================================
 // NAVIGATION
 // =============================================================================
 
@@ -44,10 +55,10 @@ export const NAV_LINKS = [
 
 export const FOOTER_LINKS = {
   products: [
-    { href: "/products?category=essential-oil", label: "Essential Oils" },
-    { href: "/products?category=fixed-oil", label: "Carrier Oils" },
-    { href: "/products?category=extract", label: "Extracts" },
-    { href: "/products?category=hydrosol", label: "Hydrosols" },
+    { href: CATEGORY_ROUTES.ESSENTIAL_OILS, label: "Essential Oils" },
+    { href: CATEGORY_ROUTES.FIXED_OILS, label: "Carrier Oils" },
+    { href: CATEGORY_ROUTES.EXTRACTS, label: "Extracts" },
+    { href: CATEGORY_ROUTES.HYDROSOLS, label: "Hydrosols" },
   ],
   resources: [
     { href: PUBLIC_NAV.ABOUT, label: "About Us" },
@@ -62,15 +73,30 @@ export const FOOTER_LINKS = {
 // =============================================================================
 
 export const BREADCRUMBS = {
-  HOME: { name: "Home", path: "/" },
-  PRODUCTS: { name: "Products", path: "/products" },
-  ABOUT: { name: "About", path: "/about" },
-  APPLICATIONS: { name: "Applications", path: "/applications" },
-  QUALITY: { name: "Quality", path: "/quality" },
-  CONTACT: { name: "Contact", path: "/contact" },
+  HOME: { name: "Home", path: PUBLIC_NAV.HOME },
+  PRODUCTS: { name: "Products", path: PUBLIC_NAV.PRODUCTS },
+  ABOUT: { name: "About", path: PUBLIC_NAV.ABOUT },
+  APPLICATIONS: { name: "Applications", path: PUBLIC_NAV.APPLICATIONS },
+  QUALITY: { name: "Quality", path: PUBLIC_NAV.QUALITY },
+  CONTACT: { name: "Contact", path: PUBLIC_NAV.CONTACT },
 } as const;
 
 export type BreadcrumbItem = {
   name: string;
   path: string;
 };
+
+// =============================================================================
+// NAVIGATION CONFIGURATIONS
+// =============================================================================
+
+export const NAVIGATION_CONFIG = {
+  /** Routes that require authentication */
+  PROTECTED: [PRIVATE_NAV.PROFILE, PRIVATE_NAV.ORDERS],
+
+  /** Routes that redirect authenticated users */
+  AUTH_ONLY: [PUBLIC_NAV.LOGIN],
+
+  /** Routes disallowed for robots */
+  ROBOTS_DISALLOW: ["/api/", "/admin/", "/_private/"],
+} as const;

@@ -1,4 +1,5 @@
 import { ERROR_MESSAGES, HTTP_STATUS } from "@/lib/constants";
+import { API_CONFIG } from "@/lib/constants/routes";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 // =============================================================================
@@ -6,8 +7,8 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 // =============================================================================
 
 export const api = axios.create({
-  baseURL: "/api",
-  timeout: 30000,
+  baseURL: API_CONFIG.BASE_URL,
+  timeout: API_CONFIG.TIMEOUT,
   headers: {
     "Content-Type": "application/json",
   },

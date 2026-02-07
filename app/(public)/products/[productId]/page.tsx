@@ -64,8 +64,6 @@ export default async function ProductDetailPage({
   const productDb: ProductWithVariantsImagesReviews = await getProductById(productId.toString());
   const allProductsResult = await getProducts({});
 
-  console.log("Fetched product from DB:", productDb);
-
   const categoryLabel = productDb.category.split("_").join(" ");
 
   const breadcrumbItems = [

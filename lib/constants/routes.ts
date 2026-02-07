@@ -7,21 +7,28 @@ import { SWRConfiguration } from "swr";
  */
 
 // =============================================================================
+// API CONFIGURATION
+// =============================================================================
+
+export const API_CONFIG = {
+  BASE_URL: "/api",
+  TIMEOUT: 60000, // 60 seconds
+} as const;
+
+// =============================================================================
 // API ROUTES
 // =============================================================================
 
 export const PUBLIC_ROUTES = {
-  // Auth
   AUTH: {
     SESSION: "/auth/session",
     SIGN_IN: "/auth/signin",
     SIGN_OUT: "/auth/signout",
   },
 
-  // Products
   PRODUCTS: {
     LIST: "/products",
-    DETAIL: (id: string | number) => `/products/${id}`,
+    DETAIL: (id: string | number) => `${PUBLIC_ROUTES.PRODUCTS.LIST}/${id}`,
     PAGINATED: (params?: {
       page?: number;
       limit?: number;
@@ -30,7 +37,7 @@ export const PUBLIC_ROUTES = {
       usage?: string;
       ids?: string[];
     }) => {
-      if (!params) return "/products";
+      if (!params) return `${PUBLIC_ROUTES.PRODUCTS.LIST}`;
       const query = new URLSearchParams();
       if (params.page) query.set("page", String(params.page));
       if (params.limit) query.set("limit", String(params.limit));
@@ -43,24 +50,17 @@ export const PUBLIC_ROUTES = {
     },
   },
 
-  // Categories
   CATEGORIES: "/categories",
 
-  // Services
-  SERVICES: "/services",
-
-  // Turnstile verification
   VERIFY_TURNSTILE: "/verify-turnstile",
 } as const;
 
 export const PRIVATE_ROUTES = {
-  // Orders
   ORDERS: {
     LIST: "/orders",
-    DETAIL: (id: string) => `/orders/${id}`,
+    DETAIL: (id: string) => `${PRIVATE_ROUTES.ORDERS.LIST}/${id}`,
   },
 
-  // Profile
   PROFILE: "/profile",
 } as const;
 
@@ -71,32 +71,6 @@ export const PRIVATE_ROUTES = {
 export const EXTERNAL_LINKS = {
   CLOUDFLARE_TURNSTILE: "https://challenges.cloudflare.com/turnstile/v0/siteverify",
   TURNSTILE_SCRIPT: "https://challenges.cloudflare.com/turnstile/v0/api.js",
-} as const;
-
-// =============================================================================
-// ROUTE CONFIGURATIONS
-// =============================================================================
-
-export const ROUTE_CONFIG = {
-  /** Routes that require authentication */
-  PROTECTED: ["/profile", "/order"],
-
-  /** Routes that redirect authenticated users */
-  AUTH_ONLY: ["/login"],
-
-  /** Routes disallowed for robots */
-  ROBOTS_DISALLOW: ["/api/", "/admin/", "/_private/"],
-} as const;
-
-// =============================================================================
-// PRODUCT CATEGORY ROUTES
-// =============================================================================
-
-export const CATEGORY_ROUTES = {
-  ESSENTIAL_OILS: "/products?category=essential-oil",
-  FIXED_OILS: "/products?category=fixed-oil",
-  EXTRACTS: "/products?category=extract",
-  HYDROSOLS: "/products?category=hydrosol",
 } as const;
 
 // =============================================================================
