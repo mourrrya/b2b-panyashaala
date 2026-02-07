@@ -16,7 +16,8 @@ export async function proxy(request: NextRequest) {
     pathname,
     url: request.url,
     method: request.method,
-    headers: Object.fromEntries(request.headers.entries()),
+    env: process.env.NODE_ENV,
+    // headers: Object.fromEntries(request.headers.entries()),
   });
 
   // Get the session token
