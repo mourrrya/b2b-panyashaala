@@ -1,6 +1,5 @@
 import { AuthUser } from "@/lib/auth/protect";
 import { ErrorUnknown } from "@/lib/backend/errorHandler";
-import { logger } from "@/lib/backend/logger";
 import { prisma } from "@/lib/backend/prisma";
 import { Address, Customer } from "@/prisma/generated/prisma/client";
 
@@ -8,7 +7,6 @@ export async function getOrCreateProfile(
   userId: string,
   userData: AuthUser,
 ): Promise<Customer & { _count?: { orders: number }; addresses: Address[] }> {
-  logger.info({ userId }, "Getting or creating profile");
   try {
     let profile = await prisma.customer.findUnique({
       where: { id: userId },
@@ -35,10 +33,8 @@ export async function getOrCreateProfile(
         },
       },
     });
-    logger.info({ userId }, "Profile created");
     return profile;
   } catch (error: any) {
-    logger.error({ error, userId }, "Error in getOrCreateProfile");
     throw new ErrorUnknown();
   }
 }
@@ -55,7 +51,6 @@ export async function updateProfile(
     notes?: string;
   },
 ): Promise<Customer & { _count?: { orders: number } }> {
-  logger.info({ userId }, "Updating profile");
   try {
     const profile = await prisma.customer.update({
       where: { id: userId },
@@ -77,10 +72,8 @@ export async function updateProfile(
         },
       },
     });
-    logger.info({ userId }, "Profile updated successfully");
     return profile;
   } catch (error: any) {
-    logger.error({ error, userId }, "Error updating profile");
     throw new ErrorUnknown(); // Re-throw other errors
   }
 }

@@ -1,6 +1,5 @@
 import { protect, ProtectedRequest } from "@/lib/auth/protect";
 import { handleError } from "@/lib/backend/errorHandler";
-import { logger } from "@/lib/backend/logger";
 import { validateRequestBody } from "@/lib/backend/validation";
 import { UpdateProfileReqSchema } from "@/lib/schema/schemas";
 import { Customer } from "@/prisma/generated/prisma/client";
@@ -16,7 +15,6 @@ async function getProfileHandler(
     const profile = await getOrCreateProfile(user.id, user);
     return NextResponse.json({ data: profile, success: true });
   } catch (error) {
-    logger.error({ error }, "Error fetching profile");
     return handleError(error);
   }
 }
@@ -31,7 +29,6 @@ async function updateProfileHandler(
     const profile = await updateProfile(user.id, body);
     return NextResponse.json({ data: profile, success: true });
   } catch (error) {
-    logger.error({ error }, "Error updating profile");
     return handleError(error);
   }
 }

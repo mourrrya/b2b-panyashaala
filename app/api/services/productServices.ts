@@ -1,5 +1,4 @@
 import { ErrorNotFound, ErrorUnknown } from "@/lib/backend/errorHandler";
-import { logger } from "@/lib/backend/logger";
 import { prisma } from "@/lib/backend/prisma";
 import { serializeProductData } from "@/lib/productUtils";
 import { ProductFiltersInput } from "@/lib/schema/schema";
@@ -101,13 +100,11 @@ export async function getProducts(filters: ProductFiltersInput): Promise<Paginat
       },
     };
   } catch (error) {
-    logger.error({ error }, "Error getting products");
     throw new ErrorUnknown("Error getting products");
   }
 }
 
 export async function getProductById(id: string): Promise<any> {
-  logger.info({ productId: id }, "Getting product by ID");
   try {
     const product = await prisma.product.findUnique({
       where: { id },
@@ -122,13 +119,10 @@ export async function getProductById(id: string): Promise<any> {
       },
     });
     if (!product) {
-      logger.warn({ productId: id }, "Product not found");
       throw new ErrorNotFound("Product");
     }
-    logger.info({ productId: id }, "Product found successfully");
     return serializeProductData(product);
   } catch (error) {
-    logger.error({ error, productId: id }, "Error getting product by ID");
     throw new ErrorUnknown("Error getting product by ID");
   }
 }

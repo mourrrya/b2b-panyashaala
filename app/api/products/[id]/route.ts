@@ -1,5 +1,4 @@
 import { ErrorInvalidRequest, handleError } from "@/lib/backend/errorHandler";
-import { logger } from "@/lib/backend/logger";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import type { ErrorServerRes, GetServerRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImagesReviews } from "@/types/product";
@@ -21,7 +20,6 @@ export async function GET(
     const product = await getProductById(id);
     return NextResponse.json({ data: product, success: true });
   } catch (error) {
-    logger.error({ error, productId: id }, "Error fetching product");
     return handleError(error);
   }
 }

@@ -1,6 +1,5 @@
 import { protect, ProtectedRequest } from "@/lib/auth/protect";
 import { ErrorNotFound, handleError } from "@/lib/backend/errorHandler";
-import { logger } from "@/lib/backend/logger";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import type { ErrorServerRes, GetServerRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
@@ -22,7 +21,6 @@ async function getOrderHandler(
 
     return NextResponse.json({ data: order, success: true });
   } catch (error) {
-    logger.error({ error }, "Error fetching order");
     return handleError(error);
   }
 }

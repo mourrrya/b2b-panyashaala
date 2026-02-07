@@ -1,6 +1,5 @@
 import { protect, ProtectedRequest } from "@/lib/auth/protect";
 import { handleError } from "@/lib/backend/errorHandler";
-import { logger } from "@/lib/backend/logger";
 import type { ErrorServerRes, GetServerListRes } from "@/types/api.payload.types";
 import { NextResponse } from "next/server";
 import { getCustomerOrders, OrderWithDetails } from "../services/orderServices";
@@ -13,7 +12,6 @@ async function getOrdersHandler(
     const orders = await getCustomerOrders(user.id);
     return NextResponse.json({ data: orders, success: true });
   } catch (error) {
-    logger.error({ error }, "Error fetching orders");
     return handleError(error);
   }
 }

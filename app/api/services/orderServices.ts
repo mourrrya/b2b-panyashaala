@@ -1,5 +1,4 @@
 import { ErrorUnknown } from "@/lib/backend/errorHandler";
-import { logger } from "@/lib/backend/logger";
 import { prisma } from "@/lib/backend/prisma";
 import { OrderItem } from "@/prisma/generated/prisma/client";
 import { OrderWithDetails } from "@/types/order";
@@ -27,7 +26,6 @@ function transformOrderItem(item: OrderItem & { variant?: { id: string; variantN
 }
 
 export async function getCustomerOrders(customerId: string): Promise<OrderWithDetails[]> {
-  logger.info({ customerId }, "Fetching customer orders");
   try {
     const orders = await prisma.order.findMany({
       where: { customerId },
@@ -86,7 +84,6 @@ export async function getCustomerOrders(customerId: string): Promise<OrderWithDe
       billingAddress: order.billingAddress,
     }));
   } catch (error: any) {
-    logger.error({ error, customerId }, "Error fetching customer orders");
     throw new ErrorUnknown();
   }
 }
@@ -95,7 +92,6 @@ export async function getOrderById(
   customerId: string,
   orderId: string,
 ): Promise<OrderWithDetails | null> {
-  logger.info({ customerId, orderId }, "Fetching order by ID");
   try {
     const order = await prisma.order.findFirst({
       where: {
@@ -157,19 +153,16 @@ export async function getOrderById(
       billingAddress: order.billingAddress,
     };
   } catch (error: any) {
-    logger.error({ error, customerId, orderId }, "Error fetching order by ID");
     throw new ErrorUnknown();
   }
 }
 
 export async function getCustomerOrderCount(customerId: string): Promise<number> {
-  logger.info({ customerId }, "Getting customer order count");
   try {
     return await prisma.order.count({
       where: { customerId },
     });
   } catch (error: any) {
-    logger.error({ error, customerId }, "Error getting order count");
     throw new ErrorUnknown();
   }
 }
