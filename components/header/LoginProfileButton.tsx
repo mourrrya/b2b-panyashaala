@@ -52,35 +52,25 @@ export function LoginProfileButton() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem onClick={() => router.push(PRIVATE_NAV.PROFILE)}>
-            <Link href={PRIVATE_NAV.PROFILE} className="flex items-center gap-4">
-              <User className="w-4 h-4" />
-              {UI_LABELS.NAV.MY_PROFILE}
-            </Link>
+            <User className="w-4 h-4 mr-2" />
+            {UI_LABELS.NAV.MY_PROFILE}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push(PRIVATE_NAV.ORDERS)}>
-            <Link href={PRIVATE_NAV.ORDERS} className="flex items-center gap-4">
-              <Package className="w-4 h-4" />
-              {UI_LABELS.NAV.MY_ORDERS}
-            </Link>
+            <Package className="w-4 h-4 mr-2" />
+            {UI_LABELS.NAV.MY_ORDERS}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="text-red-600 focus:text-red-600 focus:bg-red-50"
             disabled={isLoading}
+            onClick={async () => {
+              await signOut();
+              // TODO: if user on public page do not redirect otherwise redirect to home page after sign out
+              router.push("/");
+            }}
+            className="flex items-center gap-4 text-red-600 focus:text-red-600 focus:bg-red-50"
           >
-            <Link
-              href="#"
-              onClick={async (e) => {
-                e.preventDefault();
-                await signOut();
-                // TODO: if user on public page do not redirect otherwise redirect to home page after sign out
-                router.push("/");
-              }}
-              className="flex items-center gap-4 text-red-600"
-            >
-              <LogOut className="w-4 h-4" />
-              {UI_LABELS.NAV.SIGN_OUT}
-            </Link>
+            <LogOut className="w-4 h-4" />
+            {UI_LABELS.NAV.SIGN_OUT}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
