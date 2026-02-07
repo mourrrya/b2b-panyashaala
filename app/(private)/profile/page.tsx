@@ -1,9 +1,9 @@
 ﻿"use client";
 
+import { ProfileSkeletonLoader } from "@/components/SkeletonLoader";
 import { ProfileApiProvider, useApiProfile } from "@/lib/client/providers/ProfileApiProvider";
 import { UI_LABELS } from "@/lib/constants";
 import { CustomerType } from "@/prisma/generated/prisma/browser";
-import { useState } from "react";
 import { AddressInfoCard } from "./components/AddressInfoCard";
 import { BusinessInfoCard } from "./components/BusinessInfoCard";
 import { PersonalInfoCard } from "./components/PersonalInfoCard";
@@ -11,7 +11,6 @@ import { ProfileHeader } from "./components/ProfileHeader";
 
 function ProfileContent() {
   const { profile, isLoading, updateProfile } = useApiProfile();
-  const [isLocalLoading, setIsLocalLoading] = useState(false);
 
   const handleAvatarUpload = async (file: File) => {
     return new Promise<void>((resolve, reject) => {
@@ -38,14 +37,7 @@ function ProfileContent() {
   };
 
   if (isLoading || !profile) {
-    return (
-      <div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-emerald-600 mx-auto mb-4"></div>
-          <p className="text-slate-600">{UI_LABELS.PROFILE.LOADING}</p>
-        </div>
-      </div>
-    );
+    return <ProfileSkeletonLoader />;
   }
 
   return (
