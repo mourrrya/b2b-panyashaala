@@ -3,6 +3,7 @@
 import { ProductCard } from "@/components/ProductCard";
 import { ProductCardSkeleton, ProductGridSkeleton } from "@/components/ProductCardSkeleton";
 import { ProductFilters } from "@/components/ProductFilters";
+import { VirtualizedGrid, useGridColumns } from "@/components/VirtualizedGrid";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import { CategoriesApiProvider } from "@/lib/client/providers/CategoriesApiProvider";
 import { ProductsApiProvider, useApiProducts } from "@/lib/client/providers/ProductsApiProvider";
@@ -34,6 +35,10 @@ export function ProductsClient() {
   );
 }
 
+// =============================================================================
+// VIRTUALIZED INNER COMPONENT
+// =============================================================================
+
 function ProductsClientInner() {
   const { products, isLoading, isLoadingMore, hasMore, loadNextPage, totalProducts, error } =
     useApiProducts();
@@ -44,13 +49,20 @@ function ProductsClientInner() {
   const addToBasket = useAddToBasket();
   const removeFromBasket = useRemoveFromBasket();
 
+  const columns = useGridColumns();
+
+  // ---------------------------------------------------------------------------
+  // Infinite scroll sentinel (loads next page when visible)
+  // ---------------------------------------------------------------------------
   const sentinelRef = useInfiniteScroll({
     hasMore,
     isLoading: isLoadingMore,
     onLoadMore: loadNextPage,
   });
 
-  // Initial full-page skeleton
+  // ---------------------------------------------------------------------------
+  // LOADING STATE
+  // ---------------------------------------------------------------------------
   if (isLoading) {
     return (
       <main className="bg-texture min-h-screen">
@@ -64,6 +76,9 @@ function ProductsClientInner() {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // RENDER
+  // ---------------------------------------------------------------------------
   return (
     <main className="bg-texture min-h-screen">
       <section className="bg-white/95">
@@ -72,23 +87,30 @@ function ProductsClientInner() {
           totalProductsCount={totalProducts}
         />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-8 sm:pb-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 w-full">
-            {products.map((product) => (
+          {/* Virtualized grid */}
+          <VirtualizedGrid
+            items={products}
+            renderItem={(product) => (
               <ProductCard
-                key={product.id}
                 product={product}
                 basket={basket}
                 addToBasket={addToBasket}
                 removeFromBasket={removeFromBasket}
               />
-            ))}
+            )}
+            keyExtractor={(product) => product.id}
+            estimateRowHeight={280}
+            overscan={3}
+          />
 
-            {/* Inline skeletons while loading more */}
-            {isLoadingMore &&
-              Array.from({ length: 3 }).map((_, i) => (
+          {/* Inline skeletons while loading more */}
+          {isLoadingMore && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 w-full mt-3 sm:mt-4 lg:mt-6">
+              {Array.from({ length: columns }).map((_, i) => (
                 <ProductCardSkeleton key={`skeleton-${i}`} />
               ))}
-          </div>
+            </div>
+          )}
 
           {/* Infinite scroll sentinel */}
           {hasMore && !isLoadingMore && (

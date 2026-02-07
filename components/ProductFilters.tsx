@@ -11,8 +11,8 @@ import {
   useSetSearchTerm,
   useSetSelectedCategory,
 } from "@/store/productStore";
-import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Search, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 interface ProductFiltersProps {
   filteredProductsCount: number;
@@ -30,14 +30,23 @@ export function ProductFilters({ filteredProductsCount, totalProductsCount }: Pr
 
   const { categories, isLoading: categoriesLoading } = useApiCategories();
 
-  // Debounced setter for the API-facing search term
-  const debouncedSetSearch = debounce((value: string) => {
-    setDebouncedSearchTerm(value);
-  }, PAGINATION_CONFIG.SEARCH_DEBOUNCE_MS);
+  // Memoized debounced function that persists across renders
+  const debouncedSetSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setDebouncedSearchTerm(value);
+      }, PAGINATION_CONFIG.SEARCH_DEBOUNCE_MS),
+    [setDebouncedSearchTerm],
+  );
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value); // Instant UI update
     debouncedSetSearch(value); // Debounced API trigger
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm(""); // Clear UI
+    setDebouncedSearchTerm(""); // Clear API search immediately
   };
 
   useEffect(() => {
@@ -64,9 +73,18 @@ export function ProductFilters({ filteredProductsCount, totalProductsCount }: Pr
               placeholder={UI_LABELS.PLACEHOLDERS.SEARCH_PRODUCTS}
               value={searchTerm}
               onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-9 sm:pl-10 border border-slate-200 rounded-lg text-sm sm:text-base text-slate-900 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 pl-9 sm:pl-10 pr-9 sm:pr-10 border border-slate-200 rounded-lg text-sm sm:text-base text-slate-900 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
             />
             <Search className="absolute left-2.5 sm:left-3 top-3 sm:top-3.5 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
+            {searchTerm && (
+              <button
+                onClick={handleClearSearch}
+                className="absolute rounded right-2.5 sm:right-3 top-3 sm:top-3.5 text-slate-400 hover:text-slate-600 hover:bg-emerald-50 transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+            )}
           </div>
         </div>
       </div>
