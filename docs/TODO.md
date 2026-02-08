@@ -6,3 +6,5 @@ Priority
 Upcoming
 
 3. Add profile name dynamic according to the user
+4. Contact Form input persistence across pages
+5. Glitch while delete basket Item in Basket Drawer and in Contact Page
