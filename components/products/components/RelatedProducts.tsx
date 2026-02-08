@@ -12,7 +12,7 @@ export function RelatedProducts({ products, currentProduct, categoryLabel }: Rel
   const relatedProducts = products
     .filter((p) => p.category === currentProduct.category && p.id !== currentProduct.id)
     .slice(0, 3);
-
+  if (!relatedProducts || relatedProducts.length === 0) return null;
   return (
     <section className="bg-white py-16">
       <div className="max-w-6xl mx-auto px-6">

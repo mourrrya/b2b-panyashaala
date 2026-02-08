@@ -8,30 +8,60 @@ datasource db {
 }
 
 model Product {
-  id                 String              @id @default(uuid())
+  id                 String                         @id @default(uuid())
   name               String
-  purityType         ProductPurityType   @map("purity_type")
+  purityType         ProductPurityType              @map("purity_type")
   category           ProductCategory
   description        String?
-  botanicalName      String?             @map("botanical_name")
-  inciName           String?             @map("inci_name")
-  extractionMethod   ExtractionMethod?   @map("extraction_method")
-  chemicalFormula    String?             @map("chemical_formula")
-  casNumber          String?             @map("cas_number")
-  hazardClass        HazardClass?        @map("hazard_class")
+  botanicalName      String?                        @map("botanical_name")
+  inciName           String?                        @map("inci_name")
+  extractionMethod   ExtractionMethod?              @map("extraction_method")
+  chemicalFormula    String?                        @map("chemical_formula")
+  casNumber          String?                        @map("cas_number")
+  hazardClass        HazardClass?                   @map("hazard_class")
   supplier           String
   certifications     CertificationType[]
-  storageConditions  String?             @map("storage_conditions")
-  gstSlab            GstSlab             @map("gst_slab")
-  hsnCode            String              @map("hsn_code")
-  standardLabResults Json?               @map("standard_lab_results")
-  isDeleted          Boolean             @default(false) @map("is_deleted")
-  createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @updatedAt @map("updated_at")
+  notes              String?
+  storageConditions  String?                        @map("storage_conditions")
+  gstSlab            GstSlab                        @map("gst_slab")
+  hsnCode            String                         @map("hsn_code")
+  standardLabResults Json?                          @map("standard_lab_results")
+  isDeleted          Boolean                        @default(false) @map("is_deleted")
+  createdAt          DateTime                       @default(now()) @map("created_at")
+  updatedAt          DateTime                       @updatedAt @map("updated_at")
   variants           Variant[]
+  collections        ProductCollectionAssociation[]
 
   @@unique([name, purityType])
   @@map("products")
+}
+
+model ProductCollection {
+  id          String                         @id @default(uuid())
+  name        String                         @unique
+  description String?
+  isDeleted   Boolean                        @default(false) @map("is_deleted")
+  createdAt   DateTime                       @default(now()) @map("created_at")
+  updatedAt   DateTime                       @updatedAt @map("updated_at")
+  products    ProductCollectionAssociation[]
+
+  @@index([name])
+  @@index([isDeleted])
+  @@map("product_collections")
+}
+
+model ProductCollectionAssociation {
+  id           String            @id @default(uuid())
+  productId    String            @map("product_id")
+  collectionId String            @map("collection_id")
+  createdAt    DateTime          @default(now()) @map("created_at")
+  product      Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  collection   ProductCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, collectionId])
+  @@index([productId])
+  @@index([collectionId])
+  @@map("product_collection_associations")
 }
 
 model Variant {
