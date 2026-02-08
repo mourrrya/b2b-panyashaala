@@ -21,7 +21,7 @@ export function ProductCard({ product, basket, addToBasket, removeFromBasket }: 
       onClick={(e) => router.push(`/products/${product.id}`)}
     >
       <div className="bg-white rounded-t-xl sm:rounded-t-2xl flex items-start justify-between gap-1 mb-2 sm:mb-3">
-        <h3 className="text-base sm:text-lg font-semibold text-slate-900 line-clamp-2">
+        <h3 className="text-base sm:text-lg font-semibold text-slate-900 line-clamp-2 capitalize">
           {product.name}
         </h3>
         <span className="text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-medium whitespace-nowrap shrink-0">
