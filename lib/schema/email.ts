@@ -63,6 +63,7 @@ export const sendEmail = async (
 ): Promise<boolean> => {
   try {
     if (
+      // REVIEW: check whether to keep EMAILJS_SERVICE_ID in browser-side code or not
       !process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ||
       !process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ||
       !process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
