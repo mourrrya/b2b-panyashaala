@@ -1,5 +1,6 @@
 "use client";
 
+import { useApiProfile } from "@/lib/client/providers/ProfileApiProvider";
 import {
   ERROR_MESSAGES,
   IMG_CONFIG,
@@ -21,6 +22,7 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const { isLoading } = useApiProfile();
   const router = useRouter();
 
   const validateFile = (file: File): string | null => {
@@ -145,11 +147,10 @@ export function ProfileHeader({ user, onAvatarUpload }: ProfileHeaderProps) {
               <div className="relative z-10 flex items-center gap-2 sm:gap-3">
                 <div className="text-center">
                   <div className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
-                    {/*FIXME Loading should show only while fetching */}
-                    {!!user._count?.orders ? (
-                      user._count.orders
-                    ) : (
+                    {isLoading ? (
                       <span className="inline-block w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin" />
+                    ) : (
+                      (user._count?.orders ?? 0)
                     )}
                   </div>
                   <div className="text-[10px] sm:text-xs text-slate-500 uppercase tracking-wide">
