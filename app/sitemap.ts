@@ -1,4 +1,5 @@
 import { getProducts } from "@/app/api/services/productServices";
+import { PUBLIC_NAV } from "@/lib/constants";
 import { SITE_URL } from "@/lib/seo";
 import type { MetadataRoute } from "next";
 
@@ -14,41 +15,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
-      url: `${SITE_URL}/products`,
+      url: `${SITE_URL}${PUBLIC_NAV.PRODUCTS}`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/about`,
+      url: `${SITE_URL}${PUBLIC_NAV.ABOUT}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     },
     {
-      url: `${SITE_URL}/applications`,
+      url: `${SITE_URL}${PUBLIC_NAV.APPLICATIONS}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.6,
     },
     {
-      url: `${SITE_URL}/quality`,
+      url: `${SITE_URL}${PUBLIC_NAV.QUALITY}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.6,
     },
     {
-      url: `${SITE_URL}/contact`,
+      url: `${SITE_URL}${PUBLIC_NAV.CONTACT}`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.5,
     },
   ];
 
-  // Dynamic product routes - fetch all for sitemap
-  const result = await getProducts({ limit: 1000 });
-  const productRoutes: MetadataRoute.Sitemap = result.products.map((product) => ({
-    url: `${SITE_URL}/products/${product.id}`,
+  // Fetch all products for sitemap (using getProducts ensures only non-deleted products are included)
+  const { products } = await getProducts({
+    limit: 1000,
+    page: 1,
+  });
+
+  const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
+    url: `${SITE_URL}${PUBLIC_NAV.PRODUCT_DETAIL(product.id)}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.5,
