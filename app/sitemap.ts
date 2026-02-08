@@ -3,7 +3,8 @@ import { PUBLIC_NAV } from "@/lib/constants";
 import { SITE_URL } from "@/lib/seo";
 import type { MetadataRoute } from "next";
 
-export const revalidate = 86400; // Revalidate once per day (24 hours)
+// Force dynamic rendering so the sitemap is not pre-rendered at build time
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes
@@ -46,18 +47,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Fetch all products for sitemap (using getProducts ensures only non-deleted products are included)
-  const { products } = await getProducts({
-    limit: 1000,
-    page: 1,
-  });
+  // Fetch all products for sitemap, gracefully fallback to static-only if DB is unavailable
+  let productRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const { products } = await getProducts({
+      limit: 1000,
+      page: 1,
+    });
 
-  const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${SITE_URL}${PUBLIC_NAV.PRODUCT_DETAIL(product.id)}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.5,
-  }));
+    productRoutes = products.map((product) => ({
+      url: `${SITE_URL}${PUBLIC_NAV.PRODUCT_DETAIL(product.id)}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    }));
+  } catch (error) {
+    console.warn("Sitemap: Failed to fetch products, returning static routes only.", error);
+  }
 
   return [...staticRoutes, ...productRoutes];
 }
