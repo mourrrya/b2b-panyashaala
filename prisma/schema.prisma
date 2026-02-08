@@ -1,0 +1,541 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id                 String                         @id @default(uuid())
+  name               String
+  purityType         ProductPurityType              @map("purity_type")
+  category           ProductCategory
+  description        String?
+  botanicalName      String?                        @map("botanical_name")
+  inciName           String?                        @map("inci_name")
+  extractionMethod   ExtractionMethod?              @map("extraction_method")
+  chemicalFormula    String?                        @map("chemical_formula")
+  casNumber          String?                        @map("cas_number")
+  hazardClass        HazardClass?                   @map("hazard_class")
+  supplier           String
+  certifications     CertificationType[]
+  notes              String?
+  storageConditions  String?                        @map("storage_conditions")
+  gstSlab            GstSlab                        @map("gst_slab")
+  hsnCode            String                         @map("hsn_code")
+  standardLabResults Json?                          @map("standard_lab_results")
+  isDeleted          Boolean                        @default(false) @map("is_deleted")
+  createdAt          DateTime                       @default(now()) @map("created_at")
+  updatedAt          DateTime                       @updatedAt @map("updated_at")
+  variants           Variant[]
+  collections        ProductCollectionAssociation[]
+
+  @@unique([name, purityType])
+  @@map("products")
+}
+
+model ProductCollection {
+  id          String                         @id @default(uuid())
+  name        String                         @unique
+  description String?
+  isDeleted   Boolean                        @default(false) @map("is_deleted")
+  createdAt   DateTime                       @default(now()) @map("created_at")
+  updatedAt   DateTime                       @updatedAt @map("updated_at")
+  products    ProductCollectionAssociation[]
+
+  @@index([name])
+  @@index([isDeleted])
+  @@map("product_collections")
+}
+
+model ProductCollectionAssociation {
+  id           String            @id @default(uuid())
+  productId    String            @map("product_id")
+  collectionId String            @map("collection_id")
+  createdAt    DateTime          @default(now()) @map("created_at")
+  product      Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  collection   ProductCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, collectionId])
+  @@index([productId])
+  @@index([collectionId])
+  @@map("product_collection_associations")
+}
+
+model Variant {
+  id                    String                 @id @default(uuid())
+  productId             String                 @map("product_id")
+  variantName           String                 @unique @map("variant_name")
+  description           String?
+  netContent            Decimal                @map("net_content") @db.Decimal(10, 2)
+  measurementUnit       MeasurementUnit        @map("measurement_unit")
+  concentration         Decimal?               @db.Decimal(5, 2)
+  packaging             PackagingType?
+  retailPrice           Decimal                @map("retail_price") @db.Decimal(10, 2)
+  wholesalePrice        Decimal                @map("wholesale_price") @db.Decimal(10, 2)
+  costPrice             Decimal                @map("cost_price") @db.Decimal(10, 2)
+  quantityAvailable     Int                    @default(0) @map("quantity_available")
+  minStockLevel         Int?                   @map("min_stock_level")
+  shelfLife             Int?                   @map("shelf_life")
+  isDeleted             Boolean                @default(false) @map("is_deleted")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  benefits              String[]
+  ingredients           String[]
+  usage                 String
+  images                Image[]
+  orderItems            OrderItem[]
+  reviews               Review[]
+  batches               Batch[]
+  inventoryTransactions InventoryTransaction[]
+  purchaseOrderItems    PurchaseOrderItem[]
+  product               Product                @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("variants")
+}
+
+model Batch {
+  id                    String                 @id @default(uuid())
+  batchNumber           String                 @unique @map("batch_number")
+  variantId             String                 @map("variant_id")
+  purchaseOrderId       String?                @map("purchase_order_id")
+  quantity              Int
+  costPrice             Decimal                @map("cost_price") @db.Decimal(10, 2)
+  manufactureDate       DateTime               @map("manufacture_date")
+  expiryDate            DateTime               @map("expiry_date")
+  analysisDate          DateTime?              @map("analysis_date")
+  labResults            Json?                  @map("lab_results")
+  status                BatchStatus            @default(QUARANTINE)
+  notes                 String?
+  isDeleted             Boolean                @default(false) @map("is_deleted")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  variant               Variant                @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  purchaseOrder         PurchaseOrder?         @relation(fields: [purchaseOrderId], references: [id], onDelete: SetNull)
+  inventoryTransactions InventoryTransaction[]
+  orderItems            OrderItem[]
+
+  @@index([batchNumber])
+  @@index([variantId])
+  @@index([purchaseOrderId])
+  @@map("batches")
+}
+
+enum BatchStatus {
+  QUARANTINE
+  RELEASED
+  EXPIRED
+  REJECTED
+}
+
+model InventoryTransaction {
+  id          String          @id @default(uuid())
+  variantId   String          @map("variant_id")
+  batchId     String?         @map("batch_id")
+  orderId     String?         @map("order_id")
+  type        TransactionType
+  quantity    Int
+  referenceId String?         @map("reference_id")
+  notes       String?
+  createdAt   DateTime        @default(now()) @map("created_at")
+  variant     Variant         @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  batch       Batch?          @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  order       Order?          @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([variantId])
+  @@index([batchId])
+  @@index([orderId])
+  @@index([type])
+  @@map("inventory_transactions")
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  variantId  String   @map("variant_id")
+  customerId String   @map("customer_id")
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  variant    Variant  @relation(fields: [variantId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  @@map("reviews")
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  alt       String?
+  order     Int      @default(0)
+  variantId String   @map("variant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  variant   Variant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@map("images")
+}
+
+model Customer {
+  id    String       @id @default(uuid())
+  type  CustomerType @default(INDIVIDUAL)
+  gstIn String?      @unique @map("gst_in")
+  email String?      @unique
+  phone String?
+
+  // Auth fields
+  password      String? // Hashed password for credential login
+  emailVerified DateTime? @map("email_verified")
+
+  // Shared: Full Name for Individual, Contact Person for Business
+  fullName String? @map("full_name")
+
+  // Business Specific (B2B)
+  companyName String? @map("company_name")
+  website     String?
+  notes       String?
+
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  orders    Order[]
+  addresses Address[]
+  reviews   Review[]
+  accounts  CustomerAccount[]
+
+  @@map("customers")
+}
+
+model CustomerAccount {
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refreshToken      String? @map("refresh_token") @db.Text
+  accessToken       String? @map("access_token") @db.Text
+  expiresAt         Int?    @map("expires_at")
+  tokenType         String? @map("token_type")
+  scope             String?
+  idToken           String? @map("id_token") @db.Text
+  sessionState      String? @map("session_state")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user Customer @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("customer_accounts")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Order {
+  id                    String                 @id @default(uuid())
+  orderNumber           String                 @unique @map("order_number")
+  customerId            String                 @map("customer_id")
+  status                OrderStatus            @default(PENDING)
+  subtotal              Decimal                @db.Decimal(10, 2)
+  totalTax              Decimal                @default(0) @map("total_tax") @db.Decimal(10, 2)
+  shippingCost          Decimal                @default(0) @map("shipping_cost") @db.Decimal(10, 2)
+  discount              Decimal                @default(0) @db.Decimal(10, 2)
+  totalAmount           Decimal                @map("total_amount") @db.Decimal(10, 2)
+  shippingAddressId     String?                @map("shipping_address_id")
+  billingAddressId      String?                @map("billing_address_id")
+  paymentMethod         String                 @map("payment_method")
+  gstType               GstType?               @map("gst_type")
+  paymentStatus         PaymentStatus          @default(PENDING) @map("payment_status")
+  notes                 String?
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @default(now()) @updatedAt @map("updated_at")
+  orderItems            OrderItem[]
+  inventoryTransactions InventoryTransaction[]
+  customer              Customer               @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  shippingAddress       Address?               @relation("OrderShippingAddress", fields: [shippingAddressId], references: [id])
+  billingAddress        Address?               @relation("OrderBillingAddress", fields: [billingAddressId], references: [id])
+
+  @@index([orderNumber])
+  @@map("orders")
+}
+
+model OrderItem {
+  id              String          @id @default(uuid())
+  orderId         String          @map("order_id")
+  variantId       String          @map("variant_id")
+  batchId         String          @map("batch_id")
+  productName     String          @map("product_name")
+  variantName     String          @map("variant_name")
+  quantity        Int             @default(1)
+  netContent      Decimal         @map("net_content") @db.Decimal(10, 2)
+  measurementUnit MeasurementUnit @map("measurement_unit")
+  productCategory ProductCategory @map("product_category")
+  unitPrice       Decimal         @map("unit_price") @db.Decimal(10, 2)
+  gstSlab         GstSlab         @map("gst_slab")
+  hsnCode         String          @map("hsn_code")
+  batchNumber     String          @map("batch_number")
+  mfgDate         DateTime        @map("mfg_date")
+  expiryDate      DateTime        @map("expiry_date")
+  taxAmount       Decimal         @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  order           Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant         Variant         @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  batch           Batch           @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model Address {
+  id             String      @id @default(uuid())
+  customerId     String?     @map("customer_id")
+  vendorId       String?     @map("vendor_id")
+  type           AddressType
+  street         String
+  area           String?
+  city           String
+  state          String
+  zipCode        String      @map("zip_code")
+  country        String
+  isDefault      Boolean     @default(false) @map("is_default")
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+  customer       Customer?   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  vendor         Vendor?     @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  shippingOrders Order[]     @relation("OrderShippingAddress")
+  billingOrders  Order[]     @relation("OrderBillingAddress")
+
+  @@index([customerId])
+  @@index([vendorId])
+  @@map("addresses")
+}
+
+model Vendor {
+  id                String          @id @default(uuid())
+  name              String          @unique
+  contactPerson     String          @map("contact_person")
+  email             String?
+  phone             String?
+  website           String?
+  paymentTerms      String?         @map("payment_terms")
+  leadTimeDays      Int?            @map("lead_time_days")
+  minimumOrderValue Decimal?        @map("minimum_order_value") @db.Decimal(10, 2)
+  notes             String?
+  isActive          Boolean         @default(true) @map("is_active")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+  purchaseOrders    PurchaseOrder[]
+  addresses         Address[]
+
+  @@map("vendors")
+}
+
+model PurchaseOrder {
+  id           String              @id @default(uuid())
+  poNumber     String              @unique @map("po_number")
+  vendorId     String              @map("vendor_id")
+  orderDate    DateTime            @default(now()) @map("order_date")
+  expectedDate DateTime?           @map("expected_date")
+  status       POStatus            @default(DRAFT)
+  totalAmount  Decimal             @map("total_amount") @db.Decimal(10, 2)
+  notes        String?
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @updatedAt @map("updated_at")
+  vendor       Vendor              @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  items        PurchaseOrderItem[]
+  batches      Batch[]
+
+  @@index([poNumber])
+  @@index([vendorId])
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(uuid())
+  purchaseOrderId String        @map("purchase_order_id")
+  variantId       String        @map("variant_id")
+  orderedQty      Int           @map("ordered_qty")
+  receivedQty     Int           @default(0) @map("received_qty")
+  unitPrice       Decimal       @map("unit_price") @db.Decimal(10, 2)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  variant         Variant       @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseOrderId])
+  @@index([variantId])
+  @@map("purchase_order_items")
+}
+
+enum ProductPurityType {
+  PURE
+  REFINED
+  RCO
+}
+
+enum GstSlab {
+  ZERO_PERCENT
+  FIVE_PERCENT
+  TWELVE_PERCENT
+  EIGHTEEN_PERCENT
+  TWENTY_EIGHT_PERCENT
+  FORTY_PERCENT
+}
+
+enum GstType {
+  INTRASTATE_GST
+  INTERSTATE_GST
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
+}
+
+enum ProductCategory {
+  ESSENTIAL_OIL
+  FIXED_OIL
+  EXTRACT
+  POWDER_EXTRACT
+  POWDER
+  FRAGRANCE_OIL
+  DRY_EXTRACT
+  HYDROSOL
+  HERBAL_OILS
+  CHEMICALS
+}
+
+enum CertificationType {
+  ORGANIC
+  GMP
+  ISO_9001
+  REACH
+  FDA
+  USDA
+  KOSHER
+  HALAL
+}
+
+enum ExtractionMethod {
+  STEAM_DISTILLATION
+  COLD_PRESS
+  SOLVENT_EXTRACTION
+  CO2_EXTRACTION
+  HYDRO_DISTILLATION
+}
+
+enum HazardClass {
+  NON_HAZARDOUS
+  CLASS_1_EXPLOSIVE
+  CLASS_2_GAS
+  CLASS_3_FLAMMABLE_LIQUID
+  CLASS_4_FLAMMABLE_SOLID
+  CLASS_5_OXIDIZER
+  CLASS_6_POISON
+  CLASS_7_RADIOACTIVE
+  CLASS_8_CORROSIVE
+  CLASS_9_MISCELLANEOUS
+}
+
+enum PackagingType {
+  GLASS_BOTTLE
+  PLASTIC_BOTTLE
+  AMBER_GLASS
+  DROPPER_BOTTLE
+  SPRAY_BOTTLE
+  ALUMINUM_BOTTLE
+  JAR
+  TUBE
+  POUCH
+  BULK_CONTAINER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum MeasurementUnit {
+  ML
+  L
+  GM
+  KG
+  PCS
+}
+
+enum TransactionType {
+  PURCHASE
+  SALE
+  ADJUSTMENT
+  RETURN
+  WASTE
+}
+
+enum CustomerType {
+  INDIVIDUAL
+  BUSINESS
+}
+
+enum POStatus {
+  DRAFT
+  SENT
+  CONFIRMED
+  PARTIALLY_RECEIVED
+  COMPLETED
+  CANCELLED
+
+  @@map("PurchaseOrderStatus")
+}
+
+model InternalUser {
+  id          String           @id @default(uuid())
+  email       String           @unique
+  googleId    String?          @unique @map("google_id")
+  role        InternalUserRole @default(USER)
+  permissions String[]
+  status      UserStatus       @default(ACTIVE)
+  fullName    String?          @map("full_name")
+  department  String?
+  notes       String?
+  lastLoginAt DateTime?        @map("last_login_at")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@index([email])
+  @@index([googleId])
+  @@map("internal_users")
+}
+
+enum InternalUserRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  USER
+  VIEWER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}

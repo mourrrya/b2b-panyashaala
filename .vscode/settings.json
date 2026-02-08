@@ -2,6 +2,13 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
-  "cSpell.words": ["Aukra", "Pincode", "Supabase"],
+  "cSpell.words": [
+    "Aukra",
+    "bhandaar",
+    "emolliency",
+    "INCI",
+    "Pincode",
+    "Supabase"
+  ],
   "svg.preview.background": "transparent"
 }

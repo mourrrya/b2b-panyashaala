@@ -1,5 +1,7 @@
+import { AuthProvider } from "@/components/AuthProvider";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { Sonner } from "@/components/sonner";
 import {
   createOrganizationSchema,
   createWebsiteSchema,
@@ -10,13 +12,13 @@ import {
   SITE_URL,
   VERIFICATION_TOKENS,
 } from "@/lib/seo";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import type React from "react";
 import ClientOnly from "./ClientOnly";
 import "./globals.css";
+import { ProgressBar } from "./progressBar";
 
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 
@@ -24,8 +26,7 @@ const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], display: "swap" });
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default:
-      "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
+    default: "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
     template: "%s | " + SITE_NAME,
   },
   description: SITE_DESCRIPTION,
@@ -118,14 +119,16 @@ export default function RootLayout({
         <JsonLd schema={createOrganizationSchema()} />
         <JsonLd schema={createWebsiteSchema()} />
       </head>
-      <body
-        suppressHydrationWarning
-        className={`${plusJakarta.className} antialiased`}
-      >
+      <body suppressHydrationWarning className={`${plusJakarta.className} antialiased`}>
         <ClientOnly>
-          <Header />
-          <AntdRegistry>{children}</AntdRegistry>
-          <Footer />
+          <ProgressBar>
+            <AuthProvider>
+              <Header />
+              {children}
+            </AuthProvider>
+            <Footer />
+          </ProgressBar>
+          <Sonner />
         </ClientOnly>
         <Analytics />
       </body>

@@ -1,4 +1,5 @@
-import type { Product } from "./store";
+import { ProductCategory } from "@/prisma/generated/prisma/enums";
+import type { Product } from "../store/productStore";
 
 // INCI name mappings for common products
 const inciMappings: Record<string, Record<string, string>> = {
@@ -145,20 +146,16 @@ const inciMappings: Record<string, Record<string, string>> = {
 // Product descriptions mapping
 const descriptionMappings: Record<string, Record<string, string>> = {
   "essential-oil": {
-    default:
-      "Premium therapeutic-grade essential oil for aromatherapy and formulations.",
+    default: "Premium therapeutic-grade essential oil for aromatherapy and formulations.",
   },
   "fixed-oil": {
-    default:
-      "Cold-pressed or solvent-extracted carrier oil for skincare and formulations.",
+    default: "Cold-pressed or solvent-extracted carrier oil for skincare and formulations.",
   },
   extract: {
-    default:
-      "High-potency botanical extract with concentrated active compounds.",
+    default: "High-potency botanical extract with concentrated active compounds.",
   },
   hydrosol: {
-    default:
-      "Aromatic distilled floral water rich in botanical properties and antioxidants.",
+    default: "Aromatic distilled floral water rich in botanical properties and antioxidants.",
   },
 };
 
@@ -473,7 +470,7 @@ export function getProductsData(): Product[] {
     products.push({
       id: productId++,
       name: oilName + " Essential Oil",
-      category: "essential-oil",
+      category: ProductCategory.ESSENTIAL_OIL,
       description: getDescription(oilName, "essential-oil"),
       inci: getInci(oilName, "essential-oil"),
       applications: getApplications(oilName, "essential-oil"),
@@ -532,7 +529,7 @@ export function getProductsData(): Product[] {
     products.push({
       id: productId++,
       name: oilName + (oilName.includes("Oil") ? "" : " Oil"),
-      category: "fixed-oil",
+      category: ProductCategory.FIXED_OIL,
       description: getDescription(oilName, "fixed-oil"),
       inci: getInci(oilName, "fixed-oil"),
       applications: getApplications(oilName, "fixed-oil"),
@@ -668,7 +665,7 @@ export function getProductsData(): Product[] {
     products.push({
       id: productId++,
       name: commonName + " Extract",
-      category: "extract",
+      category: ProductCategory.EXTRACT,
       description: getDescription(commonName, "extract"),
       inci: getInci(extractName, "extract"),
       applications: getApplications(commonName, "extract"),
@@ -703,7 +700,7 @@ export function getProductsData(): Product[] {
     products.push({
       id: productId++,
       name: hydrosol + " Hydrosol",
-      category: "hydrosol",
+      category: ProductCategory.HYDROSOL,
       description: getDescription(hydrosol, "hydrosol"),
       inci: getInci(hydrosol, "hydrosol"),
       applications: getApplications(hydrosol, "hydrosol"),

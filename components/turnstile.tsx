@@ -1,5 +1,6 @@
 "use client";
 
+import { ERROR_MESSAGES, TURNSTILE_CONFIG, UI_LABELS } from "@/lib/constants";
 import { useEffect, useRef, useState } from "react";
 
 interface TurnstileProps {
@@ -36,10 +37,10 @@ export function Turnstile({
   useEffect(() => {
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
-    if (!siteKey || siteKey === "your_turnstile_site_key" || testMode) {
+    if (!siteKey || siteKey === TURNSTILE_CONFIG.PLACEHOLDER_KEY || testMode) {
       // Mock Turnstile behavior for development/testing
       const timer = setTimeout(() => {
-        const mockToken = "test-token-" + Date.now();
+        const mockToken = TURNSTILE_CONFIG.TEST_TOKEN_PREFIX + Date.now();
         onVerify(mockToken);
       }, 1000);
 
@@ -51,7 +52,7 @@ export function Turnstile({
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
     // Skip loading script if in test mode or no key
-    if (!siteKey || siteKey === "your_turnstile_site_key" || testMode) {
+    if (!siteKey || siteKey === TURNSTILE_CONFIG.PLACEHOLDER_KEY || testMode) {
       return;
     }
 
@@ -67,7 +68,7 @@ export function Turnstile({
       };
 
       script.onerror = () => {
-        setError("Failed to load Turnstile verification system");
+        setError(ERROR_MESSAGES.TURNSTILE.LOAD_FAILED);
       };
 
       document.head.appendChild(script);
@@ -87,18 +88,11 @@ export function Turnstile({
   }, [testMode]);
 
   useEffect(() => {
-    if (
-      isLoaded &&
-      containerRef.current &&
-      window.turnstile &&
-      !widgetId.current
-    ) {
+    if (isLoaded && containerRef.current && window.turnstile && !widgetId.current) {
       const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
-      if (!siteKey || siteKey === "your_turnstile_site_key") {
-        setError(
-          "Turnstile site key is not configured in environment variables"
-        );
+      if (!siteKey || siteKey === TURNSTILE_CONFIG.PLACEHOLDER_KEY) {
+        setError(ERROR_MESSAGES.TURNSTILE.NOT_CONFIGURED);
         return;
       }
 
@@ -117,17 +111,17 @@ export function Turnstile({
             onError?.();
           },
           "expired-callback": () => {
-            setError("Security verification expired. Please verify again.");
+            setError(ERROR_MESSAGES.TURNSTILE.EXPIRED);
             onExpire?.();
           },
           "timeout-callback": () => {
-            setError("Verification timed out. Please try again.");
+            setError(ERROR_MESSAGES.TURNSTILE.TIMEOUT);
             onError?.();
           },
         }) as string | null;
       } catch (err) {
-        const errorMsg = err instanceof Error ? err.message : "Unknown error";
-        setError(`Failed to initialize security verification: ${errorMsg}`);
+        const errorMsg = err instanceof Error ? err.message : ERROR_MESSAGES.UNKNOWN;
+        setError(`${ERROR_MESSAGES.TURNSTILE.INIT_FAILED}: ${errorMsg}`);
         console.error("Turnstile initialization error:", err);
       }
     }
@@ -137,15 +131,15 @@ export function Turnstile({
   const getErrorMessage = (errorCode?: string) => {
     switch (errorCode) {
       case "network-error":
-        return "Network error. Please check your internet connection.";
+        return ERROR_MESSAGES.TURNSTILE.NETWORK_ERROR;
       case "parse-error":
-        return "Configuration error. Please contact support.";
+        return ERROR_MESSAGES.TURNSTILE.PARSE_ERROR;
       case "config-error":
-        return "Invalid configuration. Please contact support.";
+        return ERROR_MESSAGES.TURNSTILE.CONFIG_ERROR;
       case "generic-client-error":
-        return "Verification failed. Please try again.";
+        return ERROR_MESSAGES.TURNSTILE.GENERIC_CLIENT_ERROR;
       default:
-        return "Security verification failed. Please try again.";
+        return ERROR_MESSAGES.TURNSTILE.DEFAULT;
     }
   };
 
@@ -162,21 +156,20 @@ export function Turnstile({
 
   // Show different UI based on configuration
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  const isTestMode =
-    testMode || !siteKey || siteKey === "your_turnstile_site_key";
+  const isTestMode = testMode || !siteKey || siteKey === TURNSTILE_CONFIG.PLACEHOLDER_KEY;
 
   if (error) {
     return (
       <div className={`text-destructive text-sm ${className}`}>
         <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-          <p className="font-medium">Security Verification Error</p>
+          <p className="font-medium">{UI_LABELS.TURNSTILE.ERROR_TITLE}</p>
           <p className="text-xs mt-1">{error}</p>
           <button
             type="button"
             onClick={reset}
             className="text-primary hover:underline text-xs mt-2 block"
           >
-            Try again
+            {UI_LABELS.ACTIONS.TRY_AGAIN}
           </button>
         </div>
       </div>
@@ -189,22 +182,20 @@ export function Turnstile({
       <div className={`${className}`}>
         <div className="p-4 bg-muted/50 border-2 border-dashed border-border rounded-lg text-center">
           <div className="text-sm text-muted-foreground mb-2">
-            🔧 Development Mode - Mock Verification
+            {UI_LABELS.TURNSTILE.DEV_MODE_TITLE}
           </div>
           <div className="text-xs text-muted-foreground">
             {isDevelopment ? (
               <>
-                Turnstile verification is disabled in development.
+                {UI_LABELS.TURNSTILE.DEV_MODE_DISABLED}
                 <br />
-                Configure NEXT_PUBLIC_TURNSTILE_SITE_KEY for production.
+                {UI_LABELS.TURNSTILE.DEV_MODE_CONFIG}
               </>
             ) : (
-              "Test mode enabled - verification will be bypassed"
+              UI_LABELS.TURNSTILE.TEST_MODE_BYPASSED
             )}
           </div>
-          <div className="mt-2 text-green-600 text-xs">
-            ✓ Verification Complete (Mock)
-          </div>
+          <div className="mt-2 text-green-600 text-xs">{UI_LABELS.TURNSTILE.MOCK_COMPLETE}</div>
         </div>
       </div>
     );
@@ -216,9 +207,7 @@ export function Turnstile({
       {!isLoaded && (
         <div className="flex items-center justify-center p-4 bg-muted rounded">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary mr-2" />
-          <span className="text-sm text-muted-foreground">
-            Loading verification...
-          </span>
+          <span className="text-sm text-muted-foreground">{UI_LABELS.TURNSTILE.LOADING}</span>
         </div>
       )}
     </div>

@@ -1,0 +1,118 @@
+"use client";
+
+import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
+import { Order } from "@/prisma/generated/prisma/browser";
+import { GetServerListRes, GetServerRes } from "@/types/api.payload.types";
+import { createContext, ReactNode, useContext, useMemo } from "react";
+import useSWR, { KeyedMutator, SWRConfig } from "swr";
+import { swrFetcher } from "../api/axios";
+
+// =============================================================================
+// CONTEXT TYPES
+// =============================================================================
+
+interface OrdersApiContextValue {
+  orders: Order[];
+  isLoading: boolean;
+  isValidating: boolean;
+  error: Error | undefined;
+  refetch: KeyedMutator<GetServerListRes<Order[]>>;
+}
+
+interface OrderApiContextValue {
+  order: Order | undefined;
+  isLoading: boolean;
+  isValidating: boolean;
+  error: Error | undefined;
+  refetch: KeyedMutator<GetServerRes<Order>>;
+}
+
+const OrdersApiContext = createContext<OrdersApiContextValue | undefined>(undefined);
+const OrderApiContext = createContext<OrderApiContextValue | undefined>(undefined);
+
+// =============================================================================
+// ORDERS PROVIDER (List)
+// =============================================================================
+
+interface OrdersApiProviderProps {
+  children: ReactNode;
+}
+
+export function OrdersApiProvider({ children }: OrdersApiProviderProps) {
+  const { data, error, isLoading, isValidating, mutate } = useSWR<GetServerListRes<Order[]>>(
+    PRIVATE_ROUTES.ORDERS.LIST,
+    swrFetcher,
+    SWR_CONFIG,
+  );
+
+  const value = useMemo<OrdersApiContextValue>(
+    () => ({
+      orders: data?.data ?? [],
+      isLoading,
+      isValidating,
+      error,
+      refetch: mutate,
+    }),
+    [data, isLoading, isValidating, error, mutate],
+  );
+
+  return (
+    <SWRConfig value={SWR_CONFIG}>
+      <OrdersApiContext.Provider value={value}>{children}</OrdersApiContext.Provider>
+    </SWRConfig>
+  );
+}
+
+// =============================================================================
+// ORDER PROVIDER (Single)
+// =============================================================================
+
+interface OrderApiProviderProps {
+  children: ReactNode;
+  orderId: string;
+}
+
+export function OrderApiProvider({ children, orderId }: OrderApiProviderProps) {
+  const { data, error, isLoading, isValidating, mutate } = useSWR<GetServerRes<Order>>(
+    orderId ? PRIVATE_ROUTES.ORDERS.DETAIL(orderId) : null,
+    swrFetcher,
+    SWR_CONFIG,
+  );
+
+  const value = useMemo<OrderApiContextValue>(
+    () => ({
+      order: data?.data,
+      isLoading,
+      isValidating,
+      error,
+      refetch: mutate,
+    }),
+    [data, isLoading, isValidating, error, mutate],
+  );
+
+  return (
+    <SWRConfig value={SWR_CONFIG}>
+      <OrderApiContext.Provider value={value}>{children}</OrderApiContext.Provider>
+    </SWRConfig>
+  );
+}
+
+// =============================================================================
+// HOOKS
+// =============================================================================
+
+export function useApiOrders(): OrdersApiContextValue {
+  const context = useContext(OrdersApiContext);
+  if (context === undefined) {
+    throw new Error("useOrders must be used within an OrdersProvider");
+  }
+  return context;
+}
+
+export function useApiOrder(): OrderApiContextValue {
+  const context = useContext(OrderApiContext);
+  if (context === undefined) {
+    throw new Error("useOrder must be used within an OrderProvider");
+  }
+  return context;
+}

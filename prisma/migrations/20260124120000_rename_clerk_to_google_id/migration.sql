@@ -1,0 +1,3 @@
+-- This migration was originally intended to rename clerk_user_id to google_id
+-- However, the previous migration was updated to create the column as google_id from the start
+-- No action needed

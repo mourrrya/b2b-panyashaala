@@ -1,103 +1,72 @@
+import {
+  CONTACT_INFO,
+  FOOTER_LINKS,
+  MARKETING_COPY,
+  SITE_CONFIG,
+  UI_LABELS,
+} from "@/lib/constants";
 import Link from "next/link";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-linear-to-br from-emerald-50/80 via-white/80 to-teal-50/80 border-t border-emerald-200/50 mt-20 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <h3 className="font-semibold text-slate-900 mb-4">About</h3>
-            <p className="text-sm text-slate-600">
-              Natural cosmetic ingredients supplier for formulators and
-              manufacturers.
-            </p>
+    <footer className="bg-linear-to-br from-emerald-50/80 via-white/80 to-teal-50/80 border-t border-emerald-200/50 mt-12 sm:mt-16 lg:mt-20 backdrop-blur-sm">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 lg:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
+          <div className="col-span-2 md:col-span-1">
+            <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+              {UI_LABELS.SECTIONS.ABOUT}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600">{MARKETING_COPY.FOOTER_ABOUT}</p>
           </div>
           <nav>
-            <h3 className="font-semibold text-slate-900 mb-4">Products</h3>
-            <ul className="space-y-2 text-sm text-slate-600">
-              <li>
-                <Link
-                  href="/products?category=essential-oil"
-                  className="hover:text-emerald-800 transition-colors duration-200"
-                >
-                  Essential Oils
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products?category=fixed-oil"
-                  className="hover:text-emerald-800 transition-colors duration-200"
-                >
-                  Carrier Oils
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products?category=extract"
-                  className="hover:text-emerald-800 transition-colors duration-200"
-                >
-                  Extracts
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products?category=hydrosol"
-                  className="hover:text-emerald-800 transition-colors duration-200"
-                >
-                  Hydrosols
-                </Link>
-              </li>
+            <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+              {UI_LABELS.SECTIONS.PRODUCTS}
+            </h3>
+            <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-600">
+              {FOOTER_LINKS.products.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="hover:text-emerald-800 transition-colors duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
           <nav>
-            <h3 className="font-semibold text-slate-900 mb-4">Resources</h3>
-            <ul className="space-y-2 text-sm text-slate-600">
-              <li>
-                <Link
-                  href="/about"
-                  className="hover:text-emerald-800 transition-colors duration-200"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/quality"
-                  className="hover:text-emerald-800 transition-colors duration-200"
-                >
-                  Quality
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/applications"
-                  className="hover:text-emerald-800 transition-colors duration-200"
-                >
-                  Applications
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/sitemap.xml"
-                  className="hover:text-emerald-800 transition-colors duration-200"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Sitemap
-                </Link>
-              </li>
+            <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+              {UI_LABELS.SECTIONS.RESOURCES}
+            </h3>
+            <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-600">
+              {FOOTER_LINKS.resources.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="hover:text-emerald-800 transition-colors duration-200"
+                    {...("external" in link && link.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
           <div>
-            <h3 className="font-semibold text-slate-900 mb-4">Contact</h3>
-            <p className="text-sm text-slate-600 mb-3">
+            <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+              {UI_LABELS.SECTIONS.CONTACT}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mb-2 sm:mb-3">
               <a
-                href="tel:+918076450898"
+                href={`tel:${CONTACT_INFO.PHONE}`}
                 className="hover:text-emerald-800 transition-colors duration-200 font-medium"
               >
-                +91 8076450898
+                {CONTACT_INFO.PHONE_DISPLAY}
               </a>
             </p>
             {/* <p className="text-sm text-slate-600 mb-4">
@@ -140,9 +109,9 @@ export function Footer() {
             </div> */}
           </div>
         </div>
-        <div className="border-t border-emerald-200/50 pt-8 text-center text-sm text-slate-600">
+        <div className="border-t border-emerald-200/50 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-slate-600">
           <p>
-            &copy; {currentYear} Aukra Chem Essentials LLP. All rights reserved.
+            &copy; {currentYear} {SITE_CONFIG.NAME}. All rights reserved.
           </p>
         </div>
       </div>

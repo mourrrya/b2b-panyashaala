@@ -1,3 +1,4 @@
+import { ERROR_MESSAGES, HTTP_STATUS, TURNSTILE_CONFIG } from "@/lib/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -5,11 +6,17 @@ export async function POST(request: NextRequest) {
     const { token } = await request.json();
 
     if (!token) {
-      return NextResponse.json({ success: false, error: "Token is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: ERROR_MESSAGES.VALIDATION.TOKEN_REQUIRED },
+        { status: HTTP_STATUS.BAD_REQUEST },
+      );
     }
 
     // Handle test tokens in development
-    if (process.env.NODE_ENV === "development" && token.startsWith("test-token-")) {
+    if (
+      process.env.NODE_ENV === "development" &&
+      token.startsWith(TURNSTILE_CONFIG.TEST_TOKEN_PREFIX)
+    ) {
       return NextResponse.json({
         success: true,
         error: null,
@@ -19,7 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     const secretKey = process.env.TURNSTILE_SECRET_KEY;
-    if (!secretKey || secretKey === "your_turnstile_secret_key") {
+    if (!secretKey || secretKey === TURNSTILE_CONFIG.PLACEHOLDER_SECRET) {
       console.warn("Turnstile secret key not configured");
       if (process.env.NODE_ENV === "development") {
         return NextResponse.json({
@@ -30,12 +37,12 @@ export async function POST(request: NextRequest) {
         });
       }
       return NextResponse.json(
-        { success: false, error: "Server configuration error" },
-        { status: 500 },
+        { success: false, error: ERROR_MESSAGES.TURNSTILE.SERVER_CONFIG_ERROR },
+        { status: HTTP_STATUS.INTERNAL_SERVER_ERROR },
       );
     }
 
-    const verifyUrl = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+    const verifyUrl = TURNSTILE_CONFIG.VERIFY_URL;
     const formData = new FormData();
     formData.append("secret", secretKey);
     formData.append("response", token);
@@ -53,6 +60,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Turnstile verification error:", error);
-    return NextResponse.json({ success: false, error: "Verification failed" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: ERROR_MESSAGES.TURNSTILE.VERIFICATION_FAILED },
+      { status: HTTP_STATUS.INTERNAL_SERVER_ERROR },
+    );
   }
 }
