@@ -13,10 +13,16 @@ if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY)
  * Form data type for contact form submissions
  */
 export const ContactFormDataSchema = z.object({
-  name: z.string().min(2, ERROR_MESSAGES.VALIDATION.NAME_MIN_LENGTH),
-  email: z.string().email(ERROR_MESSAGES.VALIDATION.INVALID_EMAIL),
-  company: z.string().optional(),
-  message: z.string().optional(),
+  name: z
+    .string()
+    .min(2, ERROR_MESSAGES.VALIDATION.NAME_MIN_LENGTH)
+    .max(100, ERROR_MESSAGES.VALIDATION.NAME_MAX_LENGTH),
+  email: z
+    .email(ERROR_MESSAGES.VALIDATION.INVALID_EMAIL)
+    .max(100, ERROR_MESSAGES.VALIDATION.EMAIL_MAX_LENGTH),
+  company: z.string().max(100, ERROR_MESSAGES.VALIDATION.COMPANY_NAME_MAX_LENGTH).optional(),
+  phone: z.string().max(15, ERROR_MESSAGES.VALIDATION.PHONE_MAX_LENGTH).optional(),
+  message: z.string().max(500, ERROR_MESSAGES.VALIDATION.MESSAGE_MAX_LENGTH).optional(),
   turnstileToken: z.string().min(1, ERROR_MESSAGES.VALIDATION.SECURITY_VERIFICATION_REQUIRED),
 });
 
@@ -82,6 +88,7 @@ export const sendEmail = async (
       sent_at: new Date().toISOString(),
       page_url: window.location.href,
       company: data.company || EMAIL_DEFAULTS.NOT_PROVIDED,
+      phone: data.phone || EMAIL_DEFAULTS.NOT_PROVIDED,
       message: data.message || EMAIL_DEFAULTS.NO_MESSAGE_PROVIDED,
       enquired_products: enquiredProductsText,
       product_count: products.length.toString(),

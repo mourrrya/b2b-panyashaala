@@ -121,10 +121,35 @@ export default function ContactPage() {
                     <input
                       type="text"
                       placeholder={UI_LABELS.PLACEHOLDERS.COMPANY}
-                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-slate-200 text-sm sm:text-base bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors"
+                      className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border text-sm sm:text-base bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors ${
+                        errors.company ? "border-red-500" : "border-slate-200"
+                      }`}
                       {...register("company")}
                       onInput={() => handleFieldChange("company")}
                     />
+                    {errors.company && (
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">
+                        {errors.company.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5 sm:mb-2">
+                      {UI_LABELS.FORM.PHONE}
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder={UI_LABELS.PLACEHOLDERS.PHONE}
+                      className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border text-sm sm:text-base bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors ${
+                        errors.phone ? "border-red-500" : "border-slate-200"
+                      }`}
+                      {...register("phone")}
+                      onInput={() => handleFieldChange("phone")}
+                    />
+                    {errors.phone && (
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.phone.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -134,10 +159,17 @@ export default function ContactPage() {
                     <textarea
                       placeholder={UI_LABELS.PLACEHOLDERS.MESSAGE}
                       rows={4}
-                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-slate-200 text-sm sm:text-base bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors resize-none"
+                      className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border text-sm sm:text-base bg-white/80 focus:border-emerald-600 focus:outline-none transition-colors resize-none ${
+                        errors.message ? "border-red-500" : "border-slate-200"
+                      }`}
                       {...register("message")}
                       onInput={() => handleFieldChange("message")}
                     />
+                    {errors.message && (
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">
+                        {errors.message.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
