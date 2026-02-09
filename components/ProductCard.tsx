@@ -33,7 +33,7 @@ export function ProductCard({ product, basket, addToBasket, removeFromBasket }: 
       </p>
       <div className="space-y-1.5 sm:space-y-2 pt-3 sm:pt-4 border-t border-slate-100 mb-2">
         <p className="text-[10px] sm:text-xs text-slate-500">
-          <span className="font-medium">INCI:</span> {generateINCI(product)}
+          <span className="font-medium capitalize">INCI:</span> {generateINCI(product)}
         </p>
         <p className="text-[10px] sm:text-xs text-emerald-700 font-medium">
           <span className="block text-slate-600 font-normal">Applications:</span>
