@@ -1,7 +1,6 @@
 import { getProductById, getProducts } from "@/app/api/services/productServices";
 import { BreadcrumbNavigation } from "@/components/BreadcrumbNavigation";
 import {
-  ProductDescription,
   ProductHeader,
   ProductSidebar,
   ProductSpecifications,
@@ -88,7 +87,7 @@ export default async function ProductDetailPage({
 
             <ProductSpecifications product={productDb} categoryLabel={categoryLabel} />
 
-            <ProductDescription product={productDb} />
+            {/* <ProductDescription product={productDb} /> */}
           </div>
 
           <ProductSidebar product={productDb} />
