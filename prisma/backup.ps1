@@ -21,3 +21,4 @@ psql $directUrl -c "COPY (select * from public.purchase_orders order by purchase
 psql $directUrl -c "COPY (select * from public.reviews order by reviews.id asc nulls last) TO STDOUT WITH CSV HEADER DELIMITER ',';" > .backup/reviews_rows.csv
 psql $directUrl -c "COPY (select * from public.variants order by variants.id asc nulls last) TO STDOUT WITH CSV HEADER DELIMITER ',';" > .backup/variants_rows.csv
 psql $directUrl -c "COPY (select * from public.vendors order by vendors.id asc nulls last) TO STDOUT WITH CSV HEADER DELIMITER ',';" > .backup/vendors_rows.csv
+psql $directUrl -c "COPY (select * from public.product_collections order by product_collections.id asc nulls last) TO STDOUT WITH CSV HEADER DELIMITER ',';" > .backup/product_collections_rows.csv
