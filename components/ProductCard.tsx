@@ -65,7 +65,7 @@ export function ProductCard({
             addToBasket(product.id);
           }
         }}
-        className={`mt-auto w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+        className={`mt-4 w-full px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer ${
           isInBasket
             ? "bg-emerald-600 text-white hover:bg-emerald-700"
             : "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
