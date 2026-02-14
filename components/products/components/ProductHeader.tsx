@@ -1,7 +1,7 @@
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 
 interface ProductHeaderProps {
-  product: ProductWithVariantsImagesReviews;
+  product: ProductWithVariantsImages;
   categoryLabel: string;
 }
 

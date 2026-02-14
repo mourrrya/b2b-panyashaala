@@ -9,7 +9,7 @@ import {
 import { UI_LABELS } from "@/lib/constants";
 import { PAGE_SEO } from "@/lib/constants/seo";
 import { createBreadcrumbSchema, createMetadata, createProductSchema, JsonLd } from "@/lib/seo";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 
 import type { Metadata } from "next";
 
@@ -60,7 +60,7 @@ export default async function ProductDetailPage({
   params: Promise<{ productId: string }>;
 }) {
   const { productId } = await params;
-  const productDb: ProductWithVariantsImagesReviews = await getProductById(productId.toString());
+  const productDb: ProductWithVariantsImages = await getProductById(productId.toString());
   const allProductsResult = await getProducts({});
 
   const categoryLabel = productDb.category.split("_").join(" ");

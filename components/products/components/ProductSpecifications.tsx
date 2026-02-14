@@ -1,8 +1,8 @@
 import { generateApplications, generateINCI } from "@/lib/productUtils";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 
 interface ProductSpecificationsProps {
-  product: ProductWithVariantsImagesReviews;
+  product: ProductWithVariantsImages;
   categoryLabel: string;
 }
 
@@ -23,7 +23,16 @@ export function ProductSpecifications({ product, categoryLabel }: ProductSpecifi
         </div>
         <div>
           <dt className="font-semibold text-slate-900 mb-2">Applications</dt>
-          <dd className="text-slate-600">{generateApplications(product)}</dd>
+          <div className="text-slate-600 flex flex-wrap gap-2">
+            {generateApplications(product).map((item) => (
+              <span
+                className="font-medium capitalize border border-slate-200 bg-slate-100 px-1.5 py-0.5 rounded text-xs sm:text-sm text-slate-700 inline-block"
+                key={item}
+              >
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
       </dl>
     </div>

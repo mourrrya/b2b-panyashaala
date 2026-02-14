@@ -6,7 +6,7 @@ import {
   SOCIAL_LINKS,
   VERIFICATION_TOKENS as VERIFICATION_TOKENS_CONST,
 } from "@/lib/constants";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 import { Metadata } from "next";
 import React, { type ReactElement } from "react";
 import { generateApplications, generateINCI } from "./productUtils";
@@ -198,7 +198,7 @@ interface ProductSchema {
   };
 }
 
-export function createProductSchema(product: ProductWithVariantsImagesReviews): ProductSchema {
+export function createProductSchema(product: ProductWithVariantsImages): ProductSchema {
   return {
     "@context": SCHEMA_CONFIG.CONTEXT,
     "@type": SCHEMA_CONFIG.TYPES.PRODUCT,

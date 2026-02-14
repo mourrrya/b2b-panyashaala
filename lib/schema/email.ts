@@ -1,5 +1,5 @@
 import { CONTACT_INFO, EMAIL_DEFAULTS, ERROR_MESSAGES } from "@/lib/constants";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
 import { API_CONFIG, PUBLIC_ROUTES } from "../constants/routes";
@@ -59,7 +59,7 @@ export async function verifyTurnstile(token: string): Promise<boolean> {
 
 export const sendEmail = async (
   data: ContactFormData,
-  products: ProductWithVariantsImagesReviews[] = [],
+  products: ProductWithVariantsImages[] = [],
 ): Promise<boolean> => {
   try {
     if (

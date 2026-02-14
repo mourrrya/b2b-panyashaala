@@ -1,17 +1,24 @@
 import { PRODUCT_CATEGORY_LABELS, UI_LABELS } from "@/lib/constants";
 import { generateApplications, generateINCI } from "@/lib/productUtils";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 import { useRouter } from "@bprogress/next/app";
 import { Check } from "lucide-react";
 
 interface ProductCardProps {
-  product: ProductWithVariantsImagesReviews;
+  product: ProductWithVariantsImages;
   basket: (number | string)[];
+  showApplications?: boolean;
   addToBasket: (id: number | string) => void;
   removeFromBasket: (id: number | string) => void;
 }
 
-export function ProductCard({ product, basket, addToBasket, removeFromBasket }: ProductCardProps) {
+export function ProductCard({
+  product,
+  basket,
+  addToBasket,
+  removeFromBasket,
+  showApplications = true,
+}: ProductCardProps) {
   const isInBasket = basket.includes(product.id);
   const router = useRouter();
 
@@ -32,13 +39,22 @@ export function ProductCard({ product, basket, addToBasket, removeFromBasket }: 
         {product.description}
       </p>
       <div className="space-y-1.5 sm:space-y-2 pt-3 sm:pt-4 border-t border-slate-100 mb-2">
-        <p className="text-[10px] sm:text-xs text-slate-500">
-          <span className="font-medium capitalize">INCI:</span> {generateINCI(product)}
+        <p className="text-[10px] sm:text-xs text-slate-500 capitalize">
+          <span className="font-medium">INCI:</span> {generateINCI(product)}
         </p>
-        <p className="text-[10px] sm:text-xs text-emerald-700 font-medium">
-          <span className="block text-slate-600 font-normal">Applications:</span>
-          {generateApplications(product)}
-        </p>
+        {showApplications && (
+          <p className="text-[10px] sm:text-xs text-emerald-700 font-medium items-start flex gap-1 flex-wrap">
+            <span className="block text-slate-600 font-normal">Applications:</span>
+            {generateApplications(product).map((item) => (
+              <span
+                className="font-medium capitalize border border-slate-200 bg-slate-100 px-1 py-px sm:px-1 sm:py-0.5 rounded text-[10px] sm:text-xs text-slate-700 inline-block"
+                key={item}
+              >
+                {item}
+              </span>
+            ))}
+          </p>
+        )}
       </div>
       <button
         onClick={(e) => {

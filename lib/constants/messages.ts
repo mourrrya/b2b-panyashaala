@@ -73,6 +73,7 @@ export const ERROR_MESSAGES = {
     NOT_FOUND: "Resource not found",
     ORDER_NOT_FOUND: "Order not found",
     PRODUCT_NOT_FOUND: "Product not found",
+    COLLECTION_NOT_FOUND: "Collection not found",
     INVALID_PRODUCT_ID: "Invalid Product ID",
     FORBIDDEN: "Forbidden",
     ALREADY_EXISTS: "Resource already exists",

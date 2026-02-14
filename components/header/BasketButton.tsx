@@ -5,7 +5,7 @@ import { UI_LABELS } from "@/lib/constants";
 import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { useBasket, useRemoveFromBasket, useRemoveMultipleFromBasket } from "@/store/productStore";
 import { GetServerListRes } from "@/types/api.payload.types";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 import { ShoppingBag } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
@@ -28,7 +28,7 @@ export function BasketButton() {
       : null;
 
   const { data, isLoading: isLoadingBasket } = useSWR<
-    GetServerListRes<ProductWithVariantsImagesReviews[]>
+    GetServerListRes<ProductWithVariantsImages[]>
   >(basketIdsKey, swrFetcher, {
     ...SWR_CONFIG,
     revalidateOnFocus: false,

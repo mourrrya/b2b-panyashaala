@@ -1,6 +1,7 @@
 // Product-related type definitions
 // Extracted to avoid circular imports between store and utils
 
+import { ProductCollection } from "@/prisma/generated/prisma/client";
 import { ProductCategory } from "@/prisma/generated/prisma/enums";
 
 export interface Variant {
@@ -62,8 +63,11 @@ export type VariantWithReviewImg = Variant & {
 };
 
 // Product and Variant types
-export type ProductWithVariantsImagesReviews = Product & {
+export type ProductWithVariantsImages = Product & {
   variants: VariantWithReviewImg[];
+  collections: {
+    collection: ProductCollection;
+  }[];
 };
 
 export type VariantWithProductImgReview = Variant & {

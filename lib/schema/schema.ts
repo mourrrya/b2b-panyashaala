@@ -19,3 +19,14 @@ export const ProductFiltersQuerySchema = z.object({
 
 /** Input type for calling getProducts directly (page/limit are optional) */
 export type ProductFiltersInput = z.input<typeof ProductFiltersQuerySchema>;
+
+// =============================================================================
+// COLLECTION PRODUCTS FILTERS
+// =============================================================================
+
+export const CollectionProductsFiltersSchema = z.object({
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(12),
+});
+
+export type CollectionProductsFiltersInput = z.input<typeof CollectionProductsFiltersSchema>;

@@ -75,11 +75,14 @@ export async function getProducts(filters: ProductFiltersInput): Promise<Paginat
       prisma.product.findMany({
         where,
         include: {
+          collections: {
+            include: { collection: true },
+            where: { collection: { isDeleted: false } },
+          },
           variants: {
             where: { isDeleted: false },
             include: {
               images: true,
-              reviews: true,
             },
           },
         },
@@ -109,6 +112,10 @@ export async function getProductById(id: string): Promise<any> {
     const product = await prisma.product.findUnique({
       where: { id },
       include: {
+        collections: {
+          include: { collection: true },
+          where: { collection: { isDeleted: false } },
+        },
         variants: {
           where: { isDeleted: false },
           include: {

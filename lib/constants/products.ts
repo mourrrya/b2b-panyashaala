@@ -75,6 +75,8 @@ export const STORE_CONFIG = {
 export const PAGINATION_CONFIG = {
   /** Number of products to load per page */
   PRODUCTS_PER_PAGE: 12,
+  /** Number of collection products to load per page */
+  COLLECTION_PRODUCTS_PER_PAGE: 12,
   /** Debounce delay (ms) for search input before triggering API call */
   SEARCH_DEBOUNCE_MS: 400,
   /** Intersection observer threshold for infinite scroll trigger */

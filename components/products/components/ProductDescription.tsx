@@ -1,8 +1,8 @@
 import { generateApplications, generateINCI } from "@/lib/productUtils";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 
 interface ProductDescriptionProps {
-  product: ProductWithVariantsImagesReviews;
+  product: ProductWithVariantsImages;
 }
 
 export function ProductDescription({ product }: ProductDescriptionProps) {

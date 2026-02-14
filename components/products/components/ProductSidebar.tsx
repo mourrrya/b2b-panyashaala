@@ -1,11 +1,11 @@
 "use client";
 import { useAddToBasket, useBasket, useRemoveFromBasket } from "@/store/productStore";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
 interface ProductSidebarProps {
-  product: ProductWithVariantsImagesReviews;
+  product: ProductWithVariantsImages;
 }
 
 export function ProductSidebar({ product }: ProductSidebarProps) {

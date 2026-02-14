@@ -52,6 +52,20 @@ export const PUBLIC_ROUTES = {
 
   CATEGORIES: "/categories",
 
+  COLLECTIONS: {
+    LIST: "/collections",
+    DETAIL: (name: string) => `/collections/${encodeURIComponent(name)}`,
+    PRODUCTS: (name: string, params?: { page?: number; limit?: number }) => {
+      const base = `/collections/${encodeURIComponent(name)}/products`;
+      if (!params) return base;
+      const query = new URLSearchParams();
+      if (params.page) query.set("page", String(params.page));
+      if (params.limit) query.set("limit", String(params.limit));
+      const qs = query.toString();
+      return qs ? `${base}?${qs}` : base;
+    },
+  },
+
   VERIFY_TURNSTILE: "/verify-turnstile",
 } as const;
 

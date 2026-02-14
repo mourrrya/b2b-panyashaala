@@ -8,7 +8,7 @@ import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { generateINCI } from "@/lib/productUtils";
 import { useBasket, useClearBasket, useRemoveFromBasket } from "@/store/productStore";
 import { GetServerListRes } from "@/types/api.payload.types";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 import { CheckCircle2, Package, ShoppingBag, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 import useSWR from "swr";
@@ -27,7 +27,7 @@ export default function ContactPage() {
         })
       : null;
 
-  const { data } = useSWR<GetServerListRes<ProductWithVariantsImagesReviews[]>>(
+  const { data } = useSWR<GetServerListRes<ProductWithVariantsImages[]>>(
     basketKey,
     swrFetcher,
     SWR_CONFIG,

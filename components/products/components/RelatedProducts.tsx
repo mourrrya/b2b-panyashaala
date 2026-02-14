@@ -1,10 +1,10 @@
 import { generateINCI } from "@/lib/productUtils";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 import Link from "next/link";
 
 interface RelatedProductsProps {
-  products: ProductWithVariantsImagesReviews[];
-  currentProduct: ProductWithVariantsImagesReviews;
+  products: ProductWithVariantsImages[];
+  currentProduct: ProductWithVariantsImages;
   categoryLabel: string;
 }
 

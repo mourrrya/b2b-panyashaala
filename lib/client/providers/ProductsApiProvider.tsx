@@ -3,7 +3,7 @@
 import { PAGINATION_CONFIG } from "@/lib/constants/products";
 import { PUBLIC_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { GetServerListRes, GetServerRes } from "@/types/api.payload.types";
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 import { createContext, ReactNode, useCallback, useContext, useMemo } from "react";
 import useSWR, { KeyedMutator, SWRConfig } from "swr";
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
@@ -15,7 +15,7 @@ import { swrFetcher } from "../api/axios";
 
 interface ProductsApiContextValue {
   /** Flattened array of all loaded products across pages */
-  products: ProductWithVariantsImagesReviews[];
+  products: ProductWithVariantsImages[];
   /** True only on first page load with no data */
   isLoading: boolean;
   /** True when fetching any page */
@@ -31,15 +31,15 @@ interface ProductsApiContextValue {
   /** True when loading subsequent pages (not the first) */
   isLoadingMore: boolean;
   /** Re-fetch all loaded pages */
-  refetch: () => Promise<GetServerListRes<ProductWithVariantsImagesReviews[]>[] | undefined>;
+  refetch: () => Promise<GetServerListRes<ProductWithVariantsImages[]>[] | undefined>;
 }
 
 interface ProductApiContextValue {
-  product: ProductWithVariantsImagesReviews | undefined;
+  product: ProductWithVariantsImages | undefined;
   isLoading: boolean;
   isValidating: boolean;
   error: Error | undefined;
-  refetch: KeyedMutator<GetServerRes<ProductWithVariantsImagesReviews>>;
+  refetch: KeyedMutator<GetServerRes<ProductWithVariantsImages>>;
 }
 
 const ProductsApiContext = createContext<ProductsApiContextValue | undefined>(undefined);
@@ -65,10 +65,7 @@ export function ProductsApiProvider({
   const limit = PAGINATION_CONFIG.PRODUCTS_PER_PAGE;
 
   const getKey: SWRInfiniteKeyLoader = useCallback(
-    (
-      pageIndex: number,
-      previousPageData: GetServerListRes<ProductWithVariantsImagesReviews[]> | null,
-    ) => {
+    (pageIndex: number, previousPageData: GetServerListRes<ProductWithVariantsImages[]> | null) => {
       // If previous page returned no data or less than limit, we're done
       if (previousPageData && (!previousPageData.data || previousPageData.data.length < limit)) {
         return null;
@@ -86,7 +83,7 @@ export function ProductsApiProvider({
   );
 
   const { data, error, isLoading, isValidating, size, setSize, mutate } = useSWRInfinite<
-    GetServerListRes<ProductWithVariantsImagesReviews[]>
+    GetServerListRes<ProductWithVariantsImages[]>
   >(getKey, swrFetcher, {
     ...SWR_CONFIG,
     revalidateFirstPage: false,
@@ -133,7 +130,7 @@ interface ProductApiProviderProps {
 
 export function ProductApiProvider({ children, productId }: ProductApiProviderProps) {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
-    GetServerRes<ProductWithVariantsImagesReviews>
+    GetServerRes<ProductWithVariantsImages>
   >(productId ? PUBLIC_ROUTES.PRODUCTS.DETAIL(productId) : null, swrFetcher, SWR_CONFIG);
 
   const value = useMemo<ProductApiContextValue>(

@@ -2,9 +2,9 @@
 // Keep these pure and free of framework-specific logic so they can be used
 // in both server and client code without circular dependencies.
 
-import { ProductWithVariantsImagesReviews } from "@/types/product";
+import { ProductWithVariantsImages } from "@/types/product";
 
-export const generateINCI = (product: ProductWithVariantsImagesReviews): string => {
+export const generateINCI = (product: ProductWithVariantsImages): string => {
   if (!product) return "";
   if (product.botanicalName) {
     return product.botanicalName;
@@ -13,16 +13,15 @@ export const generateINCI = (product: ProductWithVariantsImagesReviews): string 
   return product.name || "";
 };
 
-export const generateApplications = (product: ProductWithVariantsImagesReviews): string => {
-  if (!product) return "Various cosmetic applications";
-  if (product.variants && product.variants.length > 0) {
-    const applications = product.variants
-      .map((variant) => variant.usage || variant.description || "")
-      .filter((app) => app && app.length > 0)
-      .join(", ");
-    return applications || "Various cosmetic applications";
+export const generateApplications = (product: ProductWithVariantsImages): string[] => {
+  const usage = [];
+  if (product.collections && product.collections.length > 0) {
+    const applications = product.collections.map((c) => c.collection.name);
+    usage.push(...applications);
+  } else {
+    usage.push("Various applications");
   }
-  return "Various cosmetic applications";
+  return usage;
 };
 
 // Serialize Prisma Decimal objects to plain numbers for client compatibility
