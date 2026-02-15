@@ -25,11 +25,11 @@ export function RelatedProducts({ products, currentProduct, categoryLabel }: Rel
               className="group p-6 rounded-xl border border-slate-100 hover:border-emerald-200 transition-all hover:shadow-lg hover:shadow-emerald-100/50 bg-white hover:bg-emerald-50/30"
             >
               <p className="text-xs font-semibold text-emerald-600 mb-2">{categoryLabel}</p>
-              <h3 className="font-semibold text-slate-900 mb-2 group-hover:text-emerald-800 transition-colors">
+              <h3 className="capitalize font-semibold text-slate-900 mb-2 group-hover:text-emerald-800 transition-colors">
                 {relatedProduct.name}
               </h3>
               <p className="text-sm text-slate-600 line-clamp-2">{relatedProduct.description}</p>
-              <p className="text-xs text-emerald-600 font-mono mt-4">
+              <p className="capitalize text-xs text-emerald-600 font-mono mt-4">
                 {generateINCI(relatedProduct)}
               </p>
             </Link>
