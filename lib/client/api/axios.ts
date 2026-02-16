@@ -1,5 +1,6 @@
 import { ERROR_MESSAGES, HTTP_STATUS } from "@/lib/constants";
 import { API_CONFIG } from "@/lib/constants/routes";
+import { addBreadcrumb, captureException } from "@/lib/sentry";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 // =============================================================================
@@ -20,11 +21,16 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // Add any auth tokens or custom headers here if needed
+    addBreadcrumb(`${config.method?.toUpperCase()} ${config.url}`, "http", "info", {
+      method: config.method,
+      url: config.url,
+    });
     return config;
   },
   (error) => {
-    console.error("[Axios] Request interceptor error:", error);
+    captureException(error, {
+      tags: { layer: "axios", phase: "request" },
+    });
     return Promise.reject(error);
   },
 );
@@ -32,6 +38,14 @@ api.interceptors.request.use(
 // =============================================================================
 // RESPONSE INTERCEPTOR
 // =============================================================================
+
+/** Status codes that are expected client errors — don't spam Sentry with these. */
+const SILENT_STATUS_CODES = new Set([
+  HTTP_STATUS.BAD_REQUEST,
+  HTTP_STATUS.NOT_FOUND,
+  HTTP_STATUS.UNPROCESSABLE_ENTITY,
+  HTTP_STATUS.CONFLICT,
+]);
 
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
@@ -54,8 +68,34 @@ api.interceptors.response.use(
         errorMessages[status] ||
         ERROR_MESSAGES.GENERIC ||
         "An error occurred";
+
+      // Report server errors (5xx) and auth failures to Sentry
+      const shouldReport =
+        status >= 500 || status === HTTP_STATUS.UNAUTHORIZED || status === HTTP_STATUS.FORBIDDEN;
+
+      if (shouldReport) {
+        captureException(error, {
+          level: status >= 500 ? "error" : "warning",
+          tags: {
+            layer: "axios",
+            "http.status_code": String(status),
+            "http.url": error.config?.url ?? "unknown",
+          },
+          extra: {
+            method: error.config?.method,
+            url: error.config?.url,
+            responseData: data,
+          },
+        });
+      }
     } else if (error.request) {
+      // Network error — no response at all
       error.message = ERROR_MESSAGES.NETWORK || "Network error";
+      captureException(error, {
+        level: "warning",
+        tags: { layer: "axios", errorClass: "network" },
+        extra: { url: error.config?.url, method: error.config?.method },
+      });
     }
 
     return Promise.reject(error);

@@ -1,4 +1,5 @@
 import { CONTACT_INFO, EMAIL_DEFAULTS, ERROR_MESSAGES } from "@/lib/constants";
+import { captureException } from "@/lib/sentry";
 import { ProductWithVariantsImages } from "@/types/product";
 import emailjs from "@emailjs/browser";
 import { z } from "zod";
@@ -45,14 +46,19 @@ export async function verifyTurnstile(token: string): Promise<boolean> {
     });
 
     if (!response.ok) {
-      console.error("Turnstile verification failed:", response.statusText);
+      captureException(new Error(`Turnstile verification HTTP ${response.status}`), {
+        tags: { layer: "turnstile", action: "verify" },
+        extra: { statusText: response.statusText },
+      });
       return false;
     }
 
     const data = await response.json();
     return data.success === true;
   } catch (error) {
-    console.error("Error verifying Turnstile token:", error);
+    captureException(error, {
+      tags: { layer: "turnstile", action: "verify" },
+    });
     return false;
   }
 }
@@ -106,7 +112,9 @@ export const sendEmail = async (
 
     return response.status === 200;
   } catch (error) {
-    console.error("Failed to send email:", error);
+    captureException(error, {
+      tags: { layer: "email", action: "sendEmail" },
+    });
     return false;
   }
 };

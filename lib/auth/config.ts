@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/backend/prisma";
+import { captureException } from "@/lib/sentry";
 import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -218,11 +219,13 @@ export const authConfig: NextAuthConfig = {
             user.id = newUser.id;
           }
         } catch (error) {
-          console.error("[AUTH SIGNIN] Google OAuth error:", {
-            error: error instanceof Error ? error.message : "Unknown error",
-            email: user.email,
-            providerAccountId: account?.providerAccountId,
-            timestamp: new Date().toISOString(),
+          captureException(error, {
+            level: "error",
+            tags: { layer: "auth", action: "google-oauth-signin" },
+            extra: {
+              email: user.email,
+              providerAccountId: account?.providerAccountId,
+            },
           });
           // Return false to deny access on database errors
           return false;

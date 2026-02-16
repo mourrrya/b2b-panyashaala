@@ -1,6 +1,7 @@
 "use client";
 
 import { ERROR_MESSAGES } from "@/lib/constants";
+import { captureException } from "@/lib/sentry";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
@@ -77,11 +78,16 @@ export const useAuthStore = create<AuthStore>()(
 
             set({ isLoading: false });
             return { success: true };
-          } catch (error: any) {
+          } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : ERROR_MESSAGES.UNEXPECTED;
+            captureException(error, {
+              tags: { layer: "auth", action: "signInWithCredentials" },
+              extra: { isSignUp },
+            });
             set({ isLoading: false });
             return {
               success: false,
-              error: error?.message || ERROR_MESSAGES.UNEXPECTED,
+              error: message,
             };
           }
         },
@@ -99,7 +105,9 @@ export const useAuthStore = create<AuthStore>()(
             await authSignOut({ redirect: false });
             set({ isLoading: false });
           } catch (error) {
-            console.error("Sign out error:", error);
+            captureException(error, {
+              tags: { layer: "auth", action: "signOut" },
+            });
             set({ isLoading: false });
           }
         },
@@ -113,7 +121,9 @@ export const useAuthStore = create<AuthStore>()(
             const { getSession } = await import("next-auth/react");
             await getSession();
           } catch (error) {
-            console.error("Auth initialization error:", error);
+            captureException(error, {
+              tags: { layer: "auth", action: "initialize" },
+            });
           } finally {
             set({ isLoading: false, isInitialized: true });
           }

@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { ERROR_MESSAGES, HTTP_STATUS } from "@/lib/constants";
+import { captureException } from "@/lib/sentry";
 import { NextRequest, NextResponse } from "next/server";
 
 export type AuthUser = {
@@ -47,7 +48,9 @@ export function protect<TParams = Record<string, string>>(handler: ProtectedHand
 
       return handler(protectedReq, context);
     } catch (error) {
-      console.error("Auth error:", error);
+      captureException(error, {
+        tags: { layer: "auth", action: "protect" },
+      });
       return NextResponse.json(
         { error: ERROR_MESSAGES.AUTH.AUTHENTICATION_ERROR, success: false },
         { status: HTTP_STATUS.UNAUTHORIZED },

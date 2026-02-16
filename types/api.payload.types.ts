@@ -37,5 +37,5 @@ export interface DeleteServerRes<T> {
 export interface ErrorServerRes {
   success: false;
   message?: string;
-  errors?: Record<string, string[]>;
+  errors?: unknown;
 }

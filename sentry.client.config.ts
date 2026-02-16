@@ -1,97 +1,51 @@
 /**
  * Sentry Client Configuration
- * ===========================
- * Configuration for client-side error tracking and performance monitoring.
- * This runs in the browser.
+ * Runs in the browser. Captures client-side errors, performance, and replays.
  */
 
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
-  // DSN (Data Source Name) - Must use NEXT_PUBLIC_ prefix for client-side
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-
-  // Environment (production, staging, development)
   environment: process.env.NODE_ENV || "development",
 
-  // Enable tracing for performance monitoring (lower sample rate on client)
+  // Performance — lower on client to reduce overhead
   tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1.0,
 
-  // Replay session sampling
-  replaysSessionSampleRate: 0.1, // 10% of sessions
-  replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors
+  // Session Replay
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
 
-  // Debug mode (useful for development)
-  debug: process.env.NODE_ENV === "development",
-
-  // Integration configurations
   integrations: [
-    // Capture user interactions for replay
-    Sentry.replayIntegration({
-      maskAllText: true, // Mask all text for privacy
-      blockAllMedia: true, // Block all media for privacy
-    }),
-    // Browser tracing for performance
+    Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),
     Sentry.browserTracingIntegration(),
   ],
 
-  // Don't send errors in development unless explicitly enabled
-  enabled: process.env.NODE_ENV !== "development" || process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true",
+  enabled:
+    process.env.NODE_ENV !== "development" || process.env.NEXT_PUBLIC_SENTRY_ENABLED === "true",
 
-  // Configure beforeSend to scrub sensitive data
-  beforeSend(event, hint) {
-    // Remove sensitive data from forms
-    if (event.request?.data) {
-      const sensitiveFields = ["password", "token", "secret", "apiKey", "api_key"];
-      if (typeof event.request.data === "object" && event.request.data !== null) {
-        const data = event.request.data as Record<string, any>;
-        sensitiveFields.forEach((field) => {
-          if (field in data) {
-            data[field] = "[REDACTED]";
-          }
-        });
+  beforeSend(event) {
+    // Scrub sensitive form fields
+    if (event.request?.data && typeof event.request.data === "object") {
+      const data = event.request.data as Record<string, unknown>;
+      for (const key of ["password", "token", "secret", "apiKey", "api_key"]) {
+        if (key in data) data[key] = "[REDACTED]";
       }
     }
-
-    // Remove sensitive cookies
-    if (event.request?.cookies) {
-      const cookies = event.request.cookies as Record<string, any>;
-      const sensitiveCookies = ["session", "token", "auth"];
-      sensitiveCookies.forEach((cookie) => {
-        if (cookie in cookies) {
-          cookies[cookie] = "[REDACTED]";
-        }
-      });
-    }
-
     return event;
   },
 
-  // Ignore certain errors that are not actionable
   ignoreErrors: [
     // Browser extensions
     "top.GLOBALS",
-    "chrome-extension",
-    "moz-extension",
-    // Random network errors
+    /chrome-extension|moz-extension/,
+    // Network — already tracked via Axios interceptor
     "NetworkError",
-    "Network request failed",
     "Failed to fetch",
-    // Cancelled requests
     "AbortError",
-    "The user aborted a request",
-    // Common user-caused errors
-    "ResizeObserver loop limit exceeded",
-    "ResizeObserver loop completed with undelivered notifications",
-    // Ad blockers
-    "AdBlocker",
-    "adsbygoogle",
+    // Benign browser noise
+    "ResizeObserver loop",
   ],
 
-  // Set tags for better error categorization
-  initialScope: {
-    tags: {
-      runtime: "browser",
-    },
-  },
+  initialScope: { tags: { runtime: "browser" } },
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import { ERROR_MESSAGES, TURNSTILE_CONFIG, UI_LABELS } from "@/lib/constants";
+import { captureException } from "@/lib/sentry";
 import { useEffect, useRef, useState } from "react";
 
 interface TurnstileProps {
@@ -122,7 +123,9 @@ export function Turnstile({
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : ERROR_MESSAGES.UNKNOWN;
         setError(`${ERROR_MESSAGES.TURNSTILE.INIT_FAILED}: ${errorMsg}`);
-        console.error("Turnstile initialization error:", err);
+        captureException(err, {
+          tags: { layer: "turnstile", action: "init" },
+        });
       }
     }
   }, [isLoaded, theme, size, onVerify, onError, onExpire]);

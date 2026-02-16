@@ -26,11 +26,6 @@ const nextConfig = {
   // TODO: Need to check whether to added pino packages in serverExternalPackages or not
   serverExternalPackages: [],
 
-  // Enable instrumentation for Sentry
-  experimental: {
-    instrumentationHook: true,
-  },
-
   // Add security headers
   async headers() {
     return [

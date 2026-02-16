@@ -1,11 +1,10 @@
 /**
- * Next.js Instrumentation File
- * ============================
- * This file is used to initialize Sentry and other monitoring tools.
- * It runs once when the Next.js server starts.
- *
- * @see https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation
+ * Next.js Instrumentation
+ * Initializes Sentry for server & edge runtimes.
+ * Exports onRequestError to capture RSC / middleware errors automatically.
  */
+
+import { captureRequestError } from "@sentry/nextjs";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
@@ -16,3 +15,9 @@ export async function register() {
     await import("./sentry.edge.config");
   }
 }
+
+/**
+ * Captures errors from Server Components, Server Actions, Route Handlers,
+ * and Middleware. This is called by Next.js automatically.
+ */
+export const onRequestError = captureRequestError;

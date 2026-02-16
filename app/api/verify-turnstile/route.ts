@@ -1,4 +1,5 @@
 import { ERROR_MESSAGES, HTTP_STATUS, TURNSTILE_CONFIG } from "@/lib/constants";
+import { captureException } from "@/lib/sentry";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -59,7 +60,9 @@ export async function POST(request: NextRequest) {
       error: result["error-codes"] || null,
     });
   } catch (error) {
-    console.error("Turnstile verification error:", error);
+    captureException(error, {
+      tags: { layer: "api", action: "verify-turnstile" },
+    });
     return NextResponse.json(
       { success: false, error: ERROR_MESSAGES.TURNSTILE.VERIFICATION_FAILED },
       { status: HTTP_STATUS.INTERNAL_SERVER_ERROR },

@@ -7,6 +7,7 @@ import {
   sendEmail,
   verifyTurnstile,
 } from "@/lib/schema/email";
+import { captureException } from "@/lib/sentry";
 import { ProductWithVariantsImages } from "@/types/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
@@ -72,7 +73,9 @@ export function useContactForm(products: ProductWithVariantsImages[] = []) {
           setIsSubmitted(false);
         }, 5000);
       } catch (error) {
-        console.error("Form submission error:", error);
+        captureException(error, {
+          tags: { layer: "form", action: "contact-submit" },
+        });
         setSubmitError(ERROR_MESSAGES.FORM.UNEXPECTED_ERROR);
       }
     },

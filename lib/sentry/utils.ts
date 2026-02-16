@@ -1,202 +1,91 @@
 /**
- * Sentry Utilities
- * ================
- * Utilities for enhanced error tracking, context management, and integrations.
+ * Sentry Utilities — thin wrappers over @sentry/nextjs.
+ * Keep this file lean; every export should be actively used.
  */
 
 import * as Sentry from "@sentry/nextjs";
 import type { User } from "next-auth";
 
-/**
- * Set user context for Sentry
- * This helps identify which user encountered an error
- */
-export function setSentryUser(user: User | null) {
+/** Attach user to all subsequent Sentry events. Pass `null` to clear. */
+export function setSentryUser(user: Pick<User, "id" | "email" | "name"> | null) {
   if (user) {
     Sentry.setUser({
       id: user.id,
-      email: user.email || undefined,
-      username: user.name || undefined,
+      email: user.email ?? undefined,
+      username: user.name ?? undefined,
     });
   } else {
     Sentry.setUser(null);
   }
 }
 
-/**
- * Add breadcrumb for user actions
- * Breadcrumbs help trace the sequence of events leading to an error
- */
+/** Record a breadcrumb — shows up in the trail leading to the next error. */
 export function addBreadcrumb(
   message: string,
   category: string,
   level: "debug" | "info" | "warning" | "error" = "info",
-  data?: Record<string, any>,
+  data?: Record<string, unknown>,
 ) {
-  Sentry.addBreadcrumb({
-    message,
-    category,
-    level,
-    data,
-    timestamp: Date.now() / 1000,
+  Sentry.addBreadcrumb({ message, category, level, data });
+}
+
+/** Capture an exception with optional scoped tags / extras. */
+export function captureException(
+  error: unknown,
+  context?: {
+    tags?: Record<string, string>;
+    extra?: Record<string, unknown>;
+    level?: Sentry.SeverityLevel;
+    user?: Pick<User, "id" | "email" | "name"> | null;
+  },
+) {
+  if (!context) {
+    Sentry.captureException(error);
+    return;
+  }
+
+  Sentry.withScope((scope) => {
+    if (context.tags) scope.setTags(context.tags);
+    if (context.extra) scope.setExtras(context.extra);
+    if (context.level) scope.setLevel(context.level);
+    if (context.user) setSentryUser(context.user);
+    Sentry.captureException(error);
   });
 }
 
-/**
- * Capture an exception with additional context
- */
-export function captureException(
-  error: Error | unknown,
-  context?: {
-    tags?: Record<string, string>;
-    extra?: Record<string, any>;
-    level?: Sentry.SeverityLevel;
-    user?: User | null;
-  },
-) {
-  // Set context if provided
-  if (context) {
-    Sentry.withScope((scope) => {
-      if (context.tags) {
-        Object.entries(context.tags).forEach(([key, value]) => {
-          scope.setTag(key, value);
-        });
-      }
-
-      if (context.extra) {
-        Object.entries(context.extra).forEach(([key, value]) => {
-          scope.setExtra(key, value);
-        });
-      }
-
-      if (context.level) {
-        scope.setLevel(context.level);
-      }
-
-      if (context.user) {
-        setSentryUser(context.user);
-      }
-
-      Sentry.captureException(error);
-    });
-  } else {
-    Sentry.captureException(error);
-  }
-}
-
-/**
- * Capture a message with context
- */
+/** Capture a message with optional scoped tags / extras. */
 export function captureMessage(
   message: string,
   level: Sentry.SeverityLevel = "info",
   context?: {
     tags?: Record<string, string>;
-    extra?: Record<string, any>;
+    extra?: Record<string, unknown>;
   },
 ) {
-  if (context) {
-    Sentry.withScope((scope) => {
-      if (context.tags) {
-        Object.entries(context.tags).forEach(([key, value]) => {
-          scope.setTag(key, value);
-        });
-      }
-
-      if (context.extra) {
-        Object.entries(context.extra).forEach(([key, value]) => {
-          scope.setExtra(key, value);
-        });
-      }
-
-      scope.setLevel(level);
-      Sentry.captureMessage(message);
-    });
-  } else {
+  if (!context) {
     Sentry.captureMessage(message, level);
+    return;
   }
+
+  Sentry.withScope((scope) => {
+    if (context.tags) scope.setTags(context.tags);
+    if (context.extra) scope.setExtras(context.extra);
+    scope.setLevel(level);
+    Sentry.captureMessage(message);
+  });
 }
 
-/**
- * Start a new transaction for performance tracing
- * @deprecated Use Sentry's automatic tracing or startSpan in Sentry v8
- */
-export function startTransaction(name: string, op: string, data?: Record<string, any>) {
-  // In Sentry v8, use startSpan instead
-  // This is kept for backwards compatibility but will use current span
-  return Sentry.getCurrentScope().getSpan();
-}
-
-/**
- * Set context for the current scope
- */
-export function setContext(name: string, context: Record<string, any>) {
+/** Set structured context on the current scope. */
+export function setContext(name: string, context: Record<string, unknown>) {
   Sentry.setContext(name, context);
 }
 
-/**
- * Set a tag for categorization
- */
+/** Set a single tag on the current scope. */
 export function setTag(key: string, value: string) {
   Sentry.setTag(key, value);
 }
 
-/**
- * Set multiple tags at once
- */
+/** Set multiple tags at once. */
 export function setTags(tags: Record<string, string>) {
   Sentry.setTags(tags);
-}
-
-/**
- * Clear the current scope
- */
-export function clearScope() {
-  Sentry.setUser(null);
-  Sentry.setContext("custom", {});
-}
-
-/**
- * Send a test error to verify Sentry configuration
- * USE ONLY FOR TESTING
- */
-export function sendTestError() {
-  if (process.env.NODE_ENV === "development") {
-    captureMessage("Test message from Sentry utilities", "info", {
-      tags: { test: "true" },
-    });
-    throw new Error("Test error from Sentry utilities");
-  }
-}
-
-/**
- * Notify Slack via Sentry integration
- * Note: Configure Slack integration in Sentry dashboard under Settings > Integrations
- * You can set up alerts to send notifications to Slack channels based on:
- * - Error severity
- * - Specific error types
- * - Custom tags
- * - User impact
- */
-export function configureSlackNotification() {
-  // This is handled in Sentry dashboard:
-  // 1. Go to Settings > Integrations > Slack
-  // 2. Connect your Slack workspace
-  // 3. Create alert rules for:
-  //    - Critical errors (severity: error, fatal)
-  //    - High-impact issues (user-affected)
-  //    - Specific error types (tags)
-  // 4. Configure notification format and channels
-  return {
-    instructions: [
-      "1. Log in to Sentry dashboard",
-      "2. Navigate to Settings > Integrations",
-      "3. Find and click 'Slack' integration",
-      "4. Click 'Add to Slack' and authorize",
-      "5. Go to Alerts > Create Alert Rule",
-      "6. Set conditions (e.g., error severity, tags)",
-      "7. Select Slack channel for notifications",
-      "8. Customize notification format",
-    ],
-  };
 }
