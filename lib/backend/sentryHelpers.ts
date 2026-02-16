@@ -6,7 +6,7 @@
 
 import { addBreadcrumb, setContext, setSentryUser } from "@/lib/sentry";
 import * as Sentry from "@sentry/nextjs";
-import { getServerSession } from "next-auth";
+import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "./errorHandler";
 
@@ -51,81 +51,80 @@ export function withSentryAPI<T extends any[]>(
   return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
     const operationName = options?.operationName || `${request.method} ${new URL(request.url).pathname}`;
 
-    // Start a transaction for this API call
-    const transaction = Sentry.startTransaction({
-      name: operationName,
-      op: "http.server",
-      data: extractRequestContext(request),
-    });
+    // Use withScope and startSpan for Sentry v8
+    return await Sentry.withScope(async (scope) => {
+      try {
+        // Add breadcrumb for the API call
+        addBreadcrumb(
+          `API Request: ${operationName}`,
+          "http",
+          "info",
+          extractRequestContext(request),
+        );
 
-    // Set the transaction on the scope
-    Sentry.getCurrentScope().setSpan(transaction);
+        // Set request context
+        setContext("request", extractRequestContext(request));
 
-    try {
-      // Add breadcrumb for the API call
-      addBreadcrumb(
-        `API Request: ${operationName}`,
-        "http",
-        "info",
-        extractRequestContext(request),
-      );
-
-      // Set request context
-      setContext("request", extractRequestContext(request));
-
-      // Get user session if needed
-      if (options?.includeSession !== false) {
-        try {
-          const session = await getServerSession();
-          if (session?.user) {
-            setSentryUser(session.user);
-            setContext("user", {
-              id: session.user.id,
-              email: session.user.email,
-              name: session.user.name,
-            });
+        // Get user session if needed
+        if (options?.includeSession !== false) {
+          try {
+            const session = await auth();
+            if (session?.user) {
+              setSentryUser(session.user);
+              setContext("user", {
+                id: session.user.id,
+                email: session.user.email,
+                name: session.user.name,
+              });
+            }
+          } catch (sessionError) {
+            // Session retrieval failed, continue without it
+            addBreadcrumb("Failed to retrieve session", "auth", "warning");
           }
-        } catch (sessionError) {
-          // Session retrieval failed, continue without it
-          addBreadcrumb("Failed to retrieve session", "auth", "warning");
         }
+
+        // Execute the handler with Sentry tracing
+        const response = await Sentry.startSpan(
+          {
+            name: operationName,
+            op: "http.server",
+            attributes: extractRequestContext(request),
+          },
+          async (span) => {
+            const result = await handler(request, ...args);
+            
+            // Set response status tag
+            scope.setTag("http.status_code", String(result.status));
+            
+            // Add breadcrumb for response
+            addBreadcrumb(
+              `API Response: ${operationName}`,
+              "http",
+              result.status < 400 ? "info" : "error",
+              { status: result.status },
+            );
+
+            return result;
+          }
+        );
+
+        return response;
+      } catch (error) {
+        // Set error tag
+        scope.setTag("error", "true");
+
+        // Add breadcrumb for error
+        addBreadcrumb(
+          `API Error: ${operationName}`,
+          "http",
+          "error",
+          { error: String(error) },
+        );
+
+        // Handle the error with our error handler
+        return handleError(error);
       }
-
-      // Execute the handler
-      const response = await handler(request, ...args);
-
-      // Set response status tag
-      transaction.setTag("http.status_code", String(response.status));
-      transaction.setStatus(response.status < 400 ? "ok" : "unknown_error");
-
-      // Add breadcrumb for response
-      addBreadcrumb(
-        `API Response: ${operationName}`,
-        "http",
-        response.status < 400 ? "info" : "error",
-        { status: response.status },
-      );
-
-      return response;
-    } catch (error) {
-      // Mark transaction as failed
-      transaction.setStatus("internal_error");
-      transaction.setTag("error", "true");
-
-      // Add breadcrumb for error
-      addBreadcrumb(
-        `API Error: ${operationName}`,
-        "http",
-        "error",
-        { error: String(error) },
-      );
-
-      // Handle the error with our error handler
-      return handleError(error);
-    } finally {
-      // Finish the transaction
-      transaction.finish();
-    }
+    });
   };
 }
 
@@ -152,20 +151,13 @@ export async function measurePerformance<T>(
   name: string,
   operation: () => Promise<T>,
 ): Promise<T> {
-  const span = Sentry.getCurrentScope().getSpan();
-  const childSpan = span?.startChild({
-    op: "function",
-    description: name,
-  });
-
-  try {
-    const result = await operation();
-    childSpan?.setStatus("ok");
-    return result;
-  } catch (error) {
-    childSpan?.setStatus("internal_error");
-    throw error;
-  } finally {
-    childSpan?.finish();
-  }
+  return await Sentry.startSpan(
+    {
+      name,
+      op: "function",
+    },
+    async () => {
+      return await operation();
+    }
+  );
 }

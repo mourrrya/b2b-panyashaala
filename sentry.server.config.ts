@@ -26,18 +26,13 @@ Sentry.init({
   // Integration configurations
   integrations: [
     // Enable HTTP integration for tracing outgoing HTTP requests
-    Sentry.httpIntegration({
-      tracing: true,
-    }),
+    Sentry.httpIntegration(),
     // Enable Prisma integration for database query tracing
     Sentry.prismaIntegration(),
   ],
 
   // Don't send errors in development unless explicitly enabled
   enabled: process.env.NODE_ENV !== "development" || process.env.SENTRY_ENABLED === "true",
-
-  // Automatically capture console errors
-  autoSessionTracking: true,
 
   // Configure beforeSend to scrub sensitive data
   beforeSend(event, hint) {
@@ -53,14 +48,21 @@ Sentry.init({
       // Remove sensitive query parameters
       if (event.request.query_string) {
         const sensitiveParams = ["token", "password", "secret", "api_key", "apikey"];
+        const queryString = typeof event.request.query_string === 'string' 
+          ? event.request.query_string 
+          : '';
+        
+        let sanitized = queryString;
         sensitiveParams.forEach((param) => {
-          if (event.request?.query_string?.includes(param)) {
-            event.request.query_string = event.request.query_string.replace(
+          if (sanitized.includes(param)) {
+            sanitized = sanitized.replace(
               new RegExp(`${param}=[^&]*`, "gi"),
               `${param}=[REDACTED]`,
             );
           }
         });
+        
+        event.request.query_string = sanitized;
       }
     }
 

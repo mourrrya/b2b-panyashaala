@@ -1,4 +1,5 @@
 import { handleError } from "@/lib/backend/errorHandler";
+import { withSentryAPI } from "@/lib/backend/sentryHelpers";
 import { validateQueryParams } from "@/lib/backend/validation";
 import { ProductFiltersQuerySchema } from "@/lib/schema/schema";
 import type { ErrorServerRes, GetServerListRes } from "@/types/api.payload.types";
@@ -24,6 +25,6 @@ async function getProductsController(
   }
 }
 
-export async function GET(request: NextRequest) {
-  return getProductsController(request);
-}
+export const GET = withSentryAPI(getProductsController, {
+  operationName: "GET /api/products",
+});

@@ -32,13 +32,7 @@ Sentry.init({
       blockAllMedia: true, // Block all media for privacy
     }),
     // Browser tracing for performance
-    Sentry.browserTracingIntegration({
-      tracePropagationTargets: [
-        "localhost",
-        /^https:\/\/.*\.vercel\.app/,
-        /^\//,
-      ],
-    }),
+    Sentry.browserTracingIntegration(),
   ],
 
   // Don't send errors in development unless explicitly enabled
@@ -49,10 +43,11 @@ Sentry.init({
     // Remove sensitive data from forms
     if (event.request?.data) {
       const sensitiveFields = ["password", "token", "secret", "apiKey", "api_key"];
-      if (typeof event.request.data === "object") {
+      if (typeof event.request.data === "object" && event.request.data !== null) {
+        const data = event.request.data as Record<string, any>;
         sensitiveFields.forEach((field) => {
-          if (field in event.request.data) {
-            event.request.data[field] = "[REDACTED]";
+          if (field in data) {
+            data[field] = "[REDACTED]";
           }
         });
       }
@@ -60,10 +55,11 @@ Sentry.init({
 
     // Remove sensitive cookies
     if (event.request?.cookies) {
+      const cookies = event.request.cookies as Record<string, any>;
       const sensitiveCookies = ["session", "token", "auth"];
       sensitiveCookies.forEach((cookie) => {
-        if (event.request?.cookies && cookie in event.request.cookies) {
-          event.request.cookies[cookie] = "[REDACTED]";
+        if (cookie in cookies) {
+          cookies[cookie] = "[REDACTED]";
         }
       });
     }

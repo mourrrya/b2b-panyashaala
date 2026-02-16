@@ -119,13 +119,12 @@ export function captureMessage(
 
 /**
  * Start a new transaction for performance tracing
+ * @deprecated Use Sentry's automatic tracing or startSpan in Sentry v8
  */
 export function startTransaction(name: string, op: string, data?: Record<string, any>) {
-  return Sentry.startTransaction({
-    name,
-    op,
-    data,
-  });
+  // In Sentry v8, use startSpan instead
+  // This is kept for backwards compatibility but will use current span
+  return Sentry.getCurrentScope().getSpan();
 }
 
 /**

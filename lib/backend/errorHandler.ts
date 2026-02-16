@@ -19,49 +19,50 @@ export class ErrorApp extends Error {
 }
 
 export class ErrorNotFound extends ErrorApp {
-  constructor(message?: string) {
-    super(message || ERROR_MESSAGES.RESOURCE.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+  constructor(message?: string, context?: Record<string, any>) {
+    super(message || ERROR_MESSAGES.RESOURCE.NOT_FOUND, HTTP_STATUS.NOT_FOUND, undefined, context);
   }
 }
 
 export class ErrorAuth extends ErrorApp {
-  constructor(message?: string) {
-    super(message || ERROR_MESSAGES.AUTH.AUTHENTICATION_FAILED, HTTP_STATUS.UNAUTHORIZED);
+  constructor(message?: string, context?: Record<string, any>) {
+    super(message || ERROR_MESSAGES.AUTH.AUTHENTICATION_FAILED, HTTP_STATUS.UNAUTHORIZED, undefined, context);
   }
 }
 
 export class ErrorForbidden extends ErrorApp {
-  constructor(message?: string) {
-    super(message || ERROR_MESSAGES.RESOURCE.FORBIDDEN, HTTP_STATUS.FORBIDDEN);
+  constructor(message?: string, context?: Record<string, any>) {
+    super(message || ERROR_MESSAGES.RESOURCE.FORBIDDEN, HTTP_STATUS.FORBIDDEN, undefined, context);
   }
 }
 
 export class ErrorAlreadyExists extends ErrorApp {
-  constructor(message: string) {
-    super(`${message}`, HTTP_STATUS.CONFLICT);
+  constructor(message: string, context?: Record<string, any>) {
+    super(`${message}`, HTTP_STATUS.CONFLICT, undefined, context);
   }
 }
 
 export class ErrorValidation extends ErrorApp {
-  constructor(message?: string, details?: any) {
+  constructor(message?: string, details?: any, context?: Record<string, any>) {
     super(
       message || ERROR_MESSAGES.VALIDATION.VALIDATION_FAILED,
       HTTP_STATUS.UNPROCESSABLE_ENTITY,
       details,
+      context,
     );
   }
 }
 
 export class ErrorInvalidRequest extends ErrorApp {
-  constructor(message?: string, details?: any) {
-    super(message || ERROR_MESSAGES.VALIDATION.INVALID_REQUEST, HTTP_STATUS.BAD_REQUEST, details);
+  constructor(message?: string, details?: any, context?: Record<string, any>) {
+    super(message || ERROR_MESSAGES.VALIDATION.INVALID_REQUEST, HTTP_STATUS.BAD_REQUEST, details, context);
   }
 }
 
 // unknown error handler
 export class ErrorUnknown extends ErrorApp {
-  constructor(message?: string) {
-    super(message || ERROR_MESSAGES.UNKNOWN, HTTP_STATUS.INTERNAL_SERVER_ERROR);
+  constructor(message?: string, details?: any, context?: Record<string, any>) {
+    super(message || ERROR_MESSAGES.UNKNOWN, HTTP_STATUS.INTERNAL_SERVER_ERROR, details, context);
   }
 }
 

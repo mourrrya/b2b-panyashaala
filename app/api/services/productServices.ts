@@ -103,7 +103,11 @@ export async function getProducts(filters: ProductFiltersInput): Promise<Paginat
       },
     };
   } catch (error) {
-    throw new ErrorUnknown("Error getting products");
+    // Add context to error for better debugging
+    throw new ErrorUnknown("Error getting products", undefined, {
+      filters,
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }
 
@@ -130,6 +134,14 @@ export async function getProductById(id: string): Promise<any> {
     }
     return serializeProductData(product);
   } catch (error) {
-    throw new ErrorUnknown("Error getting product by ID");
+    // If it's already an ErrorNotFound, re-throw it
+    if (error instanceof ErrorNotFound) {
+      throw error;
+    }
+    // Otherwise, wrap in ErrorUnknown with context
+    throw new ErrorUnknown("Error getting product by ID", undefined, {
+      productId: id,
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 }

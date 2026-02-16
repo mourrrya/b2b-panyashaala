@@ -1,4 +1,5 @@
 import { ErrorInvalidRequest, handleError } from "@/lib/backend/errorHandler";
+import { withSentryAPI } from "@/lib/backend/sentryHelpers";
 import { ERROR_MESSAGES } from "@/lib/constants";
 import type { ErrorServerRes, GetServerRes } from "@/types/api.payload.types";
 import { ProductWithVariantsImages } from "@/types/product";
@@ -9,7 +10,7 @@ interface RouteContext<TParams = Record<string, string>> {
   params: Promise<TParams>;
 }
 
-export async function GET(
+async function getProductController(
   _: NextRequest,
   context: RouteContext<{ id: string }>,
 ): Promise<NextResponse<GetServerRes<ProductWithVariantsImages> | ErrorServerRes>> {
@@ -23,3 +24,7 @@ export async function GET(
     return handleError(error);
   }
 }
+
+export const GET = withSentryAPI(getProductController, {
+  operationName: "GET /api/products/[id]",
+});
