@@ -13,6 +13,7 @@ import {
   VERIFICATION_TOKENS,
 } from "@/lib/seo";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import type React from "react";
@@ -131,6 +132,7 @@ export default function RootLayout({
           <Sonner />
         </ClientOnly>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
