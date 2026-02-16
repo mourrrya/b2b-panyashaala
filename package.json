@@ -29,6 +29,7 @@
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@prisma/engines": "^7.3.0",
+    "@sentry/nextjs": "^10.38.0",
     "@supabase/supabase-js": "^2.93.1",
     "@tanstack/react-virtual": "^3.13.18",
     "@vercel/analytics": "^1.6.1",
