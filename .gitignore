@@ -17,8 +17,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
+# env files (but keep .env.example)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -31,3 +32,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /lib/generated/prisma
+
+# Sentry
+.sentryclirc
+sentry.properties
