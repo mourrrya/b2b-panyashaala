@@ -24,8 +24,8 @@ export const SITE_CONFIG = {
 
   /** Logo paths */
   LOGO: {
-    TEXT: "/logo-text.svg",
-    TEXT_SLOGAN: "/logo-text-slogan.svg",
+    TEXT_SVG: "/logo-text.svg",
+    TEXT_PNG: "/logo-text.png",
     PLACEHOLDER: "/placeholder-logo.svg",
   },
 

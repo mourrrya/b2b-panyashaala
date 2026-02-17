@@ -127,7 +127,7 @@ export function createOrganizationSchema(): Organization {
     "@type": SCHEMA_CONFIG.TYPES.ORGANIZATION,
     name: SITE_NAME,
     url: SITE_URL,
-    logo: getAbsoluteUrl(SITE_CONFIG.LOGO.TEXT),
+    logo: getAbsoluteUrl(SITE_CONFIG.LOGO.TEXT_PNG),
     description: SITE_DESCRIPTION,
     contactPoint: {
       "@type": SCHEMA_CONFIG.TYPES.CONTACT_POINT,
