@@ -48,7 +48,7 @@ export function MobileNav({
       >
         <SheetHeader className="px-4 sm:px-6 py-3 sm:py-4 border-b border-emerald-100/50 ">
           <Image
-            src={SITE_CONFIG.LOGO.TEXT}
+            src={SITE_CONFIG.LOGO.TEXT_SVG}
             alt={SITE_CONFIG.NAME}
             width={100}
             height={33}

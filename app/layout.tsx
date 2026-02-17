@@ -10,7 +10,6 @@ import {
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_URL,
-  VERIFICATION_TOKENS,
 } from "@/lib/seo";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -32,6 +31,8 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   keywords: [
+    "Aukra",
+    "Aukra Chem Essentials",
     "cosmetic ingredients",
     "essential oils",
     "carrier oils",
@@ -42,6 +43,8 @@ export const metadata: Metadata = {
     "cosmetic formulations",
     "contract manufacturer",
     "ingredient sourcing",
+    "cosmetic raw materials",
+    "wholesale essential oils",
   ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -101,12 +104,6 @@ export const metadata: Metadata = {
     apple: "/apple-icon.png",
   },
   category: "business",
-  verification: {
-    google: VERIFICATION_TOKENS.googleSiteVerification,
-    other: {
-      "msvalidate.01": VERIFICATION_TOKENS.bingMsvalidate,
-    },
-  },
 };
 
 export default function RootLayout({
@@ -121,11 +118,14 @@ export default function RootLayout({
         <JsonLd schema={createWebsiteSchema()} />
       </head>
       <body suppressHydrationWarning className={`${plusJakarta.className} antialiased`}>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <ClientOnly>
           <ProgressBar>
             <AuthProvider>
               <Header />
-              {children}
+              <div id="main-content">{children}</div>
             </AuthProvider>
             <Footer />
           </ProgressBar>

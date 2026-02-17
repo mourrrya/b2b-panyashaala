@@ -25,7 +25,7 @@ export function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         <Link href="/" className="text-emerald-800 font-semibold text-xl">
           <Image
-            src={SITE_CONFIG.LOGO.TEXT}
+            src={SITE_CONFIG.LOGO.TEXT_SVG}
             alt={SITE_CONFIG.NAME}
             width={120}
             height={40}
