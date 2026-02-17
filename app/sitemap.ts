@@ -1,3 +1,4 @@
+import { getCollections } from "@/app/api/services/collectionServices";
 import { getProducts } from "@/app/api/services/productServices";
 import { PUBLIC_NAV } from "@/lib/constants";
 import { SITE_URL } from "@/lib/seo";
@@ -31,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}${PUBLIC_NAV.APPLICATIONS}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.6,
+      priority: 0.9,
     },
     {
       url: `${SITE_URL}${PUBLIC_NAV.QUALITY}`,
@@ -47,23 +48,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Fetch all products for sitemap, gracefully fallback to static-only if DB is unavailable
+  // Dynamic product routes
   let productRoutes: MetadataRoute.Sitemap = [];
   try {
-    const { products } = await getProducts({
-      limit: 1000,
-      page: 1,
-    });
-
+    const { products } = await getProducts({ limit: 1000, page: 1 });
     productRoutes = products.map((product) => ({
       url: `${SITE_URL}${PUBLIC_NAV.PRODUCT_DETAIL(product.id)}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
-      priority: 0.5,
+      priority: 0.6,
     }));
   } catch (error) {
     console.warn("Sitemap: Failed to fetch products, returning static routes only.", error);
   }
 
-  return [...staticRoutes, ...productRoutes];
+  // Dynamic collection/application routes
+  let collectionRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const collections = await getCollections();
+    collectionRoutes = collections.map((collection) => ({
+      url: `${SITE_URL}/applications/${encodeURIComponent(collection.name)}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    }));
+  } catch (error) {
+    console.warn("Sitemap: Failed to fetch collections.", error);
+  }
+
+  return [...staticRoutes, ...productRoutes, ...collectionRoutes];
 }

@@ -98,5 +98,5 @@ export const NAVIGATION_CONFIG = {
   AUTH_ONLY: [PUBLIC_NAV.LOGIN],
 
   /** Routes disallowed for robots */
-  ROBOTS_DISALLOW: ["/api/", "/admin/", "/_private/"],
+  ROBOTS_DISALLOW: ["/api/", "/admin/", "/_private/", "/login", "/profile", "/order"],
 } as const;

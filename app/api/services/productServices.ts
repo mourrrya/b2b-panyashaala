@@ -2,6 +2,7 @@ import { ErrorNotFound, ErrorUnknown } from "@/lib/backend/errorHandler";
 import { prisma } from "@/lib/backend/prisma";
 import { serializeProductData } from "@/lib/productUtils";
 import { ProductFiltersInput } from "@/lib/schema/schema";
+import { ProductWithVariantsImages } from "@/types/product";
 import { Prisma, ProductCategory } from "@prisma/client";
 
 export interface PaginatedProducts {
@@ -111,7 +112,7 @@ export async function getProducts(filters: ProductFiltersInput): Promise<Paginat
   }
 }
 
-export async function getProductById(id: string): Promise<any> {
+export async function getProductById(id: string): Promise<ProductWithVariantsImages> {
   try {
     const product = await prisma.product.findUnique({
       where: { id },
@@ -124,7 +125,6 @@ export async function getProductById(id: string): Promise<any> {
           where: { isDeleted: false },
           include: {
             images: true,
-            reviews: true,
           },
         },
       },

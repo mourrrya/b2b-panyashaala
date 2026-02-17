@@ -1,5 +1,6 @@
 import {
   CONTACT_INFO,
+  PUBLIC_NAV,
   SCHEMA_CONFIG,
   SITE_CONFIG,
   SOCIAL_HANDLES as SOCIAL_HANDLES_CONST,
@@ -109,11 +110,13 @@ interface Organization {
   name: string;
   url: string;
   logo: string;
+  description: string;
   contactPoint: {
     "@type": string;
     contactType: string;
     email: string;
     telephone?: string;
+    availableLanguage: string;
   };
   sameAs: string[];
 }
@@ -125,11 +128,13 @@ export function createOrganizationSchema(): Organization {
     name: SITE_NAME,
     url: SITE_URL,
     logo: getAbsoluteUrl(SITE_CONFIG.LOGO.TEXT),
+    description: SITE_DESCRIPTION,
     contactPoint: {
       "@type": SCHEMA_CONFIG.TYPES.CONTACT_POINT,
       contactType: SCHEMA_CONFIG.CONTACT_TYPE,
       email: CONTACT_INFO.EMAIL.SUPPORT,
-      telephone: CONTACT_INFO.PHONE_DISPLAY,
+      telephone: CONTACT_INFO.PHONE,
+      availableLanguage: "English",
     },
     sameAs: [SOCIAL_LINKS.twitter, SOCIAL_LINKS.linkedin, SOCIAL_LINKS.instagram],
   };
@@ -181,6 +186,9 @@ interface ProductSchema {
   "@type": string;
   name: string;
   description: string;
+  sku: string;
+  url: string;
+  image?: string;
   brand: {
     "@type": string;
     name: string;
@@ -190,20 +198,25 @@ interface ProductSchema {
     "@type": string;
     availability: string;
     priceCurrency: string;
-  };
-  aggregateRating?: {
-    "@type": string;
-    ratingValue: number;
-    reviewCount: number;
+    url: string;
   };
 }
 
 export function createProductSchema(product: ProductWithVariantsImages): ProductSchema {
+  const productUrl = getAbsoluteUrl(PUBLIC_NAV.PRODUCT_DETAIL(product.id));
+  const applications = generateApplications(product);
+  const inci = generateINCI(product);
+
   return {
     "@context": SCHEMA_CONFIG.CONTEXT,
     "@type": SCHEMA_CONFIG.TYPES.PRODUCT,
     name: product.name,
-    description: `${product.description} INCI: ${generateINCI(product)}. Applications: ${generateApplications(product)}`,
+    description: `${product.description || product.name}. INCI: ${inci}. Applications: ${applications.join(", ")}.`,
+    sku: String(product.id),
+    url: productUrl,
+    ...(product.variants?.[0]?.images?.[0]?.url
+      ? { image: product.variants[0].images[0].url }
+      : {}),
     brand: {
       "@type": SCHEMA_CONFIG.TYPES.BRAND,
       name: SITE_NAME,
@@ -213,6 +226,7 @@ export function createProductSchema(product: ProductWithVariantsImages): Product
       "@type": SCHEMA_CONFIG.TYPES.OFFER,
       availability: SCHEMA_CONFIG.AVAILABILITY,
       priceCurrency: SITE_CONFIG.CURRENCY,
+      url: productUrl,
     },
   };
 }
@@ -246,54 +260,9 @@ export function createBreadcrumbSchema(items: BreadcrumbItem[]): BreadcrumbSchem
   };
 }
 
-interface Article {
-  headline: string;
-  description: string;
-  image?: string;
-  datePublished?: string;
-  author?: string;
-}
-
-interface ArticleSchema {
-  "@context": string;
-  "@type": string;
-  headline: string;
-  description: string;
-  image?: string;
-  datePublished?: string;
-  author?: {
-    "@type": string;
-    name: string;
-  };
-}
-
-export function createArticleSchema(article: Article): ArticleSchema {
-  return {
-    "@context": SCHEMA_CONFIG.CONTEXT,
-    "@type": SCHEMA_CONFIG.TYPES.ARTICLE,
-    headline: article.headline,
-    description: article.description,
-    ...(article.image && { image: getAbsoluteUrl(article.image) }),
-    ...(article.datePublished && { datePublished: article.datePublished }),
-    ...(article.author && {
-      author: {
-        "@type": SCHEMA_CONFIG.TYPES.PERSON,
-        name: article.author,
-      },
-    }),
-  };
-}
-
 /**
  * Helper Functions
  */
-
-/**
- * Generate URL-friendly slug from and ID
- */
-export function generateProductSlug(id: number | string): string {
-  return `${id}`;
-}
 
 /**
  * Combine SITE_URL with relative path
@@ -311,13 +280,7 @@ export function getAbsoluteUrl(path: string): string {
 export function JsonLd({
   schema,
 }: {
-  schema:
-    | Organization
-    | Website
-    | ProductSchema
-    | BreadcrumbSchema
-    | ArticleSchema
-    | Record<string, unknown>;
+  schema: Organization | Website | ProductSchema | BreadcrumbSchema | Record<string, unknown>;
 }): ReactElement {
   return React.createElement("script", {
     type: "application/ld+json",

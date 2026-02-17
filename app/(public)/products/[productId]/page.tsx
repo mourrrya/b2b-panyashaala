@@ -6,8 +6,9 @@ import {
   ProductSpecifications,
   RelatedProducts,
 } from "@/components/products/components";
-import { UI_LABELS } from "@/lib/constants";
+import { SITE_CONFIG, UI_LABELS } from "@/lib/constants";
 import { PAGE_SEO } from "@/lib/constants/seo";
+import { generateApplications } from "@/lib/productUtils";
 import { createBreadcrumbSchema, createMetadata, createProductSchema, JsonLd } from "@/lib/seo";
 import { ProductWithVariantsImages } from "@/types/product";
 
@@ -25,14 +26,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { productId } = await params;
   try {
-    // FIXME : need to fetch product data using swr
-    const product = await getProductById(productId.toString());
+    const product: ProductWithVariantsImages = await getProductById(productId.toString());
     const categoryLabel = product.category.toLocaleLowerCase().split("_").join(" ");
     return createMetadata({
       title: `${product.name} | ${categoryLabel}`,
-      description: `${product.description} INCI name: ${product.inci}. Common applications: ${product.applications}.`,
+      description: `${product.description} INCI name: ${product.inci}. Common applications: ${generateApplications(product)}.`,
       canonical: `/products/${productId}`,
-      image: "/og-image-default.jpg",
+      image: SITE_CONFIG.DEFAULT_OG_IMAGE,
       type: "website", // Using website instead of product as product type has limitations
       keywords: [
         product.name,

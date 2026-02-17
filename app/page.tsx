@@ -7,7 +7,7 @@ import {
   UI_LABELS,
 } from "@/lib/constants";
 import { PAGE_SEO } from "@/lib/constants/seo";
-import { createMetadata, createWebsiteSchema, JsonLd } from "@/lib/seo";
+import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +22,6 @@ export const metadata: Metadata = createMetadata({
 export default function Home() {
   return (
     <main className="bg-texture">
-      <JsonLd schema={createWebsiteSchema()} />
       {/* Hero Section */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 lg:py-20 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <div>
