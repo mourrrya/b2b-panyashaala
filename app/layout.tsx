@@ -117,6 +117,18 @@ export default function RootLayout({
         <JsonLd schema={createOrganizationSchema()} />
         <JsonLd schema={createWebsiteSchema()} />
       </head>
+      {/* Google tag (gtag.js) */}
+      <script async src="https://www.googletagmanager.com/gtag/js?id=AW-797272461"></script>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-797272461');
+            `,
+        }}
+      />
       <body suppressHydrationWarning className={`${plusJakarta.className} antialiased`}>
         <a href="#main-content" className="skip-link">
           Skip to main content
