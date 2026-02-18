@@ -3,9 +3,10 @@
 import { PRIVATE_ROUTES, SWR_CONFIG } from "@/lib/constants/routes";
 import { Address, Customer } from "@/prisma/generated/prisma/browser";
 import { GetServerRes } from "@/types/api.payload.types";
+import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useCallback, useContext, useMemo } from "react";
 import useSWR, { KeyedMutator, SWRConfig } from "swr";
-import { apiClient, swrFetcher } from "../api/axios";
+import { api, apiClient, swrFetcher } from "../api/axios";
 
 // =============================================================================
 // TYPES
@@ -23,6 +24,7 @@ interface ProfileApiContextValue {
   error: Error | undefined;
   refetch: KeyedMutator<GetServerRes<ProfileData>>;
   updateProfile: (data: Partial<Customer>) => Promise<GetServerRes<ProfileData>>;
+  uploadAvatar: (file: File) => Promise<GetServerRes<ProfileData>>;
   isUpdating: boolean;
 }
 
@@ -37,6 +39,7 @@ interface ProfileApiProviderProps {
 }
 
 export function ProfileApiProvider({ children }: ProfileApiProviderProps) {
+  const { update } = useSession();
   const { data, error, isLoading, isValidating, mutate } = useSWR<GetServerRes<ProfileData>>(
     PRIVATE_ROUTES.PROFILE,
     swrFetcher,
@@ -55,6 +58,27 @@ export function ProfileApiProvider({ children }: ProfileApiProviderProps) {
     [mutate],
   );
 
+  const uploadAvatar = useCallback(
+    async (file: File) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const result = await api
+        .post<GetServerRes<ProfileData>>(PRIVATE_ROUTES.PROFILE_AVATAR, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((res) => res.data);
+
+      if (result.success && result.data?.avatarUrl) {
+        await update({ user: { image: result.data.avatarUrl } });
+      }
+
+      await mutate();
+      return result;
+    },
+    [mutate, update],
+  );
+
   const value = useMemo<ProfileApiContextValue>(
     () => ({
       profile: data?.data,
@@ -63,9 +87,10 @@ export function ProfileApiProvider({ children }: ProfileApiProviderProps) {
       error,
       refetch: mutate,
       updateProfile,
+      uploadAvatar,
       isUpdating: false, // Can be enhanced with local state if needed
     }),
-    [data, isLoading, isValidating, error, mutate, updateProfile],
+    [data, isLoading, isValidating, error, mutate, updateProfile, uploadAvatar],
   );
 
   return (

@@ -4,36 +4,20 @@ import { ProfileSkeletonLoader } from "@/components/SkeletonLoader";
 import { ProfileApiProvider, useApiProfile } from "@/lib/client/providers/ProfileApiProvider";
 import { UI_LABELS } from "@/lib/constants";
 import { CustomerType } from "@/prisma/generated/prisma/browser";
+import { toast } from "sonner";
 import { AddressInfoCard } from "./components/AddressInfoCard";
 import { BusinessInfoCard } from "./components/BusinessInfoCard";
 import { PersonalInfoCard } from "./components/PersonalInfoCard";
 import { ProfileHeader } from "./components/ProfileHeader";
 
 function ProfileContent() {
-  const { profile, isLoading, updateProfile } = useApiProfile();
+  const { profile, isLoading, uploadAvatar } = useApiProfile();
 
   const handleAvatarUpload = async (file: File) => {
-    return new Promise<void>((resolve, reject) => {
-      try {
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          const avatarUrl = e.target?.result as string;
-          const result = await updateProfile({ avatarUrl });
-          if (result.success) {
-            console.log(UI_LABELS.PROFILE.UPDATE_SUCCESS);
-            resolve();
-          } else {
-            reject(new Error(UI_LABELS.PROFILE.UPDATE_FAILED));
-          }
-        };
-        reader.onerror = () => {
-          reject(new Error(UI_LABELS.PROFILE.FILE_READ_FAILED));
-        };
-        reader.readAsDataURL(file);
-      } catch (error) {
-        reject(error);
-      }
-    });
+    const result = await uploadAvatar(file);
+    if (!result.success) {
+      toast.error(UI_LABELS.PROFILE.UPDATE_FAILED);
+    }
   };
 
   if (isLoading || !profile) {

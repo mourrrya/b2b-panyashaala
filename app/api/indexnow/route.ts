@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const INDEXNOW_API_KEY = process.env.INDEXNOW_API_KEY || "8e5b0ca2cb494414b4390325fbef2647";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.example.com";
+const INDEXNOW_API_KEY = process.env.INDEXNOW_API_KEY || "";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "";
 
 /**
  * POST /api/indexnow

@@ -126,8 +126,9 @@ export const META_KEYWORDS = {
 export const PAGE_SEO = {
   HOME: {
     title: "Nature-powered actives for modern cosmetic formulations | B2B Supplier",
+    // FIXME Enhance description by reducing char length of the description
     description:
-      "B2B natural cosmetic ingredients supplier offering essential oils, carrier oils, botanical extracts, and hydrosols. Serving formulators, manufacturers, and sourcing teams globally with quality-tested, certified ingredients.",
+      "B2B supplier of natural cosmetic ingredients — essential & carrier oils, botanical extracts and hydrosols. Trusted by formulators for certified, tested materials.",
     canonical: "/",
     keywords: META_KEYWORDS.HOME,
   },

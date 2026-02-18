@@ -4,11 +4,10 @@ import { z } from "zod";
 export const UpdateProfileReqSchema = z.object({
   fullName: z.string().optional(),
   phone: z.string().optional(),
-  avatarUrl: z.string().url("Invalid avatar URL").optional(),
   companyName: z.string().optional(),
   taxId: z.string().optional(),
   gstIn: z.string().optional(),
-  website: z.string().url("Invalid website URL").optional(),
+  website: z.url("Invalid website URL").optional(),
   notes: z.string().optional(),
 });
 

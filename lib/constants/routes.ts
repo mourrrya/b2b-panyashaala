@@ -76,6 +76,7 @@ export const PRIVATE_ROUTES = {
   },
 
   PROFILE: "/profile",
+  PROFILE_AVATAR: "/profile/avatar",
 } as const;
 
 // =============================================================================
